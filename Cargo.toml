@@ -2,5 +2,16 @@
 name = "hergmes"
 version = "0.1.0"
 edition = "2024"
+authors = ["Alison Oliveira <arobsn@proton.me>"]
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+path = "src/main.rs"
+name = "hergmes"
 
 [dependencies]
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+tracing-log = "0.1"

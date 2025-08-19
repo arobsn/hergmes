@@ -1,3 +1,8 @@
+use hergmes::telemetry::{self, default_subscriber};
+use tracing::info;
+
 fn main() {
-    println!("Hello, world!");
+    telemetry::init(default_subscriber());
+
+    info!("Hello, world!");
 }
