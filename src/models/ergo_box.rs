@@ -6,7 +6,7 @@ pub struct ErgoBox {
     pub ergo_tree: Vec<u8>,
     pub creation_height: u32,
     pub value: u64,
-    pub assets: Vec<Token>,
+    pub tokens: Vec<Token>,
     pub registers: NonMandatoryRegisters,
 
     pub index: u16,
