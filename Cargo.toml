@@ -16,3 +16,4 @@ tracing = { version = "0.1", features = ["log"] }
 tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
 tracing-log = "0.1"
 serde = { version = "1.0.219", features = ["derive"] }
+dotenvy = "0.15.7"
