@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use crate::models::HashDigest;
 
@@ -20,6 +21,17 @@ pub struct ErgoBox {
     pub index: u16,
     #[serde(rename = "transactionId")]
     pub transaction_id: HashDigest,
+
+    #[serde(rename = "spendingProof")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    spending_proof: Option<SpendingProof>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct SpendingProof {
+    #[serde(rename = "proofBytes")]
+    pub proof_bytes: Vec<u8>,
+    pub extension: Value,
 }
 
 #[derive(Deserialize, Serialize)]
