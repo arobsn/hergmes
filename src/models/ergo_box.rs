@@ -24,6 +24,7 @@ pub struct ErgoBox {
 
     #[serde(rename = "spendingProof")]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     spending_proof: Option<SpendingProof>,
 }
 
