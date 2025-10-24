@@ -5,13 +5,13 @@ use hergmes::{
     clients::node::NodeClient,
     env::ERGO_NODE_URL,
     error::AppError,
-    telemetry::{self, default_subscriber},
+    tracing::{self, default_subscriber},
 };
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
     let _ = dotenv();
-    telemetry::init(default_subscriber());
+    tracing::init(default_subscriber());
 
     let http_client = reqwest::Client::builder()
         .timeout(Duration::from_secs(30))

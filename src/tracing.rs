@@ -7,7 +7,7 @@ use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{EnvFilter, Registry, fmt};
 
 pub fn default_subscriber() -> impl Subscriber + Send + Sync {
-    let log_level = env::var("RUST_LOG").unwrap_or("info".to_string());
+    let log_level = env::var("RUST_LOG").unwrap_or("info".into());
     Registry::default()
         .with(EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(log_level)))
         .with(fmt::layer())
