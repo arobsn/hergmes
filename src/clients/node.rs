@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use tracing::{error, info};
+use tracing::{debug, error, info};
 
 use crate::clients::node::types::IndexedHeightResponse;
 
@@ -39,6 +39,8 @@ impl ErgoNodeClient {
             )
             .into());
         }
+
+        debug!(?index_status, "Ergo Node is fully indexed.");
 
         Ok(())
     }
