@@ -1,6 +1,6 @@
 use tracing::{debug, error, info};
 
-use crate::clients::node::types::IndexedHeightResponse;
+use self::types::IndexedHeightResponse;
 
 pub mod types;
 
@@ -9,7 +9,7 @@ pub enum NodeError {
     #[error(transparent)]
     HttpError(#[from] reqwest::Error),
 
-    #[error("The Ergo Node is not fully indexed.")]
+    #[error("The node is not fully indexed.")]
     NotIndexed(IndexedHeightResponse),
 }
 
@@ -35,14 +35,14 @@ impl NodeClient {
 
     #[tracing::instrument(skip(self))]
     pub async fn check_node_index_status(&self) -> Result<(), NodeError> {
-        info!("Checking Ergo Node index status...");
+        info!("Checking node index status...");
         let index_status = self.get_indexed_height().await?;
 
-        if index_status.indexed_height == index_status.full_height {
+        if index_status.indexed_height != index_status.full_height {
             return Err(NodeError::NotIndexed(index_status));
         }
 
-        debug!(?index_status, "Ergo Node is fully indexed.");
+        debug!(?index_status, "Node is fully indexed.");
 
         Ok(())
     }

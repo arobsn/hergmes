@@ -2,6 +2,6 @@ use crate::clients::node::NodeError;
 
 #[derive(Debug, thiserror::Error)]
 pub enum AppError {
-    #[error("Node error: {0}")]
+    #[error(transparent)]
     NodeError(#[from] NodeError),
 }
