@@ -1,59 +1,51 @@
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
-use crate::models::HashDigest;
+use crate::models::{HashDigest, HexBytes};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ErgoBox {
     #[serde(rename = "boxId")]
     pub id: HashDigest,
 
     #[serde(rename = "ergoTree")]
-    pub ergo_tree: Vec<u8>,
+    pub ergo_tree: HexBytes,
+
     #[serde(rename = "creationHeight")]
     pub creation_height: u32,
+
     pub value: u64,
+
     #[serde(rename = "assets")]
     pub tokens: Vec<Token>,
+
     #[serde(rename = "additionalRegisters")]
     pub registers: NonMandatoryRegisters,
 
     pub index: u16,
+
     #[serde(rename = "transactionId")]
     pub transaction_id: HashDigest,
-
-    #[serde(rename = "spendingProof")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(flatten)]
-    spending_proof: Option<SpendingProof>,
 }
 
-#[derive(Deserialize, Serialize)]
-pub struct SpendingProof {
-    #[serde(rename = "proofBytes")]
-    pub proof_bytes: Vec<u8>,
-    pub extension: Value,
-}
-
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Token {
     #[serde(rename = "tokenId")]
     pub id: HashDigest,
     pub amount: u64,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct NonMandatoryRegisters {
     #[serde(rename = "R4")]
-    pub r4: Option<Vec<u8>>,
+    pub r4: Option<HexBytes>,
     #[serde(rename = "R5")]
-    pub r5: Option<Vec<u8>>,
+    pub r5: Option<HexBytes>,
     #[serde(rename = "R6")]
-    pub r6: Option<Vec<u8>>,
+    pub r6: Option<HexBytes>,
     #[serde(rename = "R7")]
-    pub r7: Option<Vec<u8>>,
+    pub r7: Option<HexBytes>,
     #[serde(rename = "R8")]
-    pub r8: Option<Vec<u8>>,
+    pub r8: Option<HexBytes>,
     #[serde(rename = "R9")]
-    pub r9: Option<Vec<u8>>,
+    pub r9: Option<HexBytes>,
 }

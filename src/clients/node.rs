@@ -1,5 +1,7 @@
 use tracing::{debug, error, info};
 
+use crate::models::ergo_transaction::ErgoUnconfirmedTransaction;
+
 use self::types::IndexedHeightResponse;
 
 pub mod types;
@@ -27,9 +29,21 @@ impl NodeClient {
         }
     }
 
+    #[tracing::instrument(skip(self))]
     pub async fn get_indexed_height(&self) -> Result<IndexedHeightResponse, NodeError> {
         let url = self.build_url("blockchain/indexedHeight");
         let resp = self.http_client.get(&url).send().await?.json().await?;
+        Ok(resp)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_mempool_transactions(
+        self,
+    ) -> Result<Vec<ErgoUnconfirmedTransaction>, NodeError> {
+        let url = self.build_url("transactions/unconfirmed");
+        let resp = self.http_client.get(&url).send().await?.json().await?;
+        debug!(response = ?resp, "Mempool transactions fetched.");
+
         Ok(resp)
     }
 
