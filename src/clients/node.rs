@@ -19,6 +19,12 @@ pub struct IndexedHeightResponse {
     pub full_height: u64,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct InfoResponse {
+    #[serde(rename = "lastMemPoolUpdateTime")]
+    pub last_mempool_update: u64,
+}
+
 #[derive(Debug, Clone)]
 pub struct NodeClient {
     http_client: reqwest::Client,
@@ -47,6 +53,21 @@ impl NodeClient {
         debug!(response = ?resp, "Mempool transactions fetched.");
 
         Ok(resp)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_info(&self) -> Result<InfoResponse, NodeError> {
+        let url = self.build_url("info");
+        let response: InfoResponse = self.http_client.get(&url).send().await?.json().await?;
+        debug!(?response, "Node info fetched.");
+
+        Ok(response)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_last_mempool_update_timestamp(&self) -> Result<u64, NodeError> {
+        let info = self.get_info().await?;
+        Ok(info.last_mempool_update)
     }
 
     #[tracing::instrument(skip(self))]
