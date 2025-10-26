@@ -5,6 +5,7 @@ use hergmes::{
     clients::node::NodeClient,
     env::ERGO_NODE_URL,
     error::AppError,
+    mempool,
     tracing::{self, default_subscriber},
 };
 
@@ -20,6 +21,8 @@ async fn main() -> Result<(), AppError> {
 
     let node = NodeClient::new(http_client, &ERGO_NODE_URL);
     node.check_node_index_status().await?;
+
+    let _mempool_tracker = mempool::start_indexer(&node).await?;
 
     Ok(())
 }

@@ -1,10 +1,7 @@
+use serde::{self, Deserialize};
 use tracing::{debug, error, info};
 
-use crate::models::ergo_transaction::ErgoUnconfirmedTransaction;
-
-use self::types::IndexedHeightResponse;
-
-pub mod types;
+use crate::types::ergo::UnconfirmedTransaction;
 
 #[derive(Debug, thiserror::Error)]
 pub enum NodeError {
@@ -13,6 +10,13 @@ pub enum NodeError {
 
     #[error("The node is not fully indexed.")]
     NotIndexed(IndexedHeightResponse),
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct IndexedHeightResponse {
+    pub indexed_height: u64,
+    pub full_height: u64,
 }
 
 #[derive(Debug, Clone)]
@@ -37,9 +41,7 @@ impl NodeClient {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn get_mempool_transactions(
-        self,
-    ) -> Result<Vec<ErgoUnconfirmedTransaction>, NodeError> {
+    pub async fn get_mempool_transactions(&self) -> Result<Vec<UnconfirmedTransaction>, NodeError> {
         let url = self.build_url("transactions/unconfirmed");
         let resp = self.http_client.get(&url).send().await?.json().await?;
         debug!(response = ?resp, "Mempool transactions fetched.");

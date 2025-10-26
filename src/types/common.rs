@@ -1,8 +1,6 @@
 use hex::{FromHex, ToHex};
 use serde::de::Error;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-pub mod ergo_box;
-pub mod ergo_transaction;
 
 /// A 32-byte hash digest.
 pub type HashDigest = Digest<32>;

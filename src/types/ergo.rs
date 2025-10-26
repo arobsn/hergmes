@@ -1,9 +1,42 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
-use crate::models::{HashDigest, HexBytes};
+use crate::types::{HashDigest, HexBytes};
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct ErgoBox {
+pub struct Transaction {
+    pub id: HashDigest,
+    pub inputs: Vec<TransactionInput>,
+    pub outputs: Vec<UTxO>,
+    #[serde(rename = "inclusionHeight")]
+    pub height: u32,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UnconfirmedTransaction {
+    pub id: HashDigest,
+    pub inputs: Vec<TransactionInput>,
+    pub outputs: Vec<UTxO>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct TransactionInput {
+    #[serde(flatten)]
+    pub utxo: UTxO,
+    #[serde(rename = "spendingProof")]
+    pub spending_proof: SpendingProof,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SpendingProof {
+    #[serde(rename = "proofBytes")]
+    pub proof_bytes: HexBytes,
+    pub extension: HashMap<String, HexBytes>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UTxO {
     #[serde(rename = "boxId")]
     pub id: HashDigest,
 
