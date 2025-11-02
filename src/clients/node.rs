@@ -1,7 +1,7 @@
 use serde::{self, Deserialize};
 use tracing::{debug, error, info};
 
-use crate::types::ergo::UnconfirmedTransaction;
+use crate::types::{HashDigest, ergo::UnconfirmedTransaction};
 
 #[derive(Debug, thiserror::Error)]
 pub enum NodeError {
@@ -82,6 +82,30 @@ impl NodeClient {
         debug!(?index_status, "Node is fully indexed.");
 
         Ok(())
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_unconfirmed_transaction_ids(&self) -> Result<Vec<HashDigest>, NodeError> {
+        let url = self.build_url("transactions/unconfirmed/transactionIds");
+        let resp = self.http_client.get(&url).send().await?.json().await?;
+        Ok(resp)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_unconfirmed_transactions_by_ids(
+        &self,
+        tx_ids: &[HashDigest],
+    ) -> Result<Vec<UnconfirmedTransaction>, NodeError> {
+        let url = self.build_url("transactions/unconfirmed/byTransactionIds");
+        let resp = self
+            .http_client
+            .post(&url)
+            .json(tx_ids)
+            .send()
+            .await?
+            .json()
+            .await?;
+        Ok(resp)
     }
 
     fn build_url(&self, path: &str) -> String {
