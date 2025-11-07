@@ -1,7 +1,10 @@
 use serde::{self, Deserialize};
 use tracing::{debug, error, info};
 
-use crate::types::{HashDigest, ergo::UnconfirmedTransaction};
+use crate::types::{
+    HashDigest,
+    ergo::{Balance, Base58String, UnconfirmedTransaction},
+};
 
 #[derive(Debug, thiserror::Error)]
 pub enum NodeError {
@@ -101,6 +104,20 @@ impl NodeClient {
             .http_client
             .post(&url)
             .json(tx_ids)
+            .send()
+            .await?
+            .json()
+            .await?;
+        Ok(resp)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_balance(&self, address: &Base58String) -> Result<Balance, NodeError> {
+        let url = self.build_url("blockchain/balance");
+        let resp = self
+            .http_client
+            .post(&url)
+            .json(address)
             .send()
             .await?
             .json()

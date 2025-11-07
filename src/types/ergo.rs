@@ -82,3 +82,28 @@ pub struct NonMandatoryRegisters {
     #[serde(rename = "R9")]
     pub r9: Option<HexBytes>,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Balance {
+    pub confirmed: BalancePart,
+    pub unconfirmed: BalancePart,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct BalancePart {
+    #[serde(rename = "nanoErgs")]
+    pub nano_ergs: u64,
+    pub tokens: Vec<BalanceToken>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct BalanceToken {
+    #[serde(flatten)]
+    pub token: Token,
+    pub decimals: u32,
+    pub name: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(transparent)]
+pub struct Base58String(pub String);
