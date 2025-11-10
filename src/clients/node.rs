@@ -1,7 +1,10 @@
-use serde::{self, Deserialize};
+use serde::{self, Deserialize, Serialize};
 use tracing::{debug, error, info};
 
-use crate::types::{HashDigest, ergo::UnconfirmedTransaction};
+use crate::types::{
+    HashDigest,
+    ergo::{SpendingProof, TransactionInput, UTxO, UnconfirmedTransaction},
+};
 
 #[derive(Debug, thiserror::Error)]
 pub enum NodeError {
@@ -31,6 +34,38 @@ pub struct NodeClient {
     base_url: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct MempoolTransactionResponse {
+    pub id: HashDigest,
+    pub inputs: Vec<MempoolTransactionInput>,
+    pub outputs: Vec<UTxO>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct MempoolTransactionInput {
+    #[serde(flatten)]
+    pub utxo: Option<UTxO>,
+    #[serde(rename = "spendingProof")]
+    pub spending_proof: SpendingProof,
+}
+
+impl From<MempoolTransactionResponse> for UnconfirmedTransaction {
+    fn from(mempool_input: MempoolTransactionResponse) -> Self {
+        UnconfirmedTransaction {
+            id: mempool_input.id,
+            outputs: mempool_input.outputs,
+            inputs: mempool_input
+                .inputs
+                .into_iter()
+                .map(|input| TransactionInput {
+                    utxo: input.utxo.expect("UTxO should be present"),
+                    spending_proof: input.spending_proof,
+                })
+                .collect(),
+        }
+    }
+}
+
 impl NodeClient {
     pub fn new(http_client: reqwest::Client, base_url: &str) -> Self {
         Self {
@@ -49,10 +84,19 @@ impl NodeClient {
     #[tracing::instrument(skip(self))]
     pub async fn get_mempool_transactions(&self) -> Result<Vec<UnconfirmedTransaction>, NodeError> {
         let url = self.build_url("transactions/unconfirmed");
-        let resp = self.http_client.get(&url).send().await?.json().await?;
+        let resp: Vec<MempoolTransactionResponse> =
+            self.http_client.get(&url).send().await?.json().await?;
         debug!(response = ?resp, "Mempool transactions fetched.");
 
-        Ok(resp)
+        // Filter out invalid transactions (those with missing UTxOs in inputs)
+        // https://github.com/ergoplatform/ergo/issues/2248#issuecomment-3463844934
+        let valid = resp
+            .into_iter()
+            .filter(|utx| utx.inputs.iter().all(|i| i.utxo.is_some()))
+            .map(|utx| utx.into())
+            .collect::<Vec<UnconfirmedTransaction>>();
+
+        Ok(valid)
     }
 
     #[tracing::instrument(skip(self))]
