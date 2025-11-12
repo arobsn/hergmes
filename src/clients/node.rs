@@ -35,7 +35,7 @@ pub struct NodeClient {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct MempoolTransactionResponse {
+struct MempoolTransactionResponse {
     pub id: HashDigest,
     pub inputs: Vec<MempoolTransactionInput>,
     pub outputs: Vec<UTxO>,
@@ -82,11 +82,16 @@ impl NodeClient {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn get_mempool_transactions(&self) -> Result<Vec<UnconfirmedTransaction>, NodeError> {
+    pub async fn get_mempool_snapshot(&self) -> Result<Vec<UnconfirmedTransaction>, NodeError> {
         let url = self.build_url("transactions/unconfirmed");
-        let resp: Vec<MempoolTransactionResponse> =
-            self.http_client.get(&url).send().await?.json().await?;
-        debug!(response = ?resp, "Mempool transactions fetched.");
+        let resp: Vec<MempoolTransactionResponse> = self
+            .http_client
+            .get(&url)
+            .query(&[("limit", i32::MAX)])
+            .send()
+            .await?
+            .json()
+            .await?;
 
         // Filter out invalid transactions (those with missing UTxOs in inputs)
         // https://github.com/ergoplatform/ergo/issues/2248#issuecomment-3463844934
