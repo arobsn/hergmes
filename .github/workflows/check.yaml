@@ -19,10 +19,10 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt
-      - uses: Swatinem/rust-cache@v2
-        with:
-          shared-key: check
-          cache-on-failure: true
+      # - uses: Swatinem/rust-cache@v2
+      #   with:
+      #     shared-key: check
+      #     cache-on-failure: true
       - run: cargo fmt --check
       - run: cargo clippy --all-targets --all-features
       - run: cargo test
