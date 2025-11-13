@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   check_fmt_and_test:
-    name: Global Check, Format, and Test
+    name: Check, Format, and Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
