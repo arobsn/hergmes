@@ -1,9 +1,12 @@
 use serde::{self, Deserialize, Serialize};
-use tracing::{debug, error, info};
+use tracing::{debug, info};
 
 use crate::types::{
     HashDigest,
-    ergo::{SpendingProof, TransactionInput, UTxO, UnconfirmedTransaction},
+    ergo::{
+        Balance, Base58String, NodeBox, SpendingProof, TransactionInput, UTxO,
+        UnconfirmedTransaction,
+    },
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -34,6 +37,16 @@ pub struct NodeClient {
     base_url: String,
 }
 
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct UnspentByErgoTreeQuery<'a> {
+    offset: u32,
+    limit: u32,
+    sort_direction: &'a str,
+    include_unconfirmed: bool,
+    exclude_mempool_spent: bool,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 struct MempoolTransactionResponse {
     pub id: HashDigest,
@@ -50,11 +63,11 @@ pub struct MempoolTransactionInput {
 }
 
 impl From<MempoolTransactionResponse> for UnconfirmedTransaction {
-    fn from(mempool_input: MempoolTransactionResponse) -> Self {
+    fn from(m: MempoolTransactionResponse) -> Self {
         UnconfirmedTransaction {
-            id: mempool_input.id,
-            outputs: mempool_input.outputs,
-            inputs: mempool_input
+            id: m.id,
+            outputs: m.outputs,
+            inputs: m
                 .inputs
                 .into_iter()
                 .map(|input| TransactionInput {
@@ -78,6 +91,7 @@ impl NodeClient {
     pub async fn get_indexed_height(&self) -> Result<IndexedHeightResponse, NodeError> {
         let url = self.build_url("blockchain/indexedHeight");
         let resp = self.http_client.get(&url).send().await?.json().await?;
+
         Ok(resp)
     }
 
@@ -93,12 +107,10 @@ impl NodeClient {
             .json()
             .await?;
 
-        // Filter out invalid transactions (those with missing UTxOs in inputs)
-        // https://github.com/ergoplatform/ergo/issues/2248#issuecomment-3463844934
         let valid = resp
             .into_iter()
-            .filter(|utx| utx.inputs.iter().all(|i| i.utxo.is_some()))
-            .map(|utx| utx.into())
+            .filter(|tx| tx.inputs.iter().all(|i| i.utxo.is_some()))
+            .map(|tx| tx.into())
             .collect::<Vec<UnconfirmedTransaction>>();
 
         Ok(valid)
@@ -116,6 +128,7 @@ impl NodeClient {
     #[tracing::instrument(skip(self))]
     pub async fn get_last_mempool_update_timestamp(&self) -> Result<u64, NodeError> {
         let info = self.get_info().await?;
+
         Ok(info.last_mempool_update)
     }
 
@@ -127,7 +140,6 @@ impl NodeClient {
         if index_status.indexed_height != index_status.full_height {
             return Err(NodeError::NotIndexed(index_status));
         }
-
         debug!(?index_status, "Node is fully indexed.");
 
         Ok(())
@@ -137,6 +149,7 @@ impl NodeClient {
     pub async fn get_unconfirmed_transaction_ids(&self) -> Result<Vec<HashDigest>, NodeError> {
         let url = self.build_url("transactions/unconfirmed/transactionIds");
         let resp = self.http_client.get(&url).send().await?.json().await?;
+
         Ok(resp)
     }
 
@@ -154,6 +167,88 @@ impl NodeClient {
             .await?
             .json()
             .await?;
+
+        Ok(resp)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_balance(&self, address: &Base58String) -> Result<Balance, NodeError> {
+        let url = self.build_url("blockchain/balance");
+        let resp = self
+            .http_client
+            .post(&url)
+            .json(address)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(resp)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_unspent_boxes_by_ergo_tree(
+        &self,
+        ergo_tree_hex: &str,
+        offset: u32,
+        limit: u32,
+        sort_direction: &str,
+        include_unconfirmed: bool,
+        exclude_mempool_spent: bool,
+    ) -> Result<Vec<NodeBox>, NodeError> {
+        let url = self.build_url("blockchain/box/unspent/byErgoTree");
+        let query = UnspentByErgoTreeQuery {
+            offset,
+            limit,
+            sort_direction,
+            include_unconfirmed,
+            exclude_mempool_spent,
+        };
+
+        let resp = self
+            .http_client
+            .post(&url)
+            .query(&query)
+            .json(&ergo_tree_hex)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(resp)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_unspent_boxes_by_token_id(
+        &self,
+        token_id_hex: &str,
+        offset: u32,
+        limit: u32,
+        sort_direction: &str,
+        include_unconfirmed: bool,
+        exclude_mempool_spent: bool,
+    ) -> Result<Vec<NodeBox>, NodeError> {
+        let url = self.build_url(&format!(
+            "blockchain/box/unspent/byTokenId/{}",
+            token_id_hex
+        ));
+        let query = UnspentByErgoTreeQuery {
+            offset,
+            limit,
+            sort_direction,
+            include_unconfirmed,
+            exclude_mempool_spent,
+        };
+
+        let resp = self
+            .http_client
+            .get(&url)
+            .query(&query)
+            .send()
+            .await?
+            .json()
+            .await?;
+
         Ok(resp)
     }
 
