@@ -1,5 +1,5 @@
 use serde::{self, Deserialize, Serialize};
-use tracing::{debug, error, info};
+use tracing::{debug, info};
 
 use crate::types::{
     HashDigest,
