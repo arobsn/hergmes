@@ -12,6 +12,8 @@ pub struct MempoolSnapshot {
     pub transactions: Vec<UnconfirmedTransaction>,
 }
 
+const POOLING_INTERVAL: Duration = Duration::from_secs(1);
+
 #[tracing::instrument(skip(node, swap))]
 pub async fn start(node: &NodeClient, swap: Arc<ArcSwap<MempoolSnapshot>>) -> Result<(), AppError> {
     info!("Starting mempool indexer...");
@@ -31,6 +33,6 @@ pub async fn start(node: &NodeClient, swap: Arc<ArcSwap<MempoolSnapshot>>) -> Re
             _ => {}
         }
 
-        sleep(Duration::from_secs(1)).await;
+        sleep(POOLING_INTERVAL).await;
     }
 }
