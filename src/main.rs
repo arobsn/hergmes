@@ -8,10 +8,13 @@ use hergmes::{
     trace::{self, default_subscriber},
     watcher,
 };
+use tracing::warn;
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
-    let _ = dotenv();
+    if let Err(e) = dotenv() {
+        warn!("Failed to load .env file: {:?}. Using environment variables instead.", e);
+    }
     trace::init(default_subscriber());
 
     let http_client = reqwest::Client::builder()
