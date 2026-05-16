@@ -117,7 +117,7 @@ impl NodeClient {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn check_node_index_status(&self) -> Result<(), NodeError> {
+    pub async fn check_index_status(&self) -> Result<(), NodeError> {
         info!("Checking node index status...");
         let index_status = self.get_indexed_height().await?;
 
@@ -155,7 +155,7 @@ impl NodeClient {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn get_last_n_headers(&self, n: u32) -> Result<Vec<BlockHeader>, NodeError> {
+    pub async fn get_last_headers(&self, n: u32) -> Result<Vec<BlockHeader>, NodeError> {
         let url = self.build_url(&format!("blocks/lastHeaders/{n}"));
         let resp = self.http_client.get(&url).send().await?.json().await?;
         Ok(resp)

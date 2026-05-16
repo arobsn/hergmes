@@ -22,10 +22,10 @@ async fn main() -> Result<(), AppError> {
         .build()
         .expect("Failed to build HTTP client");
 
-    let node = NodeClient::new(http_client, &ERGO_NODE_URL);
-    node.check_node_index_status().await?;
+    let node_client = NodeClient::new(http_client, &ERGO_NODE_URL);
+    node_client.check_index_status().await?;
 
-    let _mempool_snapshot = watcher::spawn(node.clone()).await?;
+    let _mempool_snapshot = watcher::spawn(node_client.clone()).await?;
 
     Ok(())
 }
