@@ -1,0 +1,10 @@
+{
+  "confirmed": {
+    "nanoErgs": 0,
+    "tokens": []
+  },
+  "unconfirmed": {
+    "nanoErgs": 0,
+    "tokens": []
+  }
+}

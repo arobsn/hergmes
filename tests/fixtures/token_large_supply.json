@@ -1,0 +1,8 @@
+{
+  "id": "d9a2cc8a09abfaed87afacfbb7daee79a6b26f10c6613fc13d3f3953e5521d1a",
+  "boxId": "3dd944af1fbd2fc7ee67f0031207dfd6ba29382f25e478089161777726634753",
+  "emissionAmount": 20000000000000000,
+  "name": "Reemission Token",
+  "description": "Re-emission token, see EIP-27 for details.",
+  "decimals": 0
+}

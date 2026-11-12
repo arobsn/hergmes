@@ -22,6 +22,14 @@ pub struct IndexedHeightResponse {
     pub full_height: u64,
 }
 
+/// Error body returned by the node, e.g. `{"error": 404, "reason": "not-found", "detail": null}`.
+#[derive(Debug, Deserialize)]
+pub struct ApiError {
+    pub error: u16,
+    pub reason: String,
+    pub detail: Option<String>,
+}
+
 #[derive(Debug, Deserialize)]
 pub struct InfoResponse {
     #[serde(rename = "lastMemPoolUpdateTime")]
@@ -175,3 +183,7 @@ impl NodeClient {
         format!("{}/{}", self.base_url, path)
     }
 }
+
+#[cfg(test)]
+#[path = "node_tests.rs"]
+mod tests;

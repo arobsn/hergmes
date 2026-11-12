@@ -1,0 +1,26 @@
+[
+  {
+    "globalIndex": 58606178,
+    "inclusionHeight": 1915414,
+    "address": "2Z4YBkDsDvQj8BX7xiySFewjitqp2ge9c99jfes2whbtKitZTxdBYqbrVZUvZvKv6aqn9by4kp3LE1c26LCyosFnVnm6b6U1JYvWpYmL2ZnixJbXLjWAWuBThV1D6dLpqZJYQHYDznJCk49g5TUiS4q8khpag2aNmHwREV7JSsypHdHLgJT7MGaw51aJfNubyzSKxZ4AJXFS27EfXwyCLzW1K6GVqwkJtCoPvrcLqmqwacAWJPkmh78nke9H4oT88XmSbRt2n9aWZjosiZCafZ4osUDxmZcc5QVEeTWn8drSraY3eFKe8Mu9MSCcVU",
+    "spentTransactionId": null,
+    "spendingProof": null,
+    "boxId": "5521e3fa373af302b36f1a51d487b1632324b3e121818a19ce9062bb90d326ab",
+    "value": 906213000000000,
+    "ergoTree": "101004020e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a7017300730110010204020404040004c0fd4f05808c82f5f6030580b8c9e5ae040580f882ad16040204c0944004c0f407040004000580f882ad16d19683030191a38cc7a7019683020193c2b2a57300007473017302830108cdeeac93a38cc7b2a573030001978302019683040193b1a5730493c2a7c2b2a573050093958fa3730673079973089c73097e9a730a9d99a3730b730c0599c1a7c1b2a5730d00938cc7b2a5730e0001a390c1a7730f",
+    "assets": [
+      {
+        "tokenId": "20fa2bf23962cdf51b07722d6237c0c7b8a44f78856c0f7ec308dc1ef1a92a51",
+        "amount": 1
+      },
+      {
+        "tokenId": "d9a2cc8a09abfaed87afacfbb7daee79a6b26f10c6613fc13d3f3953e5521d1a",
+        "amount": 6710291000000000
+      }
+    ],
+    "creationHeight": 1915414,
+    "additionalRegisters": {},
+    "transactionId": "fc7b3b9db6c0d8748abb8e68b1cc26d9f9269b1d469cad343f9d9ecb33195912",
+    "index": 0
+  }
+]

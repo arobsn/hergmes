@@ -1,0 +1,150 @@
+{
+  "recordedAt": "2026-11-12T21:30:08Z",
+  "nodeVersion": "6.0.8-0-c1a69f65-20261013-0626-SNAPSHOT",
+  "network": "mainnet",
+  "fullHeight": 1915414,
+  "samples": {
+    "address": "9gsbKAia1ARpA2zyotMzrWnJvmfuqcPemue5pfbm87Mnt5h1Tmm",
+    "nft": "20fa2bf23962cdf51b07722d6237c0c7b8a44f78856c0f7ec308dc1ef1a92a51",
+    "smallSupplyToken": "8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
+    "largeSupplyToken": "d9a2cc8a09abfaed87afacfbb7daee79a6b26f10c6613fc13d3f3953e5521d1a",
+    "headerId": "7507c76facf0e222f90ef426e08dbad8e4a263736b21b65286545b72eb4edeed"
+  },
+  "fixtures": {
+    "info": {
+      "method": "GET",
+      "path": "/info",
+      "status": 200
+    },
+    "indexed_height": {
+      "method": "GET",
+      "path": "/blockchain/indexedHeight",
+      "status": 200
+    },
+    "last_headers": {
+      "method": "GET",
+      "path": "/blocks/lastHeaders/3",
+      "status": 200
+    },
+    "indexed_block": {
+      "method": "GET",
+      "path": "/blockchain/block/byHeaderId/7507c76facf0e222f90ef426e08dbad8e4a263736b21b65286545b72eb4edeed",
+      "status": 200,
+      "notes": "Inputs are full indexed boxes. The live shape differs from the spec (top-level header/transactions/height/size)."
+    },
+    "indexed_block_unknown": {
+      "method": "GET",
+      "path": "/blockchain/block/byHeaderId/abababababababababababababababababababababababababababababababab",
+      "status": 404
+    },
+    "block": {
+      "method": "GET",
+      "path": "/blocks/7507c76facf0e222f90ef426e08dbad8e4a263736b21b65286545b72eb4edeed",
+      "status": 200,
+      "notes": "Plain block: inputs carry only boxId and spendingProof."
+    },
+    "mempool": {
+      "method": "GET",
+      "path": "/transactions/unconfirmed?limit=20",
+      "status": 200
+    },
+    "mempool_unresolved_input": {
+      "method": "GET",
+      "path": "/transactions/unconfirmed",
+      "status": 200,
+      "synthetic": true,
+      "notes": "Copy of mempool.json with the first tx's first input reduced to boxId + spendingProof, as the node returns for ergo#2248. No such input was live when recording."
+    },
+    "unspent_by_address": {
+      "method": "POST",
+      "path": "/blockchain/box/unspent/byAddress?limit=5&sortDirection=asc",
+      "status": 200,
+      "body": "9gsbKAia1ARpA2zyotMzrWnJvmfuqcPemue5pfbm87Mnt5h1Tmm"
+    },
+    "unspent_by_address_empty": {
+      "method": "POST",
+      "path": "/blockchain/box/unspent/byAddress?limit=5&sortDirection=asc",
+      "status": 200,
+      "body": "9gNvAv97W71Wm33GoXgSQBFJxinFubKvE6wh2dEhFTSgYEe783j",
+      "notes": "Empty set is 200 [] (the spec says 404)."
+    },
+    "balance": {
+      "method": "POST",
+      "path": "/blockchain/balance",
+      "status": 200,
+      "body": "9gsbKAia1ARpA2zyotMzrWnJvmfuqcPemue5pfbm87Mnt5h1Tmm"
+    },
+    "balance_empty": {
+      "method": "POST",
+      "path": "/blockchain/balance",
+      "status": 200,
+      "body": "9gNvAv97W71Wm33GoXgSQBFJxinFubKvE6wh2dEhFTSgYEe783j"
+    },
+    "token_nft": {
+      "method": "GET",
+      "path": "/blockchain/token/byId/20fa2bf23962cdf51b07722d6237c0c7b8a44f78856c0f7ec308dc1ef1a92a51",
+      "status": 200
+    },
+    "token_small_supply": {
+      "method": "GET",
+      "path": "/blockchain/token/byId/8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
+      "status": 200
+    },
+    "token_large_supply": {
+      "method": "GET",
+      "path": "/blockchain/token/byId/d9a2cc8a09abfaed87afacfbb7daee79a6b26f10c6613fc13d3f3953e5521d1a",
+      "status": 200
+    },
+    "token_unknown": {
+      "method": "GET",
+      "path": "/blockchain/token/byId/abababababababababababababababababababababababababababababababab",
+      "status": 404
+    },
+    "unspent_by_token_nft": {
+      "method": "GET",
+      "path": "/blockchain/box/unspent/byTokenId/20fa2bf23962cdf51b07722d6237c0c7b8a44f78856c0f7ec308dc1ef1a92a51?limit=100&sortDirection=asc",
+      "status": 200
+    },
+    "unspent_by_token_small_supply": {
+      "method": "GET",
+      "path": "/blockchain/box/unspent/byTokenId/8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035?limit=100&sortDirection=asc",
+      "status": 200
+    },
+    "unspent_by_token_unknown": {
+      "method": "GET",
+      "path": "/blockchain/box/unspent/byTokenId/abababababababababababababababababababababababababababababababab?limit=100&sortDirection=asc",
+      "status": 200,
+      "notes": "Unknown token is 200 [] (the spec says 404)."
+    },
+    "box_by_id_spent": {
+      "method": "GET",
+      "path": "/blockchain/box/byId/c97696655c0cfaf1c58c1611ee3c9460ee3b38ec4a33591574269bfa16c323ff",
+      "status": 200,
+      "notes": "Spent box: spentTransactionId is set, spendingHeight is absent."
+    },
+    "box_by_id_unknown": {
+      "method": "GET",
+      "path": "/blockchain/box/byId/abababababababababababababababababababababababababababababababab",
+      "status": 404
+    },
+    "with_pool_partial": {
+      "method": "POST",
+      "path": "/utxo/withPool/byIds",
+      "status": 200,
+      "body": [
+        "abababababababababababababababababababababababababababababababab",
+        "9634333a7285cb3b6f8daf90f2eadaa35a035c86368469ac49f5278e164b120a"
+      ],
+      "notes": "Missing ids are silently omitted."
+    },
+    "with_pool_none": {
+      "method": "POST",
+      "path": "/utxo/withPool/byIds",
+      "status": 200,
+      "body": [
+        "abababababababababababababababababababababababababababababababab"
+      ],
+      "notes": "No id exists: 200 [] (the spec says 404)."
+    }
+  }
+}

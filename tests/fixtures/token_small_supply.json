@@ -1,0 +1,8 @@
+{
+  "id": "8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
+  "boxId": "43be8acb757eb6b43d8cfbb03d283694b9fbfd0b9c798ec6e2d363b1e2833bfe",
+  "emissionAmount": 15,
+  "name": "ERGUSD-PT",
+  "description": "ERG/USD Oracle Pool Participant Token",
+  "decimals": 0
+}

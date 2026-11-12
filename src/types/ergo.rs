@@ -117,3 +117,77 @@ pub struct NonMandatoryRegisters {
     #[serde(rename = "R9")]
     pub r9: Option<HexBytes>,
 }
+
+/// A box as returned by the node's extra indexer (`/blockchain/...` endpoints).
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+pub struct IndexedBox {
+    #[serde(flatten)]
+    pub utxo: UTxO,
+
+    #[serde(rename = "inclusionHeight")]
+    pub inclusion_height: u32,
+
+    #[serde(rename = "spentTransactionId")]
+    pub spent_transaction_id: Option<HashDigest>,
+}
+
+/// A transaction inside an [`IndexedBlock`]. Inputs are full boxes.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct IndexedTransaction {
+    pub id: HashDigest,
+
+    #[serde(rename = "blockId")]
+    pub block_id: HashDigest,
+
+    #[serde(rename = "inclusionHeight")]
+    pub inclusion_height: u32,
+
+    pub inputs: Vec<IndexedBox>,
+    pub outputs: Vec<IndexedBox>,
+}
+
+/// A block from `/blockchain/block/byHeaderId/{id}`.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct IndexedBlock {
+    pub header: BlockHeader,
+    pub transactions: Vec<IndexedTransaction>,
+}
+
+/// Token metadata from `/blockchain/token/byId/{tokenId}`.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+pub struct TokenInfo {
+    pub id: HashDigest,
+
+    #[serde(rename = "boxId")]
+    pub box_id: HashDigest,
+
+    #[serde(rename = "emissionAmount")]
+    pub emission_amount: u64,
+
+    pub name: Option<String>,
+    pub description: Option<String>,
+    pub decimals: Option<u32>,
+}
+
+/// Response of `POST /blockchain/balance`.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct BalanceResponse {
+    pub confirmed: Balance,
+    // `unconfirmed` is unreliable and must not be used
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+pub struct Balance {
+    #[serde(rename = "nanoErgs")]
+    pub nano_ergs: u64,
+    pub tokens: Vec<TokenBalance>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+pub struct TokenBalance {
+    #[serde(rename = "tokenId")]
+    pub token_id: HashDigest,
+    pub amount: u64,
+    pub decimals: Option<u32>,
+    pub name: Option<String>,
+}
