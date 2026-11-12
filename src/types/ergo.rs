@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::types::{HashDigest, HexBytes};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct BlockHeader {
     pub id: HashDigest,
     #[serde(rename = "parentId")]
@@ -12,34 +12,34 @@ pub struct BlockHeader {
     pub height: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct Block {
     pub header: BlockHeader,
     #[serde(rename = "blockTransactions")]
     pub transactions: BlockTransactions,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct BlockTransactions {
     #[serde(rename = "headerId")]
     pub header_id: HashDigest,
     pub transactions: Vec<BlockTransaction>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct MinimalInput {
     #[serde(rename = "boxId")]
     pub id: HashDigest,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct BlockTransaction {
     pub id: HashDigest,
     pub inputs: Vec<MinimalInput>,
     pub outputs: Vec<UTxO>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Transaction {
     pub id: HashDigest,
     pub inputs: Vec<TransactionInput>,
@@ -48,14 +48,14 @@ pub struct Transaction {
     pub height: u32,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct UnconfirmedTransaction {
     pub id: HashDigest,
     pub inputs: Vec<TransactionInput>,
     pub outputs: Vec<UTxO>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct TransactionInput {
     #[serde(flatten)]
     pub utxo: UTxO,
@@ -63,14 +63,14 @@ pub struct TransactionInput {
     pub spending_proof: SpendingProof,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct SpendingProof {
     #[serde(rename = "proofBytes")]
     pub proof_bytes: HexBytes,
     pub extension: HashMap<String, HexBytes>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct UTxO {
     #[serde(rename = "boxId")]
     pub id: HashDigest,
@@ -95,14 +95,14 @@ pub struct UTxO {
     pub transaction_id: HashDigest,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Token {
     #[serde(rename = "tokenId")]
     pub id: HashDigest,
     pub amount: u64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct NonMandatoryRegisters {
     #[serde(rename = "R4")]
     pub r4: Option<HexBytes>,

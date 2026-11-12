@@ -8,7 +8,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 pub type HashDigest = Digest<32>;
 
 /// A fixed-size byte array represented as a hex string in serialization.
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Digest<const N: usize>(pub [u8; N]);
 
 impl<const N: usize> Display for Digest<N> {
@@ -55,7 +55,7 @@ impl<const N: usize> Serialize for Digest<N> {
 }
 
 /// A byte vector represented as a hex string in serialization.
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct HexBytes(pub Vec<u8>);
 
 impl Display for HexBytes {

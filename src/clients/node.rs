@@ -66,6 +66,16 @@ impl From<MempoolTransactionResponse> for UnconfirmedTransaction {
     }
 }
 
+/// Drops transactions with any input whose UTxO the node could not resolve.
+///
+/// See <https://github.com/ergoplatform/ergo/issues/2248#issuecomment-3463844934>.
+fn filter_out_unresolved(txs: Vec<MempoolTransactionResponse>) -> Vec<UnconfirmedTransaction> {
+    txs.into_iter()
+        .filter(|utx| utx.inputs.iter().all(|i| i.utxo.is_some()))
+        .map(UnconfirmedTransaction::from)
+        .collect()
+}
+
 impl NodeClient {
     pub fn new(http_client: reqwest::Client, base_url: &str) -> Self {
         Self { http_client, base_url: base_url.trim_end_matches('/').to_string() }
@@ -90,15 +100,7 @@ impl NodeClient {
             .json()
             .await?;
 
-        // Filter out invalid transactions (those with missing UTxOs in inputs)
-        // https://github.com/ergoplatform/ergo/issues/2248#issuecomment-3463844934
-        let valid = resp
-            .into_iter()
-            .filter(|utx| utx.inputs.iter().all(|i| i.utxo.is_some()))
-            .map(|utx| utx.into())
-            .collect::<Vec<UnconfirmedTransaction>>();
-
-        Ok(valid)
+        Ok(filter_out_unresolved(resp))
     }
 
     #[tracing::instrument(skip(self))]
@@ -143,7 +145,7 @@ impl NodeClient {
         tx_ids: &[HashDigest],
     ) -> Result<Vec<UnconfirmedTransaction>, NodeError> {
         let url = self.build_url("transactions/unconfirmed/byTransactionIds");
-        let resp = self
+        let resp: Vec<MempoolTransactionResponse> = self
             .http_client
             .post(&url)
             .json(tx_ids)
@@ -151,7 +153,8 @@ impl NodeClient {
             .await?
             .json()
             .await?;
-        Ok(resp)
+
+        Ok(filter_out_unresolved(resp))
     }
 
     #[tracing::instrument(skip(self))]

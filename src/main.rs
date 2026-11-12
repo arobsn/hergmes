@@ -25,7 +25,8 @@ async fn main() -> Result<(), AppError> {
     let node_client = NodeClient::new(http_client, &ERGO_NODE_URL);
     node_client.check_index_status().await?;
 
-    let _mempool_snapshot = watcher::spawn(node_client.clone()).await?;
+    let watcher = watcher::spawn(node_client.clone());
+    let _mempool_snapshot = watcher.mempool_snapshot;
 
-    Ok(())
+    watcher.handle.await?
 }
