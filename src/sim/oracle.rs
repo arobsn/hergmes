@@ -12,7 +12,9 @@ use std::{
 use crate::{
     engine::{BlockRef, BoxKey, PendingTx, Totals, TrackingKey},
     sim::SimBlock,
-    types::ergo::{BoxId, TxId, UTxO, UnconfirmedTransaction},
+    types::ergo::{
+        BoxId, IndexedBlock, IndexedBox, IndexedTransaction, TxId, UTxO, UnconfirmedTransaction,
+    },
 };
 
 pub struct Oracle {
@@ -66,6 +68,42 @@ impl Oracle {
         let mut utxo = self.utxo(height);
         utxo.retain(|_, b| key.matches(b));
         utxo
+    }
+
+    /// The key's unspent boxes after the block at `height`, as a first load returns them.
+    pub fn load(&self, key: &TrackingKey, height: u32) -> Vec<IndexedBox> {
+        self.unspent(key, height)
+            .into_iter()
+            .map(|(k, b)| IndexedBox { utxo: (*b).clone(), inclusion_height: k.inclusion_height })
+            .collect()
+    }
+
+    /// The block at `height` as the indexer serves it: inputs and outputs with their
+    /// inclusion heights on this branch.
+    pub fn indexed_block(&self, height: u32) -> IndexedBlock {
+        let start = self.blocks[0].header.height;
+        let block =
+            &self.blocks[height.checked_sub(start).expect("height on this branch") as usize];
+        let mut included: HashMap<BoxId, u32> = HashMap::new();
+        for b in self.blocks.iter().take_while(|b| b.header.height <= height) {
+            for tx in &b.txs {
+                included.extend(tx.outputs.iter().map(|o| (o.id, b.header.height)));
+            }
+        }
+        let indexed =
+            |b: &Arc<UTxO>| IndexedBox { utxo: (**b).clone(), inclusion_height: included[&b.id] };
+        IndexedBlock {
+            header: block.header.clone(),
+            transactions: block
+                .txs
+                .iter()
+                .map(|tx| IndexedTransaction {
+                    id: tx.id,
+                    inputs: tx.inputs.iter().map(indexed).collect(),
+                    outputs: tx.outputs.iter().map(indexed).collect(),
+                })
+                .collect(),
+        }
     }
 
     pub fn totals(&self, key: &TrackingKey, height: u32) -> Totals {

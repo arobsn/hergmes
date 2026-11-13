@@ -37,11 +37,24 @@ pub fn pending_order(
     txs: &[UnconfirmedTransaction],
     is_confirmed: impl Fn(&UTxO) -> bool,
 ) -> Vec<usize> {
+    pending_order_among(txs, 0..txs.len(), is_confirmed)
+}
+
+/// [`pending_order`] over only the txs of `txs` at `candidates`, as if the others were not
+/// listed: an input created by a tx outside them is asked of `is_confirmed`.
+pub fn pending_order_among(
+    txs: &[UnconfirmedTransaction],
+    candidates: impl IntoIterator<Item = usize>,
+    is_confirmed: impl Fn(&UTxO) -> bool,
+) -> Vec<usize> {
     let mut first: HashSet<TxId> = HashSet::with_capacity(txs.len());
-    let live: Vec<bool> = txs.iter().map(|tx| first.insert(tx.id)).collect();
+    let live: Vec<usize> = candidates
+        .into_iter()
+        .filter(|&i| first.insert(txs[i].id))
+        .collect();
     let mut creator: HashMap<BoxId, usize> = HashMap::new();
-    for (i, tx) in txs.iter().enumerate().filter(|(i, _)| live[*i]) {
-        creator.extend(tx.outputs.iter().map(|o| (o.id, i)));
+    for &i in &live {
+        creator.extend(txs[i].outputs.iter().map(|o| (o.id, i)));
     }
 
     // Per tx, its inputs still waiting for a pending parent; `None` once one can never be
@@ -49,7 +62,8 @@ pub fn pending_order(
     let mut waiting: Vec<Option<usize>> = vec![Some(0); txs.len()];
     let mut children: Vec<Vec<usize>> = vec![Vec::new(); txs.len()];
     let mut ready: BTreeMap<TxId, usize> = BTreeMap::new();
-    for (i, tx) in txs.iter().enumerate().filter(|(i, _)| live[*i]) {
+    for &i in &live {
+        let tx = &txs[i];
         for input in &tx.inputs {
             match creator.get(&input.id) {
                 // A tx cannot spend its own output; such an input is never available.
@@ -162,26 +176,45 @@ pub fn pending_delta(
     order: &[usize],
     key: &TrackingKey,
 ) -> PendingDelta {
-    // Per matching box: whether the overlay creates it, and whether it spends it.
-    let mut sides: HashMap<BoxId, (&UTxO, bool, bool)> = HashMap::new();
+    let mut sides = DeltaSides::default();
     for tx in order.iter().map(|&i| &txs[i]) {
         for b in tx.outputs.iter().filter(|b| key.matches(b)) {
-            sides.entry(b.id).or_insert((b, false, false)).1 = true;
+            sides.created(b);
         }
         for b in tx.inputs.iter().filter(|b| key.matches(b)) {
-            sides.entry(b.id).or_insert((b, false, false)).2 = true;
+            sides.spent(b);
         }
     }
-    let mut delta = PendingDelta::default();
-    for (b, created, spent) in sides.into_values() {
-        match (created, spent) {
-            (true, false) => delta.add(b, 1),
-            (false, true) => delta.add(b, -1),
-            _ => {}
-        }
+    sides.delta()
+}
+
+/// What an overlay does to each box of one key: whether it creates it, and whether it spends
+/// it. Builds a [`PendingDelta`].
+#[derive(Debug, Default)]
+pub struct DeltaSides<'a>(HashMap<BoxId, (&'a UTxO, bool, bool)>);
+
+impl<'a> DeltaSides<'a> {
+    pub fn created(&mut self, b: &'a UTxO) {
+        self.0.entry(b.id).or_insert((b, false, false)).1 = true;
     }
-    delta.tokens.retain(|_, amount| *amount != 0);
-    delta
+
+    pub fn spent(&mut self, b: &'a UTxO) {
+        self.0.entry(b.id).or_insert((b, false, false)).2 = true;
+    }
+
+    /// Boxes created only count plus, boxes spent only minus, and both cancel out.
+    pub fn delta(self) -> PendingDelta {
+        let mut delta = PendingDelta::default();
+        for (b, created, spent) in self.0.into_values() {
+            match (created, spent) {
+                (true, false) => delta.add(b, 1),
+                (false, true) => delta.add(b, -1),
+                _ => {}
+            }
+        }
+        delta.tokens.retain(|_, amount| *amount != 0);
+        delta
+    }
 }
 
 /// The keys a box matches: its tree, and each token it holds, once each.

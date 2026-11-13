@@ -1,6 +1,7 @@
 //! Helpers shared by the simulator's own tests.
 
 use std::{
+    collections::{BTreeMap, HashSet},
     future::Future,
     pin::pin,
     task::{Context, Poll, Waker},
@@ -13,7 +14,8 @@ use proptest::{
 
 use crate::{
     clients::{Page, source::MAX_PAGE_LIMIT},
-    sim::{Chain, SimConfig, SimOp, strategy},
+    engine::{PendingTx, overlay::PendingDelta},
+    sim::{self, Chain, SimConfig, SimOp, strategy},
     types::{
         Digest, HashDigest, HexBytes,
         ergo::{BoxId, NonMandatoryRegisters, Token, UTxO, UnconfirmedTransaction},
@@ -78,4 +80,37 @@ pub fn utxo(n: u8, tx: u8, owner: u8, tokens: &[(u8, u64)]) -> UTxO {
 
 pub fn tx(id: u8, inputs: Vec<UTxO>, outputs: Vec<UTxO>) -> UnconfirmedTransaction {
     UnconfirmedTransaction { id: digest(id), inputs, outputs }
+}
+
+/// The reference pending delta, computed another way than the engine's: the key's balance
+/// once the overlay confirms (its confirmed boxes and the overlay's outputs, minus everything
+/// the overlay spends), minus its confirmed balance. Also checks that the first is never
+/// negative, which the unsigned totals would catch by overflowing.
+pub fn reference_delta(confirmed: &[&UTxO], overlay: &[PendingTx]) -> PendingDelta {
+    let spent: HashSet<BoxId> = overlay
+        .iter()
+        .flat_map(|p| p.spent.iter().copied())
+        .collect();
+    let created = overlay.iter().flat_map(|p| p.created.iter().map(|b| &**b));
+    let after = sim::totals(
+        confirmed
+            .iter()
+            .copied()
+            .chain(created)
+            .filter(|b| !spent.contains(&b.id)),
+    );
+    let before = sim::totals(confirmed.iter().copied());
+
+    let mut delta = PendingDelta {
+        nano_ergs: i128::from(after.nano_ergs) - i128::from(before.nano_ergs),
+        tokens: BTreeMap::new(),
+    };
+    for (id, &amount) in &after.tokens {
+        *delta.tokens.entry(*id).or_default() += i128::from(amount);
+    }
+    for (id, &amount) in &before.tokens {
+        *delta.tokens.entry(*id).or_default() -= i128::from(amount);
+    }
+    delta.tokens.retain(|_, amount| *amount != 0);
+    delta
 }

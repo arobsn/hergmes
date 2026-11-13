@@ -15,7 +15,7 @@ use crate::{
     },
     sim::{
         self, Chain, SimConfig, strategy,
-        testing::{digest, new_chain, sample_history, tx, utxo},
+        testing::{digest, new_chain, reference_delta, sample_history, tx, utxo},
     },
     types::{
         Digest, HexBytes,
@@ -43,39 +43,6 @@ fn shuffled<T: Clone>(items: &[T], mut seed: u64) -> Vec<T> {
 
 fn ids(txs: &[UnconfirmedTransaction], order: &[usize]) -> Vec<TxId> {
     order.iter().map(|&i| txs[i].id).collect()
-}
-
-/// The reference pending delta, computed another way than the engine's: the key's balance
-/// once the overlay confirms (its confirmed boxes and the overlay's outputs, minus everything
-/// the overlay spends), minus its confirmed balance. Also checks that the first is never
-/// negative, which the unsigned totals would catch by overflowing.
-fn reference_delta(confirmed: &[&UTxO], overlay: &[PendingTx]) -> PendingDelta {
-    let spent: HashSet<BoxId> = overlay
-        .iter()
-        .flat_map(|p| p.spent.iter().copied())
-        .collect();
-    let created = overlay.iter().flat_map(|p| p.created.iter().map(|b| &**b));
-    let after = sim::totals(
-        confirmed
-            .iter()
-            .copied()
-            .chain(created)
-            .filter(|b| !spent.contains(&b.id)),
-    );
-    let before = sim::totals(confirmed.iter().copied());
-
-    let mut delta = PendingDelta {
-        nano_ergs: i128::from(after.nano_ergs) - i128::from(before.nano_ergs),
-        tokens: BTreeMap::new(),
-    };
-    for (id, &amount) in &after.tokens {
-        *delta.tokens.entry(*id).or_default() += i128::from(amount);
-    }
-    for (id, &amount) in &before.tokens {
-        *delta.tokens.entry(*id).or_default() -= i128::from(amount);
-    }
-    delta.tokens.retain(|_, amount| *amount != 0);
-    delta
 }
 
 /// Every pending spend refers to a confirmed box or to one created by an earlier tx of the
