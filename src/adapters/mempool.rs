@@ -6,33 +6,30 @@
 
 use std::{sync::Arc, time::Duration};
 
-use tokio::{
-    sync::mpsc,
-    time::{Instant, MissedTickBehavior},
-};
-use tracing::{debug, info, warn};
+use tokio::time::Instant;
+use tracing::{debug, info};
 
 use crate::{
+    adapters::best_full_block,
     clients::{NodeError, NodeSource, node::InfoResponse},
-    engine::{BlockRef, Event},
+    engine::BlockRef,
     types::ergo::UnconfirmedTransaction,
 };
 
-/// How often the poller looks at the node, and how long it trusts an unchanged pool.
+/// How long the poller trusts an unchanged pool. How often it polls is the follower's
+/// interval.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Config {
-    /// How often `/info` is read. A read that shows a change fetches the pool.
-    pub interval: Duration,
     /// How long after a snapshot the pool is fetched again even if `/info` shows no change.
     /// `lastMemPoolUpdateTime` is a hint: a fetch right after it moves can still return the
     /// previous pool, and nothing moves it again. Each snapshot makes the engine recompute
-    /// every tracked overlay, so it is kept well above `interval`.
+    /// every tracked overlay, so it is kept well above the polling interval.
     pub refresh: Duration,
 }
 
 impl Default for Config {
     fn default() -> Self {
-        Self { interval: Duration::from_secs(1), refresh: Duration::from_secs(10) }
+        Self { refresh: Duration::from_secs(10) }
     }
 }
 
@@ -71,17 +68,13 @@ pub struct MempoolPoller<S> {
     last: Option<Taken>,
 }
 
-/// The best full block `/info` reports, if the node has one.
-fn tip_of(info: &InfoResponse) -> Option<BlockRef> {
-    Some(BlockRef { height: info.full_height?, header_id: info.best_full_header_id? })
-}
-
 impl<S: NodeSource> MempoolPoller<S> {
     pub fn new(source: S, config: Config) -> Self {
         Self { source, config, last: None }
     }
 
-    /// One poll at `now`: read `/info`, and fetch the pool if anything changed.
+    /// One poll at `now`, given the tick's `/info` read (`before`): fetch the pool if
+    /// anything changed since the last snapshot.
     ///
     /// The pool is fetched when `lastMemPoolUpdateTime` or the tip differs from the last
     /// snapshot's, or the refresh period has passed. The time is compared by equality, since
@@ -93,9 +86,12 @@ impl<S: NodeSource> MempoolPoller<S> {
     /// A snapshot is kept only if `/info` shows the same tip before and after the fetch;
     /// otherwise it is discarded and fetched again, up to [`ATTEMPTS`] times. A failed call
     /// or a discarded snapshot leaves nothing remembered, so the next poll fetches.
-    pub async fn poll(&mut self, now: Instant) -> Result<Poll, NodeError> {
-        let mut before = self.source.info().await?;
-        let Some(mut tip) = tip_of(&before) else {
+    pub async fn poll(
+        &mut self,
+        mut before: InfoResponse,
+        now: Instant,
+    ) -> Result<Poll, NodeError> {
+        let Some(mut tip) = best_full_block(&before) else {
             debug!("Mempool not polled: the node has no full block yet");
             return Ok(Poll::NoTip);
         };
@@ -110,7 +106,7 @@ impl<S: NodeSource> MempoolPoller<S> {
         for attempt in 1..=ATTEMPTS {
             let txs = self.source.mempool().await?;
             let after = self.source.info().await?;
-            let moved_to = tip_of(&after);
+            let moved_to = best_full_block(&after);
             if moved_to == Some(tip) {
                 self.last = Some(Taken { update: before.last_mempool_update, tip, at: now });
                 debug!(txs = txs.len(), height = tip.height, "Mempool snapshot taken");
@@ -129,27 +125,6 @@ impl<S: NodeSource> MempoolPoller<S> {
             tip = next;
         }
         Ok(Poll::TipMoved)
-    }
-
-    /// Polls every interval and sends each snapshot to the engine, until its inbox closes.
-    /// A failed poll is logged and retried at the next interval.
-    pub async fn run(mut self, events: mpsc::Sender<Event>) {
-        let mut ticker = tokio::time::interval(self.config.interval);
-        ticker.set_missed_tick_behavior(MissedTickBehavior::Delay);
-        loop {
-            ticker.tick().await;
-            match self.poll(Instant::now()).await {
-                Ok(Poll::Snapshot { txs, observed_tip }) => {
-                    let event = Event::MempoolSnapshot { txs, observed_tip };
-                    if events.send(event).await.is_err() {
-                        info!("Mempool poller stopped: the engine's inbox is closed");
-                        return;
-                    }
-                }
-                Ok(Poll::Unchanged | Poll::NoTip | Poll::TipMoved) => {}
-                Err(error) => warn!(%error, "Mempool poll failed"),
-            }
-        }
     }
 }
 

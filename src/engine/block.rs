@@ -87,6 +87,20 @@ impl KeyId {
     pub(super) const MAX: KeyId = KeyId(u32::MAX);
 }
 
+/// A block of the engine's chain, with its parent: what the block consumer walks back to.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct ChainLink {
+    pub block: BlockRef,
+    pub parent_id: HeaderId,
+}
+
+impl ChainLink {
+    /// The block before this one.
+    pub fn parent(&self) -> BlockRef {
+        BlockRef { height: self.block.height - 1, header_id: self.parent_id }
+    }
+}
+
 /// A full box kept in the ring buffer.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StoredBox {

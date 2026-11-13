@@ -12,6 +12,12 @@ fn poller(sim: &SimChain) -> MempoolPoller<SimChain> {
     MempoolPoller::new(sim.clone(), Config::default())
 }
 
+/// One poll, with the `/info` read the follower would pass it.
+fn poll(poller: &mut MempoolPoller<SimChain>, now: Instant) -> Result<Poll, NodeError> {
+    let info = ready(poller.source.info()).unwrap();
+    ready(poller.poll(info, now))
+}
+
 fn snapshot(poll: Poll) -> (Arc<[UnconfirmedTransaction]>, BlockRef) {
     match poll {
         Poll::Snapshot { txs, observed_tip } => (txs, observed_tip),
@@ -40,7 +46,7 @@ mod sim {
     #[test]
     fn the_first_poll_takes_the_pool_at_the_tip() {
         let sim = SimChain::new(busy_chain());
-        let (txs, tip) = snapshot(ready(poller(&sim).poll(Instant::now())).unwrap());
+        let (txs, tip) = snapshot(poll(&mut poller(&sim), Instant::now()).unwrap());
         let chain = sim.lock();
         assert_eq!(tip, chain.tip());
         assert_eq!(&*txs, chain.mempool().as_slice());
@@ -54,8 +60,8 @@ mod sim {
         let sim = SimChain::new(busy_chain());
         let mut poller = poller(&sim);
         let now = Instant::now();
-        snapshot(ready(poller.poll(now)).unwrap());
-        let poll = ready(poller.poll(now + Duration::from_secs(1))).unwrap();
+        snapshot(poll(&mut poller, now).unwrap());
+        let poll = poll(&mut poller, now + Duration::from_secs(1)).unwrap();
         assert_eq!(poll, Poll::Unchanged);
         assert_eq!(sim.calls()[3..], [Endpoint::Info]);
     }
@@ -65,9 +71,9 @@ mod sim {
         let sim = SimChain::new(busy_chain());
         let mut poller = poller(&sim);
         let now = Instant::now();
-        let (before, tip) = snapshot(ready(poller.poll(now)).unwrap());
+        let (before, tip) = snapshot(poll(&mut poller, now).unwrap());
         let added = sim.lock().mempool_add(9).expect("a pending tx");
-        let (after, same_tip) = snapshot(ready(poller.poll(now)).unwrap());
+        let (after, same_tip) = snapshot(poll(&mut poller, now).unwrap());
         assert_eq!(same_tip, tip);
         assert_eq!(after.len(), before.len() + 1);
         assert!(after.iter().any(|tx| tx.id == added.id));
@@ -79,9 +85,9 @@ mod sim {
         let sim = SimChain::new(busy_chain());
         let mut poller = poller(&sim);
         let now = Instant::now();
-        snapshot(ready(poller.poll(now)).unwrap());
+        snapshot(poll(&mut poller, now).unwrap());
         let block = sim.lock().mine(2, 1, 5);
-        let (txs, tip) = snapshot(ready(poller.poll(now)).unwrap());
+        let (txs, tip) = snapshot(poll(&mut poller, now).unwrap());
         assert_eq!(tip, block);
         assert_eq!(&*txs, sim.lock().mempool().as_slice());
     }
@@ -91,10 +97,10 @@ mod sim {
         let sim = SimChain::new(busy_chain());
         let mut poller = poller(&sim);
         let now = Instant::now();
-        let (before, _) = snapshot(ready(poller.poll(now)).unwrap());
+        let (before, _) = snapshot(poll(&mut poller, now).unwrap());
         assert!(!before.is_empty());
         sim.lock().restart_node();
-        let (after, _) = snapshot(ready(poller.poll(now)).unwrap());
+        let (after, _) = snapshot(poll(&mut poller, now).unwrap());
         assert!(after.is_empty());
     }
 
@@ -104,15 +110,15 @@ mod sim {
         let mut poller = poller(&sim);
         let now = Instant::now();
         let refresh = Config::default().refresh;
-        let (first, _) = snapshot(ready(poller.poll(now)).unwrap());
+        let (first, _) = snapshot(poll(&mut poller, now).unwrap());
         let early = now + refresh - Duration::from_millis(1);
-        assert_eq!(ready(poller.poll(early)).unwrap(), Poll::Unchanged);
-        let (second, _) = snapshot(ready(poller.poll(now + refresh)).unwrap());
+        assert_eq!(poll(&mut poller, early).unwrap(), Poll::Unchanged);
+        let (second, _) = snapshot(poll(&mut poller, now + refresh).unwrap());
         assert_eq!(second, first);
         assert_one_fetch(&sim, 4);
         // The refresh period counts from the refetch.
         assert_eq!(
-            ready(poller.poll(now + refresh + early.duration_since(now))).unwrap(),
+            poll(&mut poller, now + refresh + early.duration_since(now)).unwrap(),
             Poll::Unchanged
         );
     }
@@ -127,7 +133,7 @@ mod sim {
                 mined = Some(chain.mine(2, 1, 5));
             }
         });
-        let (txs, tip) = snapshot(ready(poller(&sim).poll(Instant::now())).unwrap());
+        let (txs, tip) = snapshot(poll(&mut poller(&sim), Instant::now()).unwrap());
         assert_ne!(tip, old_tip);
         assert_eq!(tip, sim.lock().tip());
         assert_eq!(&*txs, sim.lock().mempool().as_slice());
@@ -149,7 +155,7 @@ mod sim {
                 chain.mine(0, 2, 11);
             }
         });
-        let (_, tip) = snapshot(ready(poller(&sim).poll(Instant::now())).unwrap());
+        let (_, tip) = snapshot(poll(&mut poller(&sim), Instant::now()).unwrap());
         assert_eq!(tip.height, old_tip.height);
         assert_ne!(tip.header_id, old_tip.header_id);
         assert_eq!(tip, sim.lock().tip());
@@ -168,7 +174,7 @@ mod sim {
         });
         let mut poller = poller(&sim);
         let now = Instant::now();
-        assert_eq!(ready(poller.poll(now)).unwrap(), Poll::TipMoved);
+        assert_eq!(poll(&mut poller, now).unwrap(), Poll::TipMoved);
         let fetches = sim
             .calls()
             .iter()
@@ -178,7 +184,7 @@ mod sim {
 
         // Nothing was remembered: once the tip holds still, the same instant fetches again.
         sim.on_call(|_, _| {});
-        let (_, tip) = snapshot(ready(poller.poll(now)).unwrap());
+        let (_, tip) = snapshot(poll(&mut poller, now).unwrap());
         assert_eq!(tip, sim.lock().tip());
     }
 }
@@ -249,6 +255,14 @@ mod node {
         (server, MempoolPoller::new(client, Config::default()))
     }
 
+    async fn poll_node(
+        poller: &mut MempoolPoller<NodeClient>,
+        now: Instant,
+    ) -> Result<Poll, NodeError> {
+        let info = poller.source.info().await?;
+        poller.poll(info, now).await
+    }
+
     async fn fetches(server: &MockServer) -> usize {
         let requests = server.received_requests().await.unwrap();
         requests
@@ -262,7 +276,7 @@ mod node {
         let (header, height) = recorded_tip();
         let tip = Some((header.as_str(), height));
         let (_server, mut poller) = node(vec![info(5, tip), info(5, tip)]).await;
-        let (txs, observed) = snapshot(poller.poll(Instant::now()).await.unwrap());
+        let (txs, observed) = snapshot(poll_node(&mut poller, Instant::now()).await.unwrap());
         assert_eq!(observed.height, height);
         assert_eq!(observed.header_id.to_string(), header);
         assert!(!txs.is_empty());
@@ -275,8 +289,8 @@ mod node {
         let (server, mut poller) =
             node(vec![info(200, tip), info(200, tip), info(100, tip), info(100, tip)]).await;
         let now = Instant::now();
-        snapshot(poller.poll(now).await.unwrap());
-        snapshot(poller.poll(now).await.unwrap());
+        snapshot(poll_node(&mut poller, now).await.unwrap());
+        snapshot(poll_node(&mut poller, now).await.unwrap());
         assert_eq!(fetches(&server).await, 2);
     }
 
@@ -288,8 +302,8 @@ mod node {
         let (_server, mut poller) =
             node(vec![info(5, tip), info(5, tip), info(5, next), info(5, next)]).await;
         let now = Instant::now();
-        snapshot(poller.poll(now).await.unwrap());
-        let (_, observed) = snapshot(poller.poll(now).await.unwrap());
+        snapshot(poll_node(&mut poller, now).await.unwrap());
+        let (_, observed) = snapshot(poll_node(&mut poller, now).await.unwrap());
         assert_eq!(observed.height, height + 1);
         assert_eq!(observed.header_id.to_string(), OTHER_HEADER);
     }
@@ -297,7 +311,7 @@ mod node {
     #[tokio::test]
     async fn a_node_with_no_full_block_is_not_fetched() {
         let (server, mut poller) = node(vec![info(5, None)]).await;
-        assert_eq!(poller.poll(Instant::now()).await.unwrap(), Poll::NoTip);
+        assert_eq!(poll_node(&mut poller, Instant::now()).await.unwrap(), Poll::NoTip);
         assert_eq!(fetches(&server).await, 0);
     }
 
@@ -310,8 +324,8 @@ mod node {
         let (server, mut poller) =
             node(vec![info(5, tip), info(6, tip), info(6, tip), info(6, tip)]).await;
         let now = Instant::now();
-        snapshot(poller.poll(now).await.unwrap());
-        snapshot(poller.poll(now).await.unwrap());
+        snapshot(poll_node(&mut poller, now).await.unwrap());
+        snapshot(poll_node(&mut poller, now).await.unwrap());
         assert_eq!(fetches(&server).await, 2);
     }
 
@@ -339,35 +353,8 @@ mod node {
         let client = NodeClient::new(reqwest::Client::new(), &server.uri(), Network::Mainnet);
         let mut poller = MempoolPoller::new(client, Config::default());
         let now = Instant::now();
-        assert!(poller.poll(now).await.is_err());
-        snapshot(poller.poll(now).await.unwrap());
-        assert_eq!(poller.poll(now).await.unwrap(), Poll::Unchanged);
-    }
-}
-
-mod run {
-    use super::*;
-
-    #[tokio::test(start_paused = true)]
-    async fn sends_snapshots_until_the_inbox_closes() {
-        let sim = SimChain::new(busy_chain());
-        let (events, mut inbox) = mpsc::channel(1);
-        let task = tokio::spawn(poller(&sim).run(events));
-
-        let Some(Event::MempoolSnapshot { txs, observed_tip }) = inbox.recv().await else {
-            panic!("expected a mempool snapshot");
-        };
-        assert_eq!(observed_tip, sim.lock().tip());
-        assert_eq!(&*txs, sim.lock().mempool().as_slice());
-
-        sim.lock().mempool_add(9).expect("a pending tx");
-        let Some(Event::MempoolSnapshot { txs: next, .. }) = inbox.recv().await else {
-            panic!("expected a mempool snapshot");
-        };
-        assert_eq!(next.len(), txs.len() + 1);
-
-        drop(inbox);
-        sim.lock().mempool_add(10).expect("a pending tx");
-        task.await.unwrap();
+        assert!(poll_node(&mut poller, now).await.is_err());
+        snapshot(poll_node(&mut poller, now).await.unwrap());
+        assert_eq!(poll_node(&mut poller, now).await.unwrap(), Poll::Unchanged);
     }
 }

@@ -1387,3 +1387,57 @@ fn a_pending_spend_of_a_box_a_block_spent_is_left_out() {
         assert!(f.engine.mempool.overlay(&one).is_empty());
     }
 }
+
+#[test]
+fn the_chain_query_lists_the_ring_oldest_first() {
+    let mut f = Fixture::new(Config { window: 2, grace: 5 });
+    let genesis = f.engine.tip().expect("a tip");
+    let chain = |f: &mut Fixture| match f.engine.query(Query::Chain) {
+        Reply::Chain(links) => links,
+        other => panic!("expected a chain, got {other:?}"),
+    };
+    assert_eq!(chain(&mut f).iter().map(|l| l.block).collect::<Vec<_>>(), [genesis]);
+
+    f.mine(vec![]);
+    let second = f.engine.tip().expect("a tip");
+    let links = chain(&mut f);
+    assert_eq!(links.iter().map(|l| l.block).collect::<Vec<_>>(), [genesis, second]);
+    assert_eq!(links[1].parent(), genesis);
+
+    // The window drops the oldest block; a revert drops the tip.
+    f.mine(vec![]);
+    let third = f.engine.tip().expect("a tip");
+    assert_eq!(chain(&mut f).iter().map(|l| l.block).collect::<Vec<_>>(), [second, third]);
+    f.revert();
+    assert_eq!(chain(&mut f).iter().map(|l| l.block).collect::<Vec<_>>(), [second]);
+}
+
+#[test]
+fn the_boxes_query_answers_from_the_ring_only() {
+    let mut f = Fixture::new(Config { window: 2, grace: 5 });
+    let (zero, one) = (f.key(0), f.key(1));
+    f.load(&zero);
+    f.load(&one);
+    let source = sim::testing::box_of(&f.chain, 0);
+    let untracked = sim::testing::box_of(&f.chain, 3);
+    let tx = f.chain.transfer(&[source], &f.chain.trees()[1].clone());
+    let created = tx.outputs[0].clone();
+    f.mine(vec![tx]);
+
+    let boxes = |f: &mut Fixture, ids: Vec<BoxId>| match f.engine.query(Query::Boxes(ids)) {
+        Reply::Boxes(boxes) => boxes,
+        other => panic!("expected boxes, got {other:?}"),
+    };
+    let spent = f.chain.find_box(&source).expect("built");
+    // Both sides of a tracked key's delta, each once; an untracked box is not held.
+    assert_eq!(
+        boxes(&mut f, vec![created.id, source, untracked, created.id]),
+        vec![created.clone(), spent]
+    );
+
+    // An older entry still answers; once the block leaves the window, its boxes are gone.
+    f.mine(vec![]);
+    assert_eq!(boxes(&mut f, vec![created.id]), vec![created.clone()]);
+    f.mine(vec![]);
+    assert!(boxes(&mut f, vec![created.id, source]).is_empty());
+}

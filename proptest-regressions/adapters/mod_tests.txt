@@ -1,0 +1,9 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc fb26f35baa9c5d8d9dcac6c2cd3f85ecc6d6ed1168c050db53f0b359499b70c3 # shrinks to ops = [Tick, Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 })]
+cc b0264850e3be33143ef922450e372c9caeb8828824b3d0ab1484bde2e08adcb8 # shrinks to ops = [Chain(IndexerLag(1)), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Tick]
+cc 2a2b00f06acc3faafc69300355044428d91f789196ea1156a9e9577a35db103e # shrinks to ops = [Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Tick, Chain(Reorg { depth: 2, extra: 0, seed: 0 })]

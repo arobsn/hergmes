@@ -11,8 +11,9 @@ use tracing::debug;
 
 use crate::{
     engine::{
-        Balance, BlockDelta, BlockRef, BoxKey, EngineError, Event, KeyDelta, KeyId, Mempool,
-        Output, PageError, Query, Reply, ResyncReason, Spend, StoredBox, Totals, TrackingKey,
+        Balance, BlockDelta, BlockRef, BoxKey, ChainLink, EngineError, Event, KeyDelta, KeyId,
+        Mempool, Output, PageError, Query, Reply, ResyncReason, Spend, StoredBox, Totals,
+        TrackingKey,
         overlay::{self, PendingDelta},
     },
     types::ergo::{BoxId, HeaderId, IndexedBlock, IndexedBox, UTxO},
@@ -140,6 +141,13 @@ impl Engine {
                 Reply::Balance(self.balance(&key))
             }
             Query::Tip => Reply::Tip(self.tip),
+            Query::Chain => Reply::Chain(
+                self.ring
+                    .iter()
+                    .map(|d| ChainLink { block: d.block, parent_id: d.parent_id })
+                    .collect(),
+            ),
+            Query::Boxes(ids) => Reply::Boxes(self.ring_boxes(&ids)),
             Query::MempoolSnapshot => Reply::MempoolSnapshot(self.mempool.latest()),
             Query::CatchUp { key, from } => Reply::CatchUp(self.catch_up(key, from)),
         }
@@ -350,6 +358,21 @@ impl Engine {
         outputs.extend(self.mempool.block_reverted(parent));
         self.push_balances(&before, &mut outputs);
         Ok(outputs)
+    }
+
+    /// The boxes of `ids` the ring buffer holds, newest entry first, each once.
+    fn ring_boxes(&self, ids: &[BoxId]) -> Vec<Arc<UTxO>> {
+        let mut seen = HashSet::new();
+        ids.iter()
+            .filter(|id| seen.insert(**id))
+            .filter_map(|id| {
+                self.ring
+                    .iter()
+                    .rev()
+                    .find_map(|d| d.boxes.get(id))
+                    .map(|s| s.utxo.clone())
+            })
+            .collect()
     }
 
     // --- Keys ---

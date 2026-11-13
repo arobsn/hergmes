@@ -3,7 +3,7 @@ use std::sync::Arc;
 use serde::Serialize;
 
 use crate::{
-    engine::{BlockRef, BoxKey, Spend, Totals, TrackingKey, overlay::PendingDelta},
+    engine::{BlockRef, BoxKey, ChainLink, Spend, Totals, TrackingKey, overlay::PendingDelta},
     types::ergo::{BoxId, HeaderId, IndexedBlock, IndexedBox, TxId, UTxO, UnconfirmedTransaction},
 };
 
@@ -44,6 +44,12 @@ pub enum Query {
     /// A tracked key's balance at the tip, as the stream sends it.
     Balance(TrackingKey),
     Tip,
+    /// The blocks the engine can revert, oldest first, ending at the tip. The block consumer
+    /// finds the fork point in it.
+    Chain,
+    /// Full boxes the ring buffer holds, for the box fetcher. Ids it does not hold are left
+    /// out.
+    Boxes(Vec<BoxId>),
     MempoolSnapshot,
     /// The messages that bring a client from `from` to the tip: replayed blocks or
     /// rollbacks, then the overlay and the balance, or a resync. Without `from` (a
@@ -64,6 +70,8 @@ pub enum Reply {
     Pending(PendingDelta),
     Balance(Option<Balance>),
     Tip(Option<BlockRef>),
+    Chain(Vec<ChainLink>),
+    Boxes(Vec<Arc<UTxO>>),
     MempoolSnapshot(Option<(Arc<[UnconfirmedTransaction]>, BlockRef)>),
     CatchUp(Vec<Output>),
 }
