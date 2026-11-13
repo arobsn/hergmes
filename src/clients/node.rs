@@ -2,6 +2,7 @@ use std::{collections::HashSet, time::Duration};
 
 use reqwest::{RequestBuilder, Response, StatusCode, header::RETRY_AFTER};
 use serde::{Deserialize, de::DeserializeOwned};
+use tracing::debug;
 
 use crate::{
     clients::source::{NodeSource, Page},
@@ -237,7 +238,17 @@ impl NodeSource for NodeClient {
         let request = self
             .get("transactions/unconfirmed")
             .query(&[("limit", i32::MAX)]);
-        Ok(filter_out_unresolved(fetch(request).await?))
+        let listed: Vec<MempoolTransactionResponse> = fetch(request).await?;
+        let count = listed.len();
+        let kept = filter_out_unresolved(listed);
+        if kept.len() < count {
+            debug!(
+                dropped = count - kept.len(),
+                kept = kept.len(),
+                "Mempool txs dropped for an unresolved input, with their descendants"
+            );
+        }
+        Ok(kept)
     }
 
     #[tracing::instrument(skip(self))]

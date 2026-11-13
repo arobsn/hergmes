@@ -10,4 +10,3 @@ mod fixtures;
 pub mod sim;
 pub mod trace;
 pub mod types;
-pub mod watcher;
