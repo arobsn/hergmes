@@ -72,7 +72,7 @@ impl<const N: usize> Serialize for Digest<N> {
 }
 
 /// A byte vector represented as a hex string in serialization.
-#[derive(Clone, PartialEq, Eq, Hash)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct HexBytes(pub Vec<u8>);
 
 impl Display for HexBytes {

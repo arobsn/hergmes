@@ -46,6 +46,17 @@ pub struct Totals {
     pub tokens: BTreeMap<TokenId, u64>,
 }
 
+impl Totals {
+    /// Adds a box's ERG and tokens. A token with no units is left out, so two totals over the
+    /// same boxes are equal as values.
+    pub fn add(&mut self, utxo: &UTxO) {
+        self.nano_ergs += utxo.value;
+        for token in utxo.tokens.iter().filter(|t| t.amount > 0) {
+            *self.tokens.entry(token.id).or_default() += token.amount;
+        }
+    }
+}
+
 /// A full box kept in the ring buffer.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StoredBox {

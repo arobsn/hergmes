@@ -6,12 +6,9 @@ use super::*;
 use crate::{
     sim::{
         Chain, SimConfig,
-        testing::{box_of, new_chain, sample_history},
+        testing::{box_of, digest, new_chain, sample_history, tx, utxo},
     },
-    types::{
-        Digest, HashDigest, HexBytes,
-        ergo::{NonMandatoryRegisters, Token},
-    },
+    types::HexBytes,
 };
 
 #[test]
@@ -74,31 +71,6 @@ fn totals_leave_out_tokens_with_no_units() {
     let t = totals([&b, &b]);
     assert_eq!(t.nano_ergs, 2);
     assert_eq!(t.tokens.into_iter().collect::<Vec<_>>(), vec![(digest(9), 6)]);
-}
-
-fn digest(n: u8) -> HashDigest {
-    Digest([n; 32])
-}
-
-/// A box with id `n` created by tx `tx`, owned by tree `[owner]`, worth 1 nanoERG.
-fn utxo(n: u8, tx: u8, owner: u8, tokens: &[(u8, u64)]) -> UTxO {
-    UTxO {
-        id: digest(n),
-        ergo_tree: HexBytes(vec![owner]),
-        creation_height: 1,
-        value: 1,
-        tokens: tokens
-            .iter()
-            .map(|&(id, amount)| Token { id: digest(id), amount })
-            .collect(),
-        registers: NonMandatoryRegisters::default(),
-        index: 0,
-        transaction_id: digest(tx),
-    }
-}
-
-fn tx(id: u8, inputs: Vec<UTxO>, outputs: Vec<UTxO>) -> UnconfirmedTransaction {
-    UnconfirmedTransaction { id: digest(id), inputs, outputs }
 }
 
 fn order(confirmed: &[u8], mempool: &[UnconfirmedTransaction]) -> Vec<u8> {

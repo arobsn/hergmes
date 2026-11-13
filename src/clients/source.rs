@@ -35,9 +35,11 @@ pub trait NodeSource: Send + Sync {
         header_id: &HeaderId,
     ) -> impl Future<Output = Result<Option<IndexedBlock>, NodeError>> + Send;
 
-    /// The mempool, without transactions whose inputs the node could not resolve. Usually free
-    /// of double spends, but not always: the node re-adds txs without a double-spend check
-    /// (rolled-back txs, and cleanup results racing a replacement).
+    /// The mempool, without transactions whose inputs the node could not resolve, nor any of
+    /// their descendants. So every input of a listed tx is either created by another listed tx
+    /// or was in the node's UTXO set when it answered; the engine's overlay relies on this.
+    /// Usually free of double spends, but not always: the node re-adds txs without a
+    /// double-spend check (rolled-back txs, and cleanup results racing a replacement).
     fn mempool(
         &self,
     ) -> impl Future<Output = Result<Vec<UnconfirmedTransaction>, NodeError>> + Send;

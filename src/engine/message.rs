@@ -3,7 +3,7 @@ use std::sync::Arc;
 use serde::Serialize;
 
 use crate::{
-    engine::{BlockRef, BoxKey, Spend, Totals, TrackingKey},
+    engine::{BlockRef, BoxKey, Spend, Totals, TrackingKey, overlay::PendingTotals},
     types::ergo::{BoxId, HeaderId, IndexedBlock, IndexedBox, TxId, UTxO, UnconfirmedTransaction},
 };
 
@@ -35,7 +35,10 @@ pub enum Query {
         after: Option<BoxKey>,
         limit: usize,
     },
+    /// A key's overlay, tracked or not.
     Overlay(TrackingKey),
+    /// A key's pending totals, tracked or not: the pending side of a balance.
+    Pending(TrackingKey),
     Totals(TrackingKey),
     Tip,
     MempoolSnapshot,
@@ -47,11 +50,13 @@ pub enum Query {
     },
 }
 
-/// The answer to a [`Query`], in the matching variant. `None` means the key is untracked.
+/// The answer to a [`Query`], in the matching variant. Where a reply is an `Option`, `None`
+/// means the key is untracked; overlays and pending totals are answered for any key.
 #[derive(Debug, Clone)]
 pub enum Reply {
     Page(Result<Vec<BoxKey>, PageError>),
-    Overlay(Option<Vec<PendingTx>>),
+    Overlay(Vec<PendingTx>),
+    Pending(PendingTotals),
     Totals(Option<Totals>),
     Tip(Option<BlockRef>),
     MempoolSnapshot(Option<(Arc<[UnconfirmedTransaction]>, BlockRef)>),

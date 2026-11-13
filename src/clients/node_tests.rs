@@ -124,6 +124,36 @@ mod shapes {
         assert!(kept.iter().all(|tx| tx.id != dropped));
     }
 
+    /// A child and grandchild of an unresolved tx resolve their inputs from its outputs (the
+    /// node keeps it in its pool), but neither can be valid, so both go with it.
+    #[test]
+    fn mempool_drops_the_descendants_of_unresolved_transactions() {
+        let txs: Vec<MempoolTransactionResponse> = load("mempool");
+        assert!(txs.len() >= 2);
+        let derive = |parent: &MempoolTransactionResponse, n: u8| {
+            let spent = parent.outputs[0].clone();
+            let mut output = spent.clone();
+            output.id = digest(&format!("{n:02x}").repeat(32));
+            output.transaction_id = digest(&format!("{:02x}", n + 1).repeat(32));
+            MempoolTransactionResponse {
+                id: output.transaction_id,
+                inputs: vec![MempoolTransactionInput { utxo: Some(spent) }],
+                outputs: vec![output],
+            }
+        };
+        let mut parent = txs[0].clone();
+        parent.inputs[0].utxo = None;
+        let child = derive(&parent, 0xa0);
+        let grandchild = derive(&child, 0xb0);
+        let unrelated = txs[1].clone();
+        let unrelated_id = unrelated.id;
+
+        // In any order.
+        let kept = filter_out_unresolved(vec![grandchild, unrelated, child, parent]);
+        let ids: Vec<TxId> = kept.iter().map(|tx| tx.id).collect();
+        assert_eq!(ids, vec![unrelated_id]);
+    }
+
     #[test]
     fn unspent_by_ergo_tree() {
         let boxes: Vec<IndexedBox> = load("unspent_by_ergo_tree");

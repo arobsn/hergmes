@@ -1,7 +1,7 @@
 use crate::types::ergo::{ErgoTree, TokenId, UTxO};
 
 /// What a client tracks: the boxes guarded by an ErgoTree, or the boxes holding a token.
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum TrackingKey {
     Tree(ErgoTree),
     Token(TokenId),

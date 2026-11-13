@@ -18,11 +18,11 @@ mod rng;
 mod source;
 pub mod strategy;
 #[cfg(test)]
-mod testing;
+pub(crate) mod testing;
 
 pub use chain::{
     Chain, GENESIS_PARENT, GENESIS_TOKENS, OutputSpec, RETRY_AFTER, SimBlock, SimConfig, SimOp,
     SimTx, token_id,
 };
-pub use oracle::{Oracle, overlay, pending_order, totals};
+pub use oracle::{Oracle, filter_overlay, overlay, pending_order, totals};
 pub use source::{Endpoint, Hook, SimChain};

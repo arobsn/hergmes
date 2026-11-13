@@ -5,8 +5,11 @@
 
 mod block;
 mod key;
+mod mempool;
 mod message;
+pub mod overlay;
 
 pub use block::{BlockDelta, BlockRef, BoxKey, KeyDelta, Spend, StoredBox, Totals};
 pub use key::TrackingKey;
+pub use mempool::Mempool;
 pub use message::{Event, Output, PageError, PendingTx, Query, Reply, ResyncReason};

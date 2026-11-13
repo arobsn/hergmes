@@ -14,7 +14,10 @@ use proptest::{
 use crate::{
     clients::{Page, source::MAX_PAGE_LIMIT},
     sim::{Chain, SimConfig, SimOp, strategy},
-    types::ergo::BoxId,
+    types::{
+        Digest, HashDigest, HexBytes,
+        ergo::{BoxId, NonMandatoryRegisters, Token, UTxO, UnconfirmedTransaction},
+    },
 };
 
 /// A page holding every box.
@@ -50,4 +53,29 @@ pub fn ready<F: Future>(future: F) -> F::Output {
         Poll::Ready(output) => output,
         Poll::Pending => panic!("SimChain calls never wait"),
     }
+}
+
+pub fn digest(n: u8) -> HashDigest {
+    Digest([n; 32])
+}
+
+/// A box with id `n` created by tx `tx`, owned by tree `[owner]`, worth 1 nanoERG.
+pub fn utxo(n: u8, tx: u8, owner: u8, tokens: &[(u8, u64)]) -> UTxO {
+    UTxO {
+        id: digest(n),
+        ergo_tree: HexBytes(vec![owner]),
+        creation_height: 1,
+        value: 1,
+        tokens: tokens
+            .iter()
+            .map(|&(id, amount)| Token { id: digest(id), amount })
+            .collect(),
+        registers: NonMandatoryRegisters::default(),
+        index: 0,
+        transaction_id: digest(tx),
+    }
+}
+
+pub fn tx(id: u8, inputs: Vec<UTxO>, outputs: Vec<UTxO>) -> UnconfirmedTransaction {
+    UnconfirmedTransaction { id: digest(id), inputs, outputs }
 }

@@ -7,7 +7,7 @@ use proptest::prelude::*;
 
 use super::*;
 use crate::sim::{
-    strategy,
+    pending_order, strategy,
     testing::{ALL, box_of, new_chain, sample_history},
     totals,
 };
@@ -63,6 +63,9 @@ fn random_histories_reach_the_hard_cases() {
         }
         if visible.len() < chain.pool().len() {
             seen.insert("pending tx with an unresolved input");
+        }
+        if chain.mempool().len() < visible.len() {
+            seen.insert("resolved pending tx dropped with its hidden parent");
         }
         let mut claimed = HashSet::new();
         if !visible
@@ -150,6 +153,7 @@ fn random_histories_reach_the_hard_cases() {
 
     for feature in [
         "pending tx with an unresolved input",
+        "resolved pending tx dropped with its hidden parent",
         "chained pending txs",
         "pending tx replaced by a double spend",
         "both sides of a double spend listed",
@@ -224,7 +228,8 @@ fn check_against_oracle(chain: &Chain, genesis_value: u64) {
         .flat_map(|b| b.txs.iter().map(|tx| tx.id))
         .collect();
     // Both sides of a double spend may be listed (`mempool_recheck_race`).
-    for tx in chain.mempool() {
+    let mempool = chain.mempool();
+    for tx in &mempool {
         assert!(
             tx.inputs
                 .iter()
@@ -232,6 +237,15 @@ fn check_against_oracle(chain: &Chain, genesis_value: u64) {
         );
         assert!(!confirmed.contains(&tx.id), "{} is both pending and confirmed", tx.id);
     }
+    // After the client's filter, every listed tx can be valid on top of the UTXO set: the
+    // engine's overlay assumes this of a snapshot taken at its tip.
+    let mut valid: Vec<TxId> = pending_order(&unspent, &mempool)
+        .iter()
+        .map(|tx| tx.id)
+        .collect();
+    valid.sort();
+    let listed: Vec<TxId> = mempool.iter().map(|tx| tx.id).collect();
+    assert_eq!(listed, valid, "the mempool lists a tx that cannot be valid");
 
     if chain.is_recovering() {
         return;
@@ -345,7 +359,7 @@ fn a_block_cannot_spend_a_spent_box() {
 }
 
 #[test]
-fn a_child_of_a_dropped_tx_is_hidden_but_a_grandchild_is_not() {
+fn a_child_of_a_dropped_tx_is_hidden_and_its_grandchild_goes_with_it() {
     let mut chain = new_chain();
     let trees = chain.trees().to_vec();
     let parent = chain.transfer(&[box_of(&chain, 0)], &trees[1]);
@@ -357,10 +371,12 @@ fn a_child_of_a_dropped_tx_is_hidden_but_a_grandchild_is_not() {
     assert_eq!(chain.mempool().len(), 3);
 
     // The child's input is gone, but the node still resolves the grandchild's input from
-    // the child, which stays in its pool until the next block (ergo#2248).
+    // the child, which stays in its pool until the next block (ergo#2248). The client's
+    // filter drops the grandchild with the child.
     assert!(chain.drop_tx(&parent.id));
-    let listed: Vec<TxId> = chain.mempool().iter().map(|tx| tx.id).collect();
-    assert_eq!(listed, vec![grandchild.id]);
+    let resolved: Vec<TxId> = chain.visible_pool().iter().map(|tx| tx.id).collect();
+    assert_eq!(resolved, vec![grandchild.id]);
+    assert!(chain.mempool().is_empty());
 
     // The cleanup the next block triggers drops both.
     chain.mine(0, 0, 0);
@@ -428,11 +444,13 @@ fn a_block_leaves_pending_double_spends_of_its_txs_to_the_cleanup() {
     chain.mine_txs(vec![mined]);
 
     // Both stay until the next block's cleanup. `pending` is hidden (its input is spent), but
-    // the child still resolves its input from `pending`'s outputs, so the node lists it.
+    // the child still resolves its input from `pending`'s outputs, so the node lists it. The
+    // client's filter drops it with its parent.
     let pool: Vec<TxId> = chain.pool().iter().map(|tx| tx.id).collect();
     assert_eq!(pool, vec![pending.id, child.id]);
-    let listed: Vec<TxId> = chain.mempool().iter().map(|tx| tx.id).collect();
-    assert_eq!(listed, vec![child.id]);
+    let resolved: Vec<TxId> = chain.visible_pool().iter().map(|tx| tx.id).collect();
+    assert_eq!(resolved, vec![child.id]);
+    assert!(chain.mempool().is_empty());
     chain.mine(0, 0, 0);
     assert!(chain.pool().is_empty());
 }

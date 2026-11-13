@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashSet, time::Duration};
 
 use reqwest::{RequestBuilder, Response, StatusCode, header::RETRY_AFTER};
 use serde::{Deserialize, de::DeserializeOwned};
@@ -72,38 +72,75 @@ pub struct NodeClient {
     network: Network,
 }
 
-#[derive(Debug, Deserialize)]
-struct MempoolTransactionResponse {
-    id: TxId,
-    inputs: Vec<MempoolTransactionInput>,
-    outputs: Vec<UTxO>,
+/// A pool tx as `/transactions/unconfirmed` lists it: inputs the node could not resolve are
+/// `None` (only `boxId` and `spendingProof` are sent).
+#[derive(Debug, Clone, Deserialize)]
+pub(crate) struct MempoolTransactionResponse {
+    pub id: TxId,
+    pub inputs: Vec<MempoolTransactionInput>,
+    pub outputs: Vec<UTxO>,
 }
 
-#[derive(Debug, Deserialize)]
-struct MempoolTransactionInput {
+#[derive(Debug, Clone, Deserialize)]
+pub(crate) struct MempoolTransactionInput {
     #[serde(flatten)]
-    utxo: Option<UTxO>,
+    pub utxo: Option<UTxO>,
 }
 
 impl MempoolTransactionResponse {
-    /// `None` if the node could not resolve any of its inputs.
-    fn resolve(self) -> Option<UnconfirmedTransaction> {
-        let inputs = self
-            .inputs
-            .into_iter()
-            .map(|i| i.utxo)
-            .collect::<Option<_>>()?;
-        Some(UnconfirmedTransaction { id: self.id, inputs, outputs: self.outputs })
+    /// The tx with its inputs, or its outputs if the node could not resolve any input.
+    fn resolve(self) -> Result<UnconfirmedTransaction, Vec<UTxO>> {
+        match self.inputs.into_iter().map(|i| i.utxo).collect() {
+            Some(inputs) => {
+                Ok(UnconfirmedTransaction { id: self.id, inputs, outputs: self.outputs })
+            }
+            None => Err(self.outputs),
+        }
     }
 }
 
-/// Drops transactions with any input whose UTxO the node could not resolve.
+/// Drops the txs with an input the node could not resolve, then every tx spending an output
+/// of a dropped tx, recursively.
+///
+/// The node resolves inputs from its UTXO set and from the outputs of every pool tx
+/// (`TransactionsApiRoute.resolveTransactionInputs`), hidden ones included. Without the
+/// cascade, a tx whose parent is hidden (its input was spent by a block, or its own parent
+/// left the pool; ergo#2248) would be kept with an input that is neither confirmed nor
+/// pending. With it, every input of a kept tx is either created by another kept tx or was in
+/// the node's UTXO set when it answered, which is what the engine's overlay relies on.
+///
+/// The cascade can also drop valid txs for a moment. The node's state reader reads the live
+/// UTXO store, while its pool reader is only replaced when `ChangedMempool` reaches
+/// `ErgoReadersHolder`, after the block is written (`ErgoNodeViewHolder.updateNodeView`). A
+/// tx just mined can still be listed with its inputs spent, and its children, whose inputs
+/// are now confirmed, are dropped with it until the pool reader catches up. Leaving out a
+/// valid tx for one poll is harmless; keeping an invalid one is not.
 ///
 /// See <https://github.com/ergoplatform/ergo/issues/2248#issuecomment-3463844934>.
-fn filter_out_unresolved(txs: Vec<MempoolTransactionResponse>) -> Vec<UnconfirmedTransaction> {
-    txs.into_iter()
-        .filter_map(MempoolTransactionResponse::resolve)
-        .collect()
+pub(crate) fn filter_out_unresolved(
+    txs: Vec<MempoolTransactionResponse>,
+) -> Vec<UnconfirmedTransaction> {
+    let mut dropped: HashSet<BoxId> = HashSet::new();
+    let mut kept = Vec::with_capacity(txs.len());
+    for tx in txs {
+        match tx.resolve() {
+            Ok(tx) => kept.push(tx),
+            Err(outputs) => dropped.extend(outputs.iter().map(|o| o.id)),
+        }
+    }
+    loop {
+        let before = kept.len();
+        kept.retain(|tx: &UnconfirmedTransaction| {
+            let orphan = tx.inputs.iter().any(|i| dropped.contains(&i.id));
+            if orphan {
+                dropped.extend(tx.outputs.iter().map(|o| o.id));
+            }
+            !orphan
+        });
+        if kept.len() == before {
+            return kept;
+        }
+    }
 }
 
 impl NodeClient {

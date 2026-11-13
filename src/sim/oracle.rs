@@ -130,8 +130,13 @@ pub fn overlay(
     mempool: &[UnconfirmedTransaction],
     key: &TrackingKey,
 ) -> Vec<PendingTx> {
-    pending_order(confirmed, mempool)
-        .into_iter()
+    filter_overlay(&pending_order(confirmed, mempool), key)
+}
+
+/// [`overlay`] over an order already computed by [`pending_order`], to share it between keys.
+pub fn filter_overlay(order: &[&UnconfirmedTransaction], key: &TrackingKey) -> Vec<PendingTx> {
+    order
+        .iter()
         .filter_map(|tx| {
             let created: Vec<Arc<UTxO>> = tx
                 .outputs

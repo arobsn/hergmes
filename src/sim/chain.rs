@@ -13,7 +13,10 @@ use reqwest::StatusCode;
 use crate::{
     clients::{
         NodeError, Page,
-        node::{IndexedHeightResponse, InfoResponse},
+        node::{
+            IndexedHeightResponse, InfoResponse, MempoolTransactionInput,
+            MempoolTransactionResponse, filter_out_unresolved,
+        },
         source::MAX_PAGE_LIMIT,
     },
     engine::{BlockRef, BoxKey, TrackingKey},
@@ -185,9 +188,9 @@ pub enum SimOp {
 ///   goes at the next block's cleanup; the node's `CleanupWorker` runs right after each block
 ///   but skips txs checked in the last 30 s, so "next block" is the usual case, not the only
 ///   one. A cleanup that races a replacement can put the replaced tx back (see
-///   [`Chain::mempool_recheck_race`]), so the pool can hold both sides of a double spend. It
-///   lists only txs whose inputs resolve from the UTXO set or from a pool tx's outputs, so txs
-///   left unresolvable stay hidden.
+///   [`Chain::mempool_recheck_race`]), so the pool can hold both sides of a double spend. The
+///   node resolves inputs from the UTXO set and from every pool tx's outputs; the client
+///   drops txs it could not resolve and their descendants ([`Chain::mempool`]).
 ///
 /// [`SimChain`]: crate::sim::SimChain
 /// [`NodeSource`]: crate::clients::NodeSource
@@ -695,14 +698,33 @@ impl Chain {
             .collect()
     }
 
-    /// What `GET /transactions/unconfirmed` returns after the unresolved-input filter, in tx id
-    /// order, which has nothing to do with dependencies.
-    pub fn mempool(&self) -> Vec<UnconfirmedTransaction> {
-        let mut txs: Vec<_> = self
-            .visible_pool()
+    /// The pool as `GET /transactions/unconfirmed` lists it, in pool order: an input the
+    /// node resolves (from the UTXO set or from any pool tx's outputs) is a full box, any
+    /// other is `None`.
+    pub(crate) fn listed_pool(&self) -> Vec<MempoolTransactionResponse> {
+        let produced = self.pool_outputs();
+        self.pool
             .iter()
-            .map(|tx| tx.to_unconfirmed())
-            .collect();
+            .map(|tx| MempoolTransactionResponse {
+                id: tx.id,
+                inputs: tx
+                    .inputs
+                    .iter()
+                    .map(|i| MempoolTransactionInput {
+                        utxo: (self.node.unspent.contains_key(&i.id) || produced.contains(&i.id))
+                            .then(|| (**i).clone()),
+                    })
+                    .collect(),
+                outputs: tx.outputs.iter().map(|o| (**o).clone()).collect(),
+            })
+            .collect()
+    }
+
+    /// What `NodeSource::mempool` returns: the listed pool through the client's own
+    /// unresolved-input filter, which also drops descendants of the dropped txs. Sorted by tx
+    /// id, which has nothing to do with dependencies.
+    pub fn mempool(&self) -> Vec<UnconfirmedTransaction> {
+        let mut txs = filter_out_unresolved(self.listed_pool());
         txs.sort_by_key(|tx| tx.id);
         txs
     }
