@@ -56,7 +56,7 @@ pub struct Token {
     pub amount: u64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize, Serialize)]
 pub struct NonMandatoryRegisters {
     #[serde(rename = "R4")]
     pub r4: Option<HexBytes>,
@@ -102,8 +102,6 @@ pub struct IndexedBlock {
 pub struct TokenInfo {
     #[serde(rename = "emissionAmount")]
     pub emission_amount: u64,
-    pub name: Option<String>,
-    pub decimals: Option<u32>,
 }
 
 /// Response of `POST /blockchain/balance`.
@@ -124,6 +122,4 @@ pub struct TokenBalance {
     #[serde(rename = "tokenId")]
     pub token_id: TokenId,
     pub amount: u64,
-    pub decimals: Option<u32>,
-    pub name: Option<String>,
 }
