@@ -18,8 +18,11 @@ pub enum Event {
     MempoolSnapshot { txs: Arc<[UnconfirmedTransaction]>, observed_tip: BlockRef },
     /// A key's first load. Accepted only if `as_of` is the current tip; it then starts tracking.
     KeyLoaded { key: TrackingKey, as_of: BlockRef, boxes: Vec<IndexedBox> },
-    /// Stop tracking a key.
-    Untrack(TrackingKey),
+    /// A client subscribed to a key.
+    Subscribed(TrackingKey),
+    /// A client unsubscribed from a key or disconnected. A key with no subscribers is
+    /// untracked once it has been idle for the grace period, counted in blocks.
+    Unsubscribed(TrackingKey),
 }
 
 /// A read of engine state, answered in order with the events.
