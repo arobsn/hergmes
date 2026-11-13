@@ -12,18 +12,18 @@ name = "hergmes"
 path = "src/main.rs"
 
 [dependencies]
-arc-swap = "1.9"
+arc-swap = "1.9.5"
 blake2 = "0.11.0"
 bs58 = "0.5.1"
-dotenvy = "0.15"
-hex = "0.4"
-reqwest = { version = "0.13", features = ["json", "query"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-thiserror = "2.0"
+dotenvy = "0.15.7"
+hex = "0.4.3"
+reqwest = { version = "0.13.5", features = ["json", "query"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+thiserror = "2.0.21"
 tokio = { version = "1.54.1", features = ["macros", "rt-multi-thread"] }
-tracing = { version = "0.1" }
-tracing-subscriber = { version = "0.3", features = ["env-filter", "registry"] }
+tracing = { version = "0.1.44" }
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "registry"] }
 
 [features]
 # Exposes the `sim` module (SimChain + oracle) to integration tests.
