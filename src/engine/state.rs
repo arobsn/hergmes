@@ -7,6 +7,8 @@ use std::{
     sync::Arc,
 };
 
+use tracing::debug;
+
 use crate::{
     engine::{
         Balance, BlockDelta, BlockRef, BoxKey, EngineError, Event, KeyDelta, KeyId, Mempool,
@@ -118,8 +120,9 @@ impl Engine {
                 None => vec![Output::ResyncRequired { key, reason: ResyncReason::NotTracked }],
             },
             Event::Unsubscribed(key) => {
-                if let Some(state) = self.touch(&key) {
-                    state.subscribers = state.subscribers.saturating_sub(1);
+                match self.touch(&key) {
+                    Some(state) => state.subscribers = state.subscribers.saturating_sub(1),
+                    None => debug!(?key, "Unsubscribe from an untracked key ignored"),
                 }
                 Vec::new()
             }
@@ -262,6 +265,8 @@ impl Engine {
             .map(|s| s.key.clone())
             .collect();
         for key in idle {
+            let last_activity = self.keys[&self.ids[&key]].last_activity;
+            debug!(?key, last_activity, height = block_ref.height, "Untracking idle key");
             self.untrack(&key);
             before.retain(|id, _| self.keys.contains_key(id));
         }
@@ -282,6 +287,7 @@ impl Engine {
         let Some(delta) = self.ring.pop_back() else {
             // The ring is exhausted: the fork is deeper than the window. Every key's state is
             // on the old chain and cannot be undone.
+            debug!(?block, keys = self.ids.len(), "Revert beyond the ring, untracking every key");
             let mut outputs = Vec::new();
             for key in self.ids.keys() {
                 let reason = ResyncReason::ForkBeyondWindow;
@@ -305,6 +311,7 @@ impl Engine {
             let state = self.keys.get_mut(&key_id).expect("an id is tracked");
             if state.since == block {
                 // Loaded at this block: its share of the block was never recorded.
+                debug!(?key, ?block, "Revert of the key's load block, untracking it");
                 let reason = ResyncReason::ForkBeyondWindow;
                 outputs.push(Output::ResyncRequired { key: key.clone(), reason });
                 dropped.push(key.clone());
@@ -358,8 +365,10 @@ impl Engine {
         }
         if self.touch(&key).is_some() {
             // Another load of a tracked key, from a racing loader: the engine's state is newer.
+            debug!(?key, ?as_of, "Load of an already tracked key ignored");
             return Vec::new();
         }
+        debug!(?key, height = as_of.height, boxes = boxes.len(), "Tracking key");
         let key_id = KeyId(self.next_id);
         self.next_id += 1;
         let mut state = KeyState {

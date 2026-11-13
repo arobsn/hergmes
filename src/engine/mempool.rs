@@ -6,6 +6,8 @@ use std::{
     sync::Arc,
 };
 
+use tracing::debug;
+
 use crate::{
     engine::{
         BlockRef, Output, PendingTx, TrackingKey,
@@ -70,10 +72,24 @@ impl Mempool {
                 self.emit(tip.height)
             }
             Some(tip) if observed_tip.height > tip.height => {
+                debug!(
+                    ?observed_tip,
+                    ?tip,
+                    txs = txs.len(),
+                    "Mempool snapshot ahead of the tip held"
+                );
                 self.ahead = Some((txs, observed_tip));
                 Vec::new()
             }
-            _ => Vec::new(),
+            _ => {
+                debug!(
+                    ?observed_tip,
+                    ?tip,
+                    txs = txs.len(),
+                    "Mempool snapshot off the tip ignored"
+                );
+                Vec::new()
+            }
         }
     }
 
@@ -84,6 +100,12 @@ impl Mempool {
         is_confirmed: impl Fn(&UTxO) -> bool,
     ) {
         let order = overlay::pending_order(&txs, is_confirmed);
+        debug!(
+            height = tip.height,
+            txs = txs.len(),
+            left_out = txs.len() - order.len(),
+            "Mempool snapshot installed"
+        );
         self.snapshot = Some(Snapshot { txs, observed: tip, tip, order });
     }
 
@@ -107,7 +129,15 @@ impl Mempool {
                 return self.emit(tip.height);
             }
             Some(ahead) if ahead.1.height > tip.height => self.ahead = Some(ahead),
-            _ => {}
+            Some((txs, observed)) => {
+                debug!(
+                    ?observed,
+                    ?tip,
+                    txs = txs.len(),
+                    "Held mempool snapshot off the chain dropped"
+                );
+            }
+            None => {}
         }
         if let Some(s) = &mut self.snapshot {
             let candidates = s
@@ -115,10 +145,17 @@ impl Mempool {
                 .iter()
                 .copied()
                 .filter(|&i| !mined.contains(&s.txs[i].id));
+            let before = s.order.len();
             s.order = overlay::pending_order_among(&s.txs, candidates, |b| {
                 !spent.contains(&b.id) && is_confirmed(b)
             });
             s.tip = tip;
+            debug!(
+                height = tip.height,
+                left = before - s.order.len(),
+                kept = s.order.len(),
+                "Mempool snapshot pruned by block"
+            );
         }
         self.emit(tip.height)
     }
@@ -128,12 +165,19 @@ impl Mempool {
     /// txs, which return to the node's pool. Overlays are empty until a snapshot observed at
     /// the new tip arrives, so returned txs appear only after the rollback.
     pub fn block_reverted(&mut self, tip: BlockRef) -> Vec<Output> {
-        self.snapshot = None;
+        if self.snapshot.take().is_some() {
+            debug!(height = tip.height, "Mempool snapshot dropped by revert");
+        }
         self.emit(tip.height)
     }
 
     /// Forgets every snapshot, as when the engine loses its tip.
     pub fn reset(&mut self) {
+        debug!(
+            snapshot = self.snapshot.is_some(),
+            ahead = self.ahead.is_some(),
+            "Mempool snapshots reset"
+        );
         self.snapshot = None;
         self.ahead = None;
     }
@@ -145,7 +189,15 @@ impl Mempool {
             return Vec::new();
         };
         let candidates = std::mem::take(&mut s.order);
+        let before = candidates.len();
         s.order = overlay::pending_order_among(&s.txs, candidates, is_confirmed);
+        if s.order.len() < before {
+            debug!(
+                left = before - s.order.len(),
+                kept = s.order.len(),
+                "Mempool snapshot re-decided"
+            );
+        }
         let height = s.tip.height;
         self.emit(height)
     }
