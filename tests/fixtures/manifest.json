@@ -22,11 +22,6 @@
       "path": "/blockchain/indexedHeight",
       "status": 200
     },
-    "last_headers": {
-      "method": "GET",
-      "path": "/blocks/lastHeaders/3",
-      "status": 200
-    },
     "indexed_block": {
       "method": "GET",
       "path": "/blockchain/block/byHeaderId/41f89ff983dc639d0950522e819012854bbcbecdc41c0739c685b7e53fb27a02",

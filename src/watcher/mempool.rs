@@ -22,10 +22,12 @@ const POLLING_INTERVAL: Duration = Duration::from_secs(1);
 pub async fn start(node: &NodeClient, swap: Arc<ArcSwap<MempoolSnapshot>>) -> Result<(), AppError> {
     info!("Starting mempool indexer...");
 
+    // `lastMemPoolUpdateTime` is the node's wall clock, so it can move backwards: refetch on
+    // any change, not only an increase.
     let mut last_update = 0u64;
     loop {
         match node.info().await.map(|info| info.last_mempool_update) {
-            Ok(updated) if updated > last_update => match node.mempool().await {
+            Ok(updated) if updated != last_update => match node.mempool().await {
                 Ok(transactions) => {
                     last_update = updated;
                     info!(count = ?transactions.len(), ?last_update, "Mempool updated, storing new snapshot");

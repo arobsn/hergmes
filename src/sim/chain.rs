@@ -161,6 +161,9 @@ pub enum SimOp {
     MempoolConflict { pick: u32, seed: u64 },
     /// Remove the `pick`-th visible pending tx, leaving its children in the pool.
     MempoolDrop { pick: u32 },
+    /// Put back the `pick`-th tx replaced by a double spend since the last block, as a cleanup
+    /// result racing the replacement does.
+    MempoolRecheckRace { pick: u32 },
     /// Keep the indexer this many blocks behind the tip.
     IndexerLag(u8),
 }
@@ -168,17 +171,23 @@ pub enum SimOp {
 /// The simulated node and indexer. Driven directly with `&mut self`; [`SimChain`] shares it
 /// with adapters through [`NodeSource`].
 ///
-/// - **Node view** (`info`, `last_headers`, `mempool`, `boxes_with_pool`): the selected tip.
+/// - **Node view** (`info`, `mempool`, `boxes_with_pool`): the selected tip, which is the best
+///   full block. The simulator has no headers without blocks, so the best header and the best
+///   full block are always the same here; on a real node the header chain can run ahead.
 /// - **Indexer view** (every `/blockchain` endpoint): the indexer's own tip, which trails the
 ///   selected tip by the configured lag. When a reorg orphans it, the next
 ///   [`SimConfig::recovery_reads`] indexer reads answer `503`, then it rolls back and catches up.
 ///   The node gates on its state instead (rollback pending or checkpoint off the selected
 ///   chain); counting reads stands in for time. `indexedHeight` is never gated.
 /// - **Mempool**: a pool of txs that may chain. Like the node (`ErgoMemPool`), a double spend
-///   replaces the pooled tx, a block removes the txs it confirms and their direct double
-///   spends, the rest of what it invalidated goes at the next block's cleanup, and an orphaned
-///   block's txs return unchecked. It lists only txs whose inputs resolve from the UTXO set or
-///   from a pool tx's outputs, so txs left unresolvable stay hidden.
+///   replaces the pooled tx, a block removes only the txs it confirms, and an orphaned block's
+///   txs return unchecked. What a block invalidated (double spends of its txs, descendants)
+///   goes at the next block's cleanup; the node's `CleanupWorker` runs right after each block
+///   but skips txs checked in the last 30 s, so "next block" is the usual case, not the only
+///   one. A cleanup that races a replacement can put the replaced tx back (see
+///   [`Chain::mempool_recheck_race`]), so the pool can hold both sides of a double spend. It
+///   lists only txs whose inputs resolve from the UTXO set or from a pool tx's outputs, so txs
+///   left unresolvable stay hidden.
 ///
 /// [`SimChain`]: crate::sim::SimChain
 /// [`NodeSource`]: crate::clients::NodeSource
@@ -196,6 +205,11 @@ pub struct Chain {
     /// While the indexer recovers from a reorg: how many more reads answer `503`.
     recovery: Option<u32>,
     pool: Vec<Arc<SimTx>>,
+    /// The pool after the last block: what that block's cleanup rechecks.
+    rechecking: HashSet<TxId>,
+    /// Txs from `rechecking` replaced by a double spend since, which a cleanup result can put
+    /// back.
+    replaced: Vec<Arc<SimTx>>,
     mempool_clock: u64,
     /// Every box ever built, so tests can name inputs by id.
     boxes: HashMap<BoxId, Arc<UTxO>>,
@@ -225,6 +239,8 @@ impl Chain {
             indexer_lag: 0,
             recovery: None,
             pool: Vec::new(),
+            rechecking: HashSet::new(),
+            replaced: Vec::new(),
             mempool_clock: 1_700_000_000_000,
             boxes: HashMap::new(),
             known_tokens: BTreeMap::new(),
@@ -298,6 +314,9 @@ impl Chain {
             }
             SimOp::MempoolDrop { pick } => {
                 self.mempool_drop(pick);
+            }
+            SimOp::MempoolRecheckRace { pick } => {
+                self.mempool_recheck_race(pick);
             }
             SimOp::IndexerLag(lag) => self.set_indexer_lag(lag.into()),
         }
@@ -600,17 +619,15 @@ impl Chain {
         self.node.apply(&block);
         self.blocks.insert(id, block.clone());
         self.main.push(id);
-        // Like `removeWithDoubleSpends`: the block's txs and the pool txs spending the same
-        // inputs. Their descendants stay, unresolvable, until the next cleanup.
+        // Like `removeWithDoubleSpends`, which in node 6.0.8 removes only the block's own txs:
+        // `OrderedTxPool.remove` drops a tx's input keys before the double-spend lookup, so the
+        // lookup finds nothing. Pool txs spending the same inputs, and descendants, stay,
+        // unresolvable, until the next cleanup.
         let mined: HashSet<TxId> = block.txs.iter().map(|tx| tx.id).collect();
-        let spent: HashSet<BoxId> = block
-            .txs
-            .iter()
-            .flat_map(|tx| tx.inputs.iter().map(|i| i.id))
-            .collect();
-        self.pool.retain(|tx| {
-            !mined.contains(&tx.id) && !tx.inputs.iter().any(|i| spent.contains(&i.id))
-        });
+        self.pool.retain(|tx| !mined.contains(&tx.id));
+        // This block's cleanup starts from the pool as it is now.
+        self.rechecking = self.pool.iter().map(|tx| tx.id).collect();
+        self.replaced.clear();
         // Every applied block republishes the mempool, changed or not.
         self.mempool_clock += 1;
         self.sync_indexer();
@@ -700,11 +717,35 @@ impl Chain {
                 return;
             }
             let contested: HashSet<BoxId> = tx.inputs.iter().map(|i| i.id).collect();
-            chain
-                .pool
-                .retain(|p| !p.inputs.iter().any(|i| contested.contains(&i.id)));
+            let (losers, kept) = std::mem::take(&mut chain.pool)
+                .into_iter()
+                .partition(|p| p.inputs.iter().any(|i| contested.contains(&i.id)));
+            chain.pool = kept;
+            let losers: Vec<Arc<SimTx>> = losers;
+            chain.replaced.extend(
+                losers
+                    .into_iter()
+                    .filter(|p| chain.rechecking.contains(&p.id)),
+            );
             chain.pool.push(tx);
         });
+    }
+
+    /// Puts back the `pick`-th tx replaced by a double spend since the last block, as the
+    /// node does when that block's cleanup validated the tx before the replacement arrived:
+    /// `RecheckedTransactions` re-adds it with `put`, which checks no double spends. The pool
+    /// then holds both sides. Returns the tx put back, if any.
+    pub fn mempool_recheck_race(&mut self, pick: u32) -> Option<Arc<SimTx>> {
+        if self.replaced.is_empty() {
+            return None;
+        }
+        let tx = self.replaced.remove(pick as usize % self.replaced.len());
+        self.update_pool(|chain| {
+            if !chain.pool.iter().any(|p| p.id == tx.id) {
+                chain.pool.push(tx.clone());
+            }
+        });
+        Some(tx)
     }
 
     /// Removes a tx from the pool, leaving its children. Returns whether it was there.
@@ -748,6 +789,8 @@ impl Chain {
     /// time, so it moves forward.
     pub fn restart_node(&mut self) {
         self.pool.clear();
+        self.rechecking.clear();
+        self.replaced.clear();
         self.mempool_clock += 1;
     }
 
@@ -903,16 +946,13 @@ impl Chain {
     // --- Endpoint answers. `SimChain` serves these through `NodeSource`. ---
 
     pub fn info(&self) -> InfoResponse {
-        InfoResponse { last_mempool_update: self.mempool_clock, network: "mainnet".to_string() }
-    }
-
-    /// The last `count` headers of the selected chain, oldest first.
-    pub fn last_headers(&self, count: u32) -> Vec<BlockHeader> {
-        let start = self.main.len().saturating_sub(count as usize);
-        self.main[start..]
-            .iter()
-            .map(|id| self.blocks[id].header.clone())
-            .collect()
+        let tip = self.tip();
+        InfoResponse {
+            last_mempool_update: self.mempool_clock,
+            network: "mainnet".to_string(),
+            best_full_header_id: Some(tip.header_id),
+            full_height: Some(tip.height),
+        }
     }
 
     pub fn indexed_height(&self) -> IndexedHeightResponse {

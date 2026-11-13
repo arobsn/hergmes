@@ -9,8 +9,8 @@ use crate::{
     },
     sim::Chain,
     types::ergo::{
-        Balance, BlockHeader, BoxId, ErgoTree, HeaderId, IndexedBlock, IndexedBox, TokenId,
-        TokenInfo, UTxO, UnconfirmedTransaction,
+        Balance, BoxId, ErgoTree, HeaderId, IndexedBlock, IndexedBox, TokenId, TokenInfo, UTxO,
+        UnconfirmedTransaction,
     },
 };
 
@@ -18,7 +18,6 @@ use crate::{
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Endpoint {
     Info,
-    LastHeaders,
     IndexedHeight,
     IndexedBlock,
     Mempool,
@@ -34,14 +33,7 @@ impl Endpoint {
     /// Answers `503` while the indexer recovers: every `/blockchain` endpoint except
     /// `indexedHeight`, which the node serves before its recovery check.
     pub fn gated_by_recovery(self) -> bool {
-        !matches!(
-            self,
-            Self::Info
-                | Self::LastHeaders
-                | Self::Mempool
-                | Self::BoxesWithPool
-                | Self::IndexedHeight
-        )
+        !matches!(self, Self::Info | Self::Mempool | Self::BoxesWithPool | Self::IndexedHeight)
     }
 }
 
@@ -99,10 +91,6 @@ impl SimChain {
 impl NodeSource for SimChain {
     async fn info(&self) -> Result<InfoResponse, NodeError> {
         self.serve(Endpoint::Info, |c| Ok(c.info()))
-    }
-
-    async fn last_headers(&self, count: u32) -> Result<Vec<BlockHeader>, NodeError> {
-        self.serve(Endpoint::LastHeaders, |c| Ok(c.last_headers(count)))
     }
 
     async fn indexed_height(&self) -> Result<IndexedHeightResponse, NodeError> {

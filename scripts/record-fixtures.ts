@@ -263,7 +263,6 @@ async function main() {
   // Chain and node state
   await rec.record("info", "GET", "/info");
   await rec.record("indexed_height", "GET", "/blockchain/indexedHeight");
-  await rec.record("last_headers", "GET", "/blocks/lastHeaders/3");
 
   // Blocks
   const headerId: string = sampleBlock.header.id;

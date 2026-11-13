@@ -24,7 +24,9 @@ reorg is either rolled back to the fork point or told to resync, never left sile
 
 ## Requirements
 
-- An Ergo node with the **extra indexer** enabled (`/blockchain/*` endpoints)
+- An Ergo node with the **extra indexer** enabled (`extraIndex = true`, for the `/blockchain/*`
+  endpoints) and a UTXO state (`stateType = "utxo"`, the default): in digest mode the node
+  resolves no mempool inputs and serves no `/utxo/withPool` boxes
 - Node.js 23.6+, if you want to re-record test fixtures
 
 ## Getting started

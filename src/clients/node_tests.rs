@@ -52,22 +52,26 @@ mod shapes {
         let info: InfoResponse = load("info");
         assert!(info.last_mempool_update > 0);
         assert_eq!(info.network.parse::<Network>().unwrap(), Network::Mainnet);
+        let raw: Value = load("info");
+        assert_eq!(
+            info.best_full_header_id.map(|id| id.to_string()).as_deref(),
+            raw["bestFullHeaderId"].as_str()
+        );
+        assert_eq!(info.full_height.map(u64::from), raw["fullHeight"].as_u64());
+    }
+
+    #[test]
+    fn info_before_the_first_full_block() {
+        // The node drops null fields, so both are absent until a full block is applied.
+        let info: InfoResponse =
+            serde_json::from_str(r#"{"lastMemPoolUpdateTime": 1, "network": "mainnet"}"#).unwrap();
+        assert_eq!((info.best_full_header_id, info.full_height), (None, None));
     }
 
     #[test]
     fn indexed_height() {
         let h: IndexedHeightResponse = load("indexed_height");
         assert_eq!(h.indexed_height, h.full_height);
-    }
-
-    #[test]
-    fn last_headers_are_oldest_first_and_linked() {
-        let headers: Vec<BlockHeader> = load("last_headers");
-        assert_eq!(headers.len(), 3);
-        for pair in headers.windows(2) {
-            assert_eq!(pair[1].parent_id, pair[0].id);
-            assert_eq!(pair[1].height, pair[0].height + 1);
-        }
     }
 
     #[test]
@@ -278,14 +282,8 @@ mod source {
     }
 
     #[tokio::test]
-    async fn headers_and_indexed_height() {
+    async fn indexed_height() {
         let (server, node) = node().await;
-        Mock::given(method("GET"))
-            .and(path("/blocks/lastHeaders/3"))
-            .respond_with(recorded("last_headers"))
-            .expect(1)
-            .mount(&server)
-            .await;
         Mock::given(method("GET"))
             .and(path("/blockchain/indexedHeight"))
             .respond_with(recorded("indexed_height"))
@@ -293,7 +291,6 @@ mod source {
             .mount(&server)
             .await;
 
-        assert_eq!(node.last_headers(3).await.unwrap().len(), 3);
         let height = node.indexed_height().await.unwrap();
         assert_eq!(height.indexed_height, height.full_height);
     }

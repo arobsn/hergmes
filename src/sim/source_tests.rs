@@ -134,7 +134,7 @@ fn a_lagging_indexer_serves_its_own_tip() {
     );
     assert_eq!(ready(sim.confirmed_balance(&tree)).unwrap().nano_ergs, expected.nano_ergs);
     // The node view is not delayed.
-    assert_eq!(ready(sim.last_headers(1)).unwrap()[0].id, tip.header_id);
+    assert_eq!(ready(sim.info()).unwrap().best_full_header_id, Some(tip.header_id));
 }
 
 #[test]
@@ -155,7 +155,7 @@ fn orphaning_the_indexed_tip_answers_503_until_the_indexer_recovers() {
         assert_eq!(heights.indexed_height, orphaned.height);
         assert!(is_unavailable(ready(sim.token_info(&token))));
         // Node endpoints keep answering, and don't count as indexer reads.
-        assert_eq!(ready(sim.last_headers(1)).unwrap()[0].id, tip.header_id);
+        assert_eq!(ready(sim.info()).unwrap().best_full_header_id, Some(tip.header_id));
         assert!(ready(sim.mempool()).is_ok());
     }
     assert!(ready(sim.token_info(&token)).unwrap().is_some());
@@ -257,21 +257,36 @@ fn boxes_with_pool_reads_the_utxo_set_and_every_pool_output() {
 }
 
 #[test]
-fn last_headers_are_linked_and_oldest_first() {
+fn info_reports_the_best_full_block_and_indexed_blocks_link_back_from_it() {
     let mut chain = new_chain();
     for seed in 0..3 {
         chain.mine(0, 1, seed);
     }
+    let orphaned = chain.tip();
+    chain.reorg(1, 0, 9);
     let tip = chain.tip();
     let sim = SimChain::new(chain);
 
-    let headers = ready(sim.last_headers(3)).unwrap();
-    assert_eq!(headers.len(), 3);
-    assert_eq!(headers[2].id, tip.header_id);
-    for pair in headers.windows(2) {
-        assert_eq!(pair[1].parent_id, pair[0].id);
+    let info = ready(sim.info()).unwrap();
+    assert_eq!(info.best_full_header_id, Some(tip.header_id));
+    assert_eq!(info.full_height, Some(tip.height));
+    assert_ne!(info.best_full_header_id, Some(orphaned.header_id));
+
+    // The block consumer's walk: parent ids from the tip, through indexed blocks, reach the
+    // fork point; the orphaned block is not served.
+    sim.lock().settle_indexer();
+    let mut cursor = tip.header_id;
+    let mut heights = Vec::new();
+    while let Some(block) = ready(sim.indexed_block(&cursor)).unwrap() {
+        heights.push(block.header.height);
+        cursor = block.header.parent_id;
     }
-    assert_eq!(ready(sim.last_headers(100)).unwrap().len(), 4, "the whole chain");
+    assert_eq!(heights, (1..=tip.height).rev().collect::<Vec<_>>());
+    assert!(
+        ready(sim.indexed_block(&orphaned.header_id))
+            .unwrap()
+            .is_none()
+    );
 }
 
 #[test]

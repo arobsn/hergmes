@@ -17,6 +17,7 @@ pub fn op(max_depth: u8) -> impl Strategy<Value = SimOp> {
         1 => (any::<u32>(), any::<u64>())
             .prop_map(|(pick, seed)| SimOp::MempoolConflict { pick, seed }),
         1 => any::<u32>().prop_map(|pick| SimOp::MempoolDrop { pick }),
+        1 => any::<u32>().prop_map(|pick| SimOp::MempoolRecheckRace { pick }),
         1 => (0..3u8).prop_map(SimOp::IndexerLag),
     ]
 }

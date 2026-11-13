@@ -3,8 +3,8 @@ use std::future::Future;
 use crate::{
     clients::node::{IndexedHeightResponse, InfoResponse, NodeError},
     types::ergo::{
-        Balance, BlockHeader, BoxId, ErgoTree, HeaderId, IndexedBlock, IndexedBox, TokenId,
-        TokenInfo, UTxO, UnconfirmedTransaction,
+        Balance, BoxId, ErgoTree, HeaderId, IndexedBlock, IndexedBox, TokenId, TokenInfo, UTxO,
+        UnconfirmedTransaction,
     },
 };
 
@@ -20,25 +20,24 @@ pub struct Page {
 
 /// The node endpoints the adapters use.
 pub trait NodeSource: Send + Sync {
+    /// The best full block (the tip the relay follows) and the mempool update hint.
     fn info(&self) -> impl Future<Output = Result<InfoResponse, NodeError>> + Send;
-
-    /// The last `count` headers, oldest first.
-    fn last_headers(
-        &self,
-        count: u32,
-    ) -> impl Future<Output = Result<Vec<BlockHeader>, NodeError>> + Send;
 
     fn indexed_height(
         &self,
     ) -> impl Future<Output = Result<IndexedHeightResponse, NodeError>> + Send;
 
-    /// `None` if the indexer does not know the block.
+    /// `None` unless the indexer has indexed every tx of the block under this header, so an
+    /// orphaned block, or one the indexer has not reached, is `None`. The header's `parentId`
+    /// is how the block consumer walks back from the best full block to its own chain.
     fn indexed_block(
         &self,
         header_id: &HeaderId,
     ) -> impl Future<Output = Result<Option<IndexedBlock>, NodeError>> + Send;
 
-    /// The mempool, without transactions whose inputs the node could not resolve.
+    /// The mempool, without transactions whose inputs the node could not resolve. Usually free
+    /// of double spends, but not always: the node re-adds txs without a double-spend check
+    /// (rolled-back txs, and cleanup results racing a replacement).
     fn mempool(
         &self,
     ) -> impl Future<Output = Result<Vec<UnconfirmedTransaction>, NodeError>> + Send;

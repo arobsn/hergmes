@@ -64,6 +64,14 @@ fn random_histories_reach_the_hard_cases() {
         if visible.len() < chain.pool().len() {
             seen.insert("pending tx with an unresolved input");
         }
+        let mut claimed = HashSet::new();
+        if !visible
+            .iter()
+            .flat_map(|tx| &tx.inputs)
+            .all(|i| claimed.insert(i.id))
+        {
+            seen.insert("both sides of a double spend listed");
+        }
         let pending_outputs: HashSet<BoxId> = visible
             .iter()
             .flat_map(|tx| tx.outputs.iter().map(|o| o.id))
@@ -144,6 +152,7 @@ fn random_histories_reach_the_hard_cases() {
         "pending tx with an unresolved input",
         "chained pending txs",
         "pending tx replaced by a double spend",
+        "both sides of a double spend listed",
         "indexer recovering",
         "indexer lagging",
         "orphaned block",
@@ -214,16 +223,8 @@ fn check_against_oracle(chain: &Chain, genesis_value: u64) {
         .iter()
         .flat_map(|b| b.txs.iter().map(|tx| tx.id))
         .collect();
-    let listed = chain.mempool();
-    let mut claimed = HashSet::new();
-    assert!(
-        listed
-            .iter()
-            .flat_map(|tx| &tx.inputs)
-            .all(|i| claimed.insert(i.id)),
-        "the node never lists both sides of a double spend"
-    );
-    for tx in listed {
+    // Both sides of a double spend may be listed (`mempool_recheck_race`).
+    for tx in chain.mempool() {
         assert!(
             tx.inputs
                 .iter()
@@ -384,21 +385,54 @@ fn a_double_spend_replaces_the_pending_tx_and_hides_its_child() {
 }
 
 #[test]
-fn a_block_removes_pending_double_spends_of_its_txs() {
+fn a_cleanup_racing_a_replacement_lists_both_sides() {
+    let mut chain = new_chain();
+    let trees = chain.trees().to_vec();
+    let source = box_of(&chain, 0);
+    let first = chain.transfer(&[source], &trees[1]);
+    chain.submit(first.clone());
+    // The block's cleanup starts with `first` in the pool...
+    chain.mine(0, 0, 0);
+    // ...and a replacement arrives before its result.
+    let second = chain.transfer(&[source], &trees[2]);
+    chain.submit(second.clone());
+    assert_eq!(chain.mempool_recheck_race(0).map(|tx| tx.id), Some(first.id));
+
+    let mut listed: Vec<TxId> = chain.mempool().iter().map(|tx| tx.id).collect();
+    listed.sort();
+    let mut both = vec![first.id, second.id];
+    both.sort();
+    assert_eq!(listed, both);
+    assert!(chain.mempool_recheck_race(0).is_none(), "each tx comes back once");
+
+    // A tx that entered the pool after the last block is not being rechecked, so it cannot
+    // come back once replaced.
+    let other = box_of(&chain, 1);
+    let late = chain.transfer(&[other], &trees[3]);
+    chain.submit(late);
+    let replacement = chain.transfer(&[other], &trees[4]);
+    chain.submit(replacement);
+    assert!(chain.mempool_recheck_race(0).is_none());
+}
+
+#[test]
+fn a_block_leaves_pending_double_spends_of_its_txs_to_the_cleanup() {
     let mut chain = new_chain();
     let trees = chain.trees().to_vec();
     let source = box_of(&chain, 0);
     let pending = chain.transfer(&[source], &trees[1]);
     let child = chain.transfer(&[pending.outputs[0].id], &trees[3]);
-    chain.submit(pending);
+    chain.submit(pending.clone());
     chain.submit(child.clone());
     let mined = chain.transfer(&[source], &trees[2]);
     chain.mine_txs(vec![mined]);
 
-    // The child stays, unresolvable and hidden, until the next block's cleanup.
+    // Both stay until the next block's cleanup. `pending` is hidden (its input is spent), but
+    // the child still resolves its input from `pending`'s outputs, so the node lists it.
     let pool: Vec<TxId> = chain.pool().iter().map(|tx| tx.id).collect();
-    assert_eq!(pool, vec![child.id]);
-    assert!(chain.mempool().is_empty());
+    assert_eq!(pool, vec![pending.id, child.id]);
+    let listed: Vec<TxId> = chain.mempool().iter().map(|tx| tx.id).collect();
+    assert_eq!(listed, vec![child.id]);
     chain.mine(0, 0, 0);
     assert!(chain.pool().is_empty());
 }

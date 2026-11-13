@@ -8,8 +8,8 @@ use crate::{
     types::{
         address::{self, Network, UnknownNetwork},
         ergo::{
-            Balance, BalanceResponse, BlockHeader, BoxId, ErgoTree, HeaderId, IndexedBlock,
-            IndexedBox, TokenId, TokenInfo, TxId, UTxO, UnconfirmedTransaction,
+            Balance, BalanceResponse, BoxId, ErgoTree, HeaderId, IndexedBlock, IndexedBox, TokenId,
+            TokenInfo, TxId, UTxO, UnconfirmedTransaction,
         },
     },
 };
@@ -48,9 +48,21 @@ pub struct ApiError {
 
 #[derive(Debug, Deserialize)]
 pub struct InfoResponse {
+    /// Wall-clock time (ms) of the last `ChangedMempool` event: set at launch, and on every
+    /// applied block, accepted or invalidated tx, and cleanup recheck, changed or not. It is a
+    /// hint, not a version: it is set by a different actor than the one the mempool endpoints
+    /// read, so a read right after it moves can still return the previous pool, and it can
+    /// move backwards if the node's clock does.
     #[serde(rename = "lastMemPoolUpdateTime")]
     pub last_mempool_update: u64,
     pub network: String,
+    /// The best full block: the tip of the chain the node's UTXO set, mempool and indexer
+    /// follow. Absent before the first full block. Not the best header, which can run ahead of
+    /// it (`/blocks/lastHeaders` follows headers).
+    #[serde(rename = "bestFullHeaderId")]
+    pub best_full_header_id: Option<HeaderId>,
+    #[serde(rename = "fullHeight")]
+    pub full_height: Option<u32>,
 }
 
 #[derive(Debug, Clone)]
@@ -171,11 +183,6 @@ impl NodeSource for NodeClient {
     #[tracing::instrument(skip(self))]
     async fn info(&self) -> Result<InfoResponse, NodeError> {
         fetch(self.get("info")).await
-    }
-
-    #[tracing::instrument(skip(self))]
-    async fn last_headers(&self, count: u32) -> Result<Vec<BlockHeader>, NodeError> {
-        fetch(self.get(&format!("blocks/lastHeaders/{count}"))).await
     }
 
     #[tracing::instrument(skip(self))]
