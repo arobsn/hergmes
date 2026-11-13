@@ -4,6 +4,8 @@ pub mod clients;
 pub mod engine;
 pub mod env;
 pub mod error;
+#[cfg(test)]
+mod fixtures;
 #[cfg(any(test, feature = "sim"))]
 pub mod sim;
 pub mod trace;

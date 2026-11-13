@@ -1,296 +1,18 @@
 [
   {
-    "id": "61a790a168ace921033060f841a761a4b6fd3d35c1d8994e03d1a951b469e737",
+    "id": "021e67eed854a956fbdb8d761644a109b364f47ee0fbd800535e0a75b472392e",
     "inputs": [
       {
-        "boxId": "4cb961f98cffd6e1f09b0ef3ba8741891537ad8bff36ccb91e58f9b5c539375c",
-        "value": 766459354,
-        "ergoTree": "0008cd02211885143727de3226fd94eab78cebba2483f0149008b254592a3884681b590b",
+        "boxId": "7379943043110c71b36f3ef85ffc7e719676f0c51fac624562761d2f841397c2",
+        "value": 1147668206,
+        "ergoTree": "0008cd0253ac3f74080f8df350cd913e7f7540e05fce30c6b6d6c53f8690d1499f89b0d8",
         "assets": [],
-        "creationHeight": 1915400,
+        "creationHeight": 1915462,
         "additionalRegisters": {},
-        "transactionId": "5d3061c7f8b1869ee7c8a65dfaf6299845f11bdc76df239528f68a01af5b8784",
-        "index": 18,
-        "spendingProof": {
-          "proofBytes": "9ad6082f7d1fce468e246d23fdf56ab960fe0c61f262fb619fc6d4d95bdfe7944b64d1ddc0fc173a7276a401b04a5e8b2be0f4fff7235fe2",
-          "extension": {}
-        }
-      }
-    ],
-    "dataInputs": [],
-    "outputs": [
-      {
-        "boxId": "5e12563ecbb56cdce3fc090c6f8f8155b94afa8d87d1faed00a23065ca52768b",
-        "value": 765359354,
-        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "61a790a168ace921033060f841a761a4b6fd3d35c1d8994e03d1a951b469e737",
-        "index": 0
-      },
-      {
-        "boxId": "d3e67eed5010fef5ef11bfa3cf72dc23608c961a4e3665984ba6e3ff972813d5",
-        "value": 1100000,
-        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "61a790a168ace921033060f841a761a4b6fd3d35c1d8994e03d1a951b469e737",
-        "index": 1
-      }
-    ],
-    "size": 253,
-    "cost": 13406
-  },
-  {
-    "id": "80dac52208848b18ba478c815e26b2bdb0585735dc31c5f0507a28eccad012ef",
-    "inputs": [
-      {
-        "boxId": "dac7e25c8a943b1685d23714da8b762fd61b2dd5a987324ba03e93e9c656bee3",
-        "value": 552828029,
-        "ergoTree": "0008cd03a34d32de12546fc5acd2d63c34edb1f41b1d1d6256be669e7b347834397245b3",
-        "assets": [],
-        "creationHeight": 1915400,
-        "additionalRegisters": {},
-        "transactionId": "5d3061c7f8b1869ee7c8a65dfaf6299845f11bdc76df239528f68a01af5b8784",
-        "index": 19,
-        "spendingProof": {
-          "proofBytes": "f596e1f216588be2b9c1d5ef5ae5a73d0739f13fcf7f2fd151f7263e801db073e98b1f467ef20c68df22cd8ad8687e788ff8981ec6962fa6",
-          "extension": {}
-        }
-      }
-    ],
-    "dataInputs": [],
-    "outputs": [
-      {
-        "boxId": "5836a24373886f3aac25e581c163f2f774579e2cf5cff8450ac3f19fc3d8e0a6",
-        "value": 551728029,
-        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "80dac52208848b18ba478c815e26b2bdb0585735dc31c5f0507a28eccad012ef",
-        "index": 0
-      },
-      {
-        "boxId": "24f5ac45eab5b3e6878a1d46344b75c8cbc8ca5d26f244a9e5a4c064aad7bb82",
-        "value": 1100000,
-        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "80dac52208848b18ba478c815e26b2bdb0585735dc31c5f0507a28eccad012ef",
-        "index": 1
-      }
-    ],
-    "size": 253,
-    "cost": 13406
-  },
-  {
-    "id": "8744fc082071f060042e0ffbd3a4a73490b98ef48658fac9222d0ea55f6fccd4",
-    "inputs": [
-      {
-        "boxId": "b990e6f255435a0bfb00b9d5da5fdac0ad1d7a099975cf3a0049e25d63b28500",
-        "value": 734328896,
-        "ergoTree": "0008cd02c50e4cc7c0ff8f540a9a976d79ea56013801d07ecfeaf0fd367222f4011560e7",
-        "assets": [],
-        "creationHeight": 1915400,
-        "additionalRegisters": {},
-        "transactionId": "5d3061c7f8b1869ee7c8a65dfaf6299845f11bdc76df239528f68a01af5b8784",
-        "index": 15,
-        "spendingProof": {
-          "proofBytes": "0ce461fbba9e3dd71bf45c349002c98cc92bcd2f5854c7a05ba39ec974d27a6926e24b8545309769cbbbe25c1096d52c4d13d739d30bb65c",
-          "extension": {}
-        }
-      }
-    ],
-    "dataInputs": [],
-    "outputs": [
-      {
-        "boxId": "f91df90058f0e03aff1821451294fd8ba8ba0b8f90251ae80b1939a6fdf8af2c",
-        "value": 733228896,
-        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "8744fc082071f060042e0ffbd3a4a73490b98ef48658fac9222d0ea55f6fccd4",
-        "index": 0
-      },
-      {
-        "boxId": "9159bcfbb348ced8ed0c7201e726965c904022a3f9fe28d11a79c45ae31c5d3c",
-        "value": 1100000,
-        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "8744fc082071f060042e0ffbd3a4a73490b98ef48658fac9222d0ea55f6fccd4",
-        "index": 1
-      }
-    ],
-    "size": 253,
-    "cost": 13406
-  },
-  {
-    "id": "a6afba7818799c90ab3485dd9dbf81724f5a433f761040d90bb688457ca043ad",
-    "inputs": [
-      {
-        "boxId": "f250ff09ff680b8894cb0bc259bf0928a21e42ae947048391c7b2d8c7980dada",
-        "value": 796656152,
-        "ergoTree": "0008cd02fe3d4e42ee8f764540725adb71cd94c3b96b7be4ab6d4650112d242dc4cfd3fe",
-        "assets": [],
-        "creationHeight": 1915400,
-        "additionalRegisters": {},
-        "transactionId": "5d3061c7f8b1869ee7c8a65dfaf6299845f11bdc76df239528f68a01af5b8784",
-        "index": 29,
-        "spendingProof": {
-          "proofBytes": "6fdd671442b62caab114836a84567c830a0908310c268bc650bf15b34f279b25f24fab2f93e8d1ace0302573799711e907710272c82019d7",
-          "extension": {}
-        }
-      }
-    ],
-    "dataInputs": [],
-    "outputs": [
-      {
-        "boxId": "309b27c351b9bff0f3dc86ff641141ef42482c3ecfe371fa46689fc994892266",
-        "value": 795556152,
-        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "a6afba7818799c90ab3485dd9dbf81724f5a433f761040d90bb688457ca043ad",
-        "index": 0
-      },
-      {
-        "boxId": "0e0a458620cc14f66cfaed7fdc980e883e1817fe504b287896548c43f25be47e",
-        "value": 1100000,
-        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "a6afba7818799c90ab3485dd9dbf81724f5a433f761040d90bb688457ca043ad",
-        "index": 1
-      }
-    ],
-    "size": 253,
-    "cost": 13406
-  },
-  {
-    "id": "c86db30dafb23cddf4998e6c807d4cf2dc2200a1a2d98e73656269f773000b6e",
-    "inputs": [
-      {
-        "boxId": "860bb68575d104f3f049300b67fbb8fc6d6aa4a78004f6ae4555fff60b4b7b1a",
-        "value": 1633265704,
-        "ergoTree": "0008cd03f4e4a351555eaa2c63e2f2218c85168b71538d3928da180626f9d8c70052e1dc",
-        "assets": [],
-        "creationHeight": 1915400,
-        "additionalRegisters": {},
-        "transactionId": "5d3061c7f8b1869ee7c8a65dfaf6299845f11bdc76df239528f68a01af5b8784",
-        "index": 30,
-        "spendingProof": {
-          "proofBytes": "6f45006f537c54913d6661f563857115addf17a300b355b55aa31a480cc12865e9588fac0176a9b58ddb2e2d24d675145f3139fc4c23af4e",
-          "extension": {}
-        }
-      }
-    ],
-    "dataInputs": [],
-    "outputs": [
-      {
-        "boxId": "dc7c4a103f9ac956d0e55ebfef5206caf2638aaeaebe9a103d28591f5c29e2c1",
-        "value": 1632165704,
-        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "c86db30dafb23cddf4998e6c807d4cf2dc2200a1a2d98e73656269f773000b6e",
-        "index": 0
-      },
-      {
-        "boxId": "e06bacf98b7ef14512526f8f8941436119cca0c5e6923ab5519c2db9948aeda7",
-        "value": 1100000,
-        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "c86db30dafb23cddf4998e6c807d4cf2dc2200a1a2d98e73656269f773000b6e",
-        "index": 1
-      }
-    ],
-    "size": 253,
-    "cost": 13406
-  },
-  {
-    "id": "fd6bba7e8bcf983de5203a72a5ca4a804bb44014c94b3b79dbda4e584b723351",
-    "inputs": [
-      {
-        "boxId": "438d5ab51f7b10993de693782a312b58f47ece7e7f41447d446a0c2d30966658",
-        "value": 1499634374,
-        "ergoTree": "0008cd036a27d7f3bd2e63406d845d1b9123d5ab1f8db9cbf13f74541caf3cde899727be",
-        "assets": [],
-        "creationHeight": 1915400,
-        "additionalRegisters": {},
-        "transactionId": "5d3061c7f8b1869ee7c8a65dfaf6299845f11bdc76df239528f68a01af5b8784",
-        "index": 16,
-        "spendingProof": {
-          "proofBytes": "304a0b8cb18870be43fa956a8e5c9127fd44929df644804ed693fef9332f28055d2155253b57fc0dd20d59b4a1ce72c06e96259e58307edb",
-          "extension": {}
-        }
-      }
-    ],
-    "dataInputs": [],
-    "outputs": [
-      {
-        "boxId": "3c68ea6c77dd551b780d990c075361f7c4645b19076fa2fb1f475cc5a79ab0ad",
-        "value": 1498534374,
-        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "fd6bba7e8bcf983de5203a72a5ca4a804bb44014c94b3b79dbda4e584b723351",
-        "index": 0
-      },
-      {
-        "boxId": "bc580fe40a370f3d7cd6ffae4322311c3c805d51fd90ad6b15632f61d7812f54",
-        "value": 1100000,
-        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
-        "assets": [],
-        "creationHeight": 1915413,
-        "additionalRegisters": {},
-        "transactionId": "fd6bba7e8bcf983de5203a72a5ca4a804bb44014c94b3b79dbda4e584b723351",
-        "index": 1
-      }
-    ],
-    "size": 253,
-    "cost": 13406
-  },
-  {
-    "id": "e040f40c8657ec63a236ce85466a292956381fac07da581878eb517e9c626ef5",
-    "inputs": [
-      {
-        "boxId": "88d9834d8c9963f7621b1f0ec6a982ce7602ad60adadbde212a40757376941a6",
-        "value": 12000533199641,
-        "ergoTree": "0008cd02ab40333c8af9554c95e648e10a5bc88e8bf2d0df40b9571f081a09f4313cdd62",
-        "assets": [],
-        "creationHeight": 1894653,
-        "additionalRegisters": {},
-        "transactionId": "91d0865487fbbf916b9596ccc4f299bd7fd037ae73333002d29bda6c937b0cfb",
+        "transactionId": "c9b64e1207bf5e4895c6dd86c18c4a46e5fe3377b6655ce69aaba3c1940997d6",
         "index": 1,
         "spendingProof": {
-          "proofBytes": "9e1d943f46190b1a058dc993570338526455e6b2c1ed0e5571ad63eeb0f6a5849c5f05ccb41d72ad3aa23b294511b70aaf1f8d6074b9cbab",
-          "extension": {}
-        }
-      },
-      {
-        "boxId": "65e4e2729263d09489f5c074fbcf24207e02de7da61482275303f14a199c020b",
-        "value": 12000749900000,
-        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
-        "assets": [],
-        "creationHeight": 1911789,
-        "additionalRegisters": {},
-        "transactionId": "10e1729c44615c6a4f626875f933f4dfb968f9f1e067801cabbc00b443d10c1f",
-        "index": 0,
-        "spendingProof": {
-          "proofBytes": "cb8a55e62c982c44773c254980ac097d07666d5cd5532c06268017bccb8e1e2064bb9817f45573b07b594b5209f84de32ce3b3f016995dbd",
+          "proofBytes": "83c6a78f057992ff71b033a1641e2a7e43a88c973edff8c7073f11787828b89cef8052b93e70505962845256aa7ffc5ab4bde7bfbc8353e5",
           "extension": {}
         }
       }
@@ -298,84 +20,87 @@
     "dataInputs": [],
     "outputs": [
       {
-        "boxId": "c1e06ec958301806751963e2126146a3343e8cdd628f76281383d43530cb545e",
-        "value": 12343000000000,
-        "ergoTree": "0008cd030c4ccae10a7cf563d54c16f00ccca519767c2176879a44d44354d36db02a7694",
+        "boxId": "06723dfb88c9d831bd93fb886856b1932c024a28ca52c504a43b535960cfb23d",
+        "value": 1131668206,
+        "ergoTree": "0008cd02deb9e152b4e1c2d5f36271ac9b799f7a40abfcc08c599ead30ef9b9abb7c5c97",
         "assets": [],
-        "creationHeight": 1915413,
+        "creationHeight": 1915474,
         "additionalRegisters": {},
-        "transactionId": "e040f40c8657ec63a236ce85466a292956381fac07da581878eb517e9c626ef5",
+        "transactionId": "021e67eed854a956fbdb8d761644a109b364f47ee0fbd800535e0a75b472392e",
         "index": 0
       },
       {
-        "boxId": "06509c7d1a1a6193d2970fee9551c43dddb8716c32e1a88383406e1f7f254338",
-        "value": 11658281999641,
-        "ergoTree": "0008cd02ab40333c8af9554c95e648e10a5bc88e8bf2d0df40b9571f081a09f4313cdd62",
+        "boxId": "720274316b597da276f63c28111fc8d68a05636ecb3a345e4ab4fc15f695b85c",
+        "value": 16000000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
         "assets": [],
-        "creationHeight": 1915413,
+        "creationHeight": 1915474,
         "additionalRegisters": {},
-        "transactionId": "e040f40c8657ec63a236ce85466a292956381fac07da581878eb517e9c626ef5",
+        "transactionId": "021e67eed854a956fbdb8d761644a109b364f47ee0fbd800535e0a75b472392e",
         "index": 1
+      }
+    ],
+    "size": 254,
+    "cost": 13406
+  },
+  {
+    "id": "97471177b94a2cc914cd6d2b56213486b876a3d71a5e2369ab090ddd3a76e13f",
+    "inputs": [
+      {
+        "boxId": "c497fcbaaa626f83679bec46a338e897719bc0697b3ea998aa7e35d3ac283e23",
+        "value": 1053851755,
+        "ergoTree": "0008cd036a27d7f3bd2e63406d845d1b9123d5ab1f8db9cbf13f74541caf3cde899727be",
+        "assets": [],
+        "creationHeight": 1915463,
+        "additionalRegisters": {},
+        "transactionId": "17006e6a3d91919127b9f7ac2cea1351191abcf5c124613a89ce0bd8c30d8a1b",
+        "index": 6,
+        "spendingProof": {
+          "proofBytes": "df4f39aeea82a511a758c8d4d13dd494fa4b4106f763bdfde25ae101973bf8ba528d9065fbfdf4f521fbd12d2dbf2c8b8868ce1b2efb1a86",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "0321da1ee077d2a4147c2016a45d8eaced6fe2a943ef4eb44f30379a4f5279c4",
+        "value": 1052751755,
+        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "97471177b94a2cc914cd6d2b56213486b876a3d71a5e2369ab090ddd3a76e13f",
+        "index": 0
       },
       {
-        "boxId": "0e51cc61d31bcd1c6e2b8f114c16224dd3fd5e6f8ae8ac53948c6ef79e7d734f",
+        "boxId": "2656272ac011869aabd7ee9454f84f4e01b014e5107b90579e43ac0ecca59170",
         "value": 1100000,
         "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
         "assets": [],
-        "creationHeight": 1915413,
+        "creationHeight": 1915474,
         "additionalRegisters": {},
-        "transactionId": "e040f40c8657ec63a236ce85466a292956381fac07da581878eb517e9c626ef5",
-        "index": 2
+        "transactionId": "97471177b94a2cc914cd6d2b56213486b876a3d71a5e2369ab090ddd3a76e13f",
+        "index": 1
       }
     ],
-    "size": 393,
-    "cost": 16514
+    "size": 253,
+    "cost": 13406
   },
   {
-    "id": "23bd66dcf48b89722b5a7660ec3a7020397bae19380e5e36bb1148a32438a12b",
+    "id": "a7c400c29a63df47565547e3aad6fcff738b29086989bbe0fd51d7305ffccfaf",
     "inputs": [
       {
-        "boxId": "54963c0591a0d33b93d95e3997e0720543b9c5e02090ddf0bf63e1a17386434c",
-        "value": 10000000,
-        "ergoTree": "0008cd02d681efeb2961e5f698fcb0b3a7ee8d65bca8983c9b1e59053a01f245b535af37",
+        "boxId": "7fb973ac4fc7197b3d6dab46ff3619f7e0ecb4bee9afcd97aac3ad6fb67aa2a4",
+        "value": 720132677,
+        "ergoTree": "0008cd03f4e4a351555eaa2c63e2f2218c85168b71538d3928da180626f9d8c70052e1dc",
         "assets": [],
-        "creationHeight": 1915410,
+        "creationHeight": 1915463,
         "additionalRegisters": {},
-        "transactionId": "216d06065817c94147de85548f075610e7662bc366f925e5341f58303b33311f",
-        "index": 0,
+        "transactionId": "17006e6a3d91919127b9f7ac2cea1351191abcf5c124613a89ce0bd8c30d8a1b",
+        "index": 14,
         "spendingProof": {
-          "proofBytes": "85869b79cb4d5c10774ea6f3fbdc286e26c82001335cfcd245bd02a169c2194c0d223a9af04f087f6dd2163e221e53f0cb9c4ff56e7c05b4",
-          "extension": {}
-        }
-      },
-      {
-        "boxId": "5d918136a6233a763f92058e67f85b995d2614519ddf10a12aa859e62dc85b96",
-        "value": 26184519000,
-        "ergoTree": "0008cd02d681efeb2961e5f698fcb0b3a7ee8d65bca8983c9b1e59053a01f245b535af37",
-        "assets": [
-          {
-            "tokenId": "1465c9b9de602bd75f8f38df83118e2c8b1d5b2f5518514dd1438149053652a8",
-            "amount": 25000000
-          },
-          {
-            "tokenId": "028ec31acacaa6aab6cd89a16cab5f9046cfea701262f8c9532ace433075353a",
-            "amount": 21025
-          },
-          {
-            "tokenId": "ed2197ebb2b958670cb568aeed54693617a3f3718d16d1a298b8c8d337193da0",
-            "amount": 6105
-          },
-          {
-            "tokenId": "31ac0f72b036502a17e27ff3bc9eb1b3ae4eef9aa4a3c3bd818475d6326cbd9f",
-            "amount": 6105
-          }
-        ],
-        "creationHeight": 1915412,
-        "additionalRegisters": {},
-        "transactionId": "7f863b2be18e107713b21a9d6ad5b95c44ae1dac0b9af03cbfb75878317c6e5c",
-        "index": 2,
-        "spendingProof": {
-          "proofBytes": "cb49370687a7bb9b9ff910248fc315cadeebad57f9ba5dfe44ff4e13a819dadac3c35adcaa3715b6361634fa63343f184bfb37befa43599c",
+          "proofBytes": "1d1219c09b7b7d69dfed3b092e99bca44a4d80373f0fa3edc4906770450669dcadc007360d8142333556590ff377e4500f3d93de65171a4d",
           "extension": {}
         }
       }
@@ -383,54 +108,1509 @@
     "dataInputs": [],
     "outputs": [
       {
-        "boxId": "45f3c9d9c413f3ce705e1a83c76f5b1171eded4b5750e8569bb274a9a08d8272",
-        "value": 10000000,
-        "ergoTree": "0008cd02d681efeb2961e5f698fcb0b3a7ee8d65bca8983c9b1e59053a01f245b535af37",
+        "boxId": "4643b0f0d12ade5195cab249953db07ab733110177aeef27c868d3e0254d9ea0",
+        "value": 719032677,
+        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
         "assets": [],
-        "creationHeight": 1915414,
+        "creationHeight": 1915474,
         "additionalRegisters": {},
-        "transactionId": "23bd66dcf48b89722b5a7660ec3a7020397bae19380e5e36bb1148a32438a12b",
+        "transactionId": "a7c400c29a63df47565547e3aad6fcff738b29086989bbe0fd51d7305ffccfaf",
         "index": 0
       },
       {
-        "boxId": "b6364bd73d67cbe4522a73f2ed07a44bea4aedf18f8250e1d0010a6eab8431d6",
-        "value": 1000000,
+        "boxId": "7c417a3c4eb44f19458a5071770b2ab59faf8c997177460ce84c519ecee7f5a4",
+        "value": 1100000,
         "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
         "assets": [],
-        "creationHeight": 1915414,
+        "creationHeight": 1915474,
         "additionalRegisters": {},
-        "transactionId": "23bd66dcf48b89722b5a7660ec3a7020397bae19380e5e36bb1148a32438a12b",
+        "transactionId": "a7c400c29a63df47565547e3aad6fcff738b29086989bbe0fd51d7305ffccfaf",
+        "index": 1
+      }
+    ],
+    "size": 253,
+    "cost": 13406
+  },
+  {
+    "id": "c775996aea0b27982c85d1eaab4c116e1f39e92224d2a66ae900c45b217d3563",
+    "inputs": [
+      {
+        "boxId": "af3d667abe35efe031c6a711f90b1e15bc88f16c112ab88c949ee87e5ec984b6",
+        "value": 575404989,
+        "ergoTree": "0008cd02fe3d4e42ee8f764540725adb71cd94c3b96b7be4ab6d4650112d242dc4cfd3fe",
+        "assets": [],
+        "creationHeight": 1915463,
+        "additionalRegisters": {},
+        "transactionId": "17006e6a3d91919127b9f7ac2cea1351191abcf5c124613a89ce0bd8c30d8a1b",
+        "index": 13,
+        "spendingProof": {
+          "proofBytes": "99c226cb733cd93ade533782543986259e197b4551bdf593065eb24c2ab80d2806b10992320fe0c665e89d2311730e0c3dd20a9e38ed9c05",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "39d7fc0400374d1406fe98c4726e4c39311df6bbeafec0bf07c62617a8f46a45",
+        "value": 574304989,
+        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "c775996aea0b27982c85d1eaab4c116e1f39e92224d2a66ae900c45b217d3563",
+        "index": 0
+      },
+      {
+        "boxId": "9a56b06c834020c90d587286bd1f47494497c0e9fd9ab91df64d06508cddd0eb",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "c775996aea0b27982c85d1eaab4c116e1f39e92224d2a66ae900c45b217d3563",
+        "index": 1
+      }
+    ],
+    "size": 253,
+    "cost": 13406
+  },
+  {
+    "id": "fe833cc4573e8b092d19a9f57745f686cd25099e17fe5c8abc627ab83d01d9b4",
+    "inputs": [
+      {
+        "boxId": "fb821ca05482d8754a9eb5f530ee4220716cbf22fe4aba67bbcb59861b474f43",
+        "value": 534420615,
+        "ergoTree": "0008cd02211885143727de3226fd94eab78cebba2483f0149008b254592a3884681b590b",
+        "assets": [],
+        "creationHeight": 1915463,
+        "additionalRegisters": {},
+        "transactionId": "17006e6a3d91919127b9f7ac2cea1351191abcf5c124613a89ce0bd8c30d8a1b",
+        "index": 7,
+        "spendingProof": {
+          "proofBytes": "f9b1ad771ac7fc30239eb40575fcc5f02d7ee947f6a3b468c375323073b58a35b92cd4b732d80fd9014632ab36363c41210e77584116370d",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "64d44ed2cf5999579db6980ce5a52d41746e9ea46dff345559cd113c53863690",
+        "value": 533320615,
+        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "fe833cc4573e8b092d19a9f57745f686cd25099e17fe5c8abc627ab83d01d9b4",
+        "index": 0
+      },
+      {
+        "boxId": "dc8d9716226cc873dcfdb1f66b0700aab1a45c2060dc13b98ffcb41a2ca56c45",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "fe833cc4573e8b092d19a9f57745f686cd25099e17fe5c8abc627ab83d01d9b4",
+        "index": 1
+      }
+    ],
+    "size": 253,
+    "cost": 13406
+  },
+  {
+    "id": "9e67bf0008532b3d7fbdc8f99859e472813560e89751f86188716baa33de70ad",
+    "inputs": [
+      {
+        "boxId": "0dca8d2e05991cf754d18b904403f60632f95666d9eb057f591e144938075023",
+        "value": 13203255649,
+        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
+        "assets": [],
+        "creationHeight": 1915450,
+        "additionalRegisters": {},
+        "transactionId": "d5d384974a9684ba39d417eabf4c453db8dddaf3de8cf6501845508c0fe9cc8e",
+        "index": 0,
+        "spendingProof": {
+          "proofBytes": "5eb95810c501d6aedd0034bbc8ebc29f24d84ed3d843302c9f815985a86acf7bb783b3ba4e4895fdd502873a0309153ef3e26f1e98a3eef8",
+          "extension": {}
+        }
+      },
+      {
+        "boxId": "7f25d041a51e386538307390b517b8e5348af7242be4d28432d9cab1917211fd",
+        "value": 275678900000,
+        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
+        "assets": [],
+        "creationHeight": 1915470,
+        "additionalRegisters": {},
+        "transactionId": "7ae59db3152cfe5bfc5b6aa3a189afc9dfa06ab1ce0a73aa673d95555b2754a3",
+        "index": 0,
+        "spendingProof": {
+          "proofBytes": "647dffc3db35938321824a99d2df2a01368e571e921b5e82492c8bfe49b4a7e6240d3db7184b279caa94edb54fc94f01b262f3abf122fc6a",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "2b93990c608ee7b98dbdaffee765a6376aa5b5639ca0b397a1b94270a81e81b4",
+        "value": 288881055649,
+        "ergoTree": "0008cd03b1668d64532c10fb2cd40461f81077ffbeeaf84e52b534aaed25d4442db7cc80",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "9e67bf0008532b3d7fbdc8f99859e472813560e89751f86188716baa33de70ad",
+        "index": 0
+      },
+      {
+        "boxId": "788eff59b5c521e714a9fad07e5cc1bbea2551832dc1fd0cd6065b3eea780917",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "9e67bf0008532b3d7fbdc8f99859e472813560e89751f86188716baa33de70ad",
+        "index": 1
+      }
+    ],
+    "size": 344,
+    "cost": 16216
+  },
+  {
+    "id": "31496333ba9fec6afe22c7f343b0cbfce3567ad013885fa08bb0c4e41fdc7616",
+    "inputs": [
+      {
+        "boxId": "13445379a637385d4ee4df4652787b0efdc5bddf4ed90253cd8b36e36fe62af9",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 10939
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "0703bdb6464c98f2511c7547ea1b6ea1fa01a4d8bfbeaa9f945e2982bd0ee854551f"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 13,
+        "spendingProof": {
+          "proofBytes": "b4174bab1370e6973351d7953dac9fc2276e1f700ce8b44bdecbff88ae2953a17e17d9807aa765b867eb59453a053949e11f52b518b55603",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "b87a435391cd29b65f64c905e18ae5ad805655ad66e6209ccf946a5fe9d74d52",
+        "value": 63500000,
+        "ergoTree": "0008cd03bdb6464c98f2511c7547ea1b6ea1fa01a4d8bfbeaa9f945e2982bd0ee854551f",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "ca41f0a8639e73f02b9214848161929753145c9131bc3457d29dce10b7e31a66",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "74d4eb5b95d3f49a70d0c903cbba1b7db0eeefa935b84bae456bb57aab2e62b000af28360d6d9e0e7b6deaaae0ace3e053da83e45334c3ac",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "81dd2c598b7b56a0ade550539051837ce10468c362606157abfd6c2a342e1823",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 10939
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0703bdb6464c98f2511c7547ea1b6ea1fa01a4d8bfbeaa9f945e2982bd0ee854551f",
+          "R5": "04fea504",
+          "R6": "05c0f1c4e628"
+        },
+        "transactionId": "31496333ba9fec6afe22c7f343b0cbfce3567ad013885fa08bb0c4e41fdc7616",
+        "index": 0
+      },
+      {
+        "boxId": "d3ae6b84223dc41a5772944a4e2240d46ed7c7b801a3ae27620a502c96f4ecad",
+        "value": 62000000,
+        "ergoTree": "0008cd03bdb6464c98f2511c7547ea1b6ea1fa01a4d8bfbeaa9f945e2982bd0ee854551f",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "31496333ba9fec6afe22c7f343b0cbfce3567ad013885fa08bb0c4e41fdc7616",
         "index": 1
       },
       {
-        "boxId": "7fe3157e07f6ca4b41a06a7a4ad6279096c95b961b8284a90622feef97883cfb",
-        "value": 26183519000,
-        "ergoTree": "0008cd02d681efeb2961e5f698fcb0b3a7ee8d65bca8983c9b1e59053a01f245b535af37",
-        "assets": [
-          {
-            "tokenId": "1465c9b9de602bd75f8f38df83118e2c8b1d5b2f5518514dd1438149053652a8",
-            "amount": 25000000
-          },
-          {
-            "tokenId": "028ec31acacaa6aab6cd89a16cab5f9046cfea701262f8c9532ace433075353a",
-            "amount": 21025
-          },
-          {
-            "tokenId": "ed2197ebb2b958670cb568aeed54693617a3f3718d16d1a298b8c8d337193da0",
-            "amount": 6105
-          },
-          {
-            "tokenId": "31ac0f72b036502a17e27ff3bc9eb1b3ae4eef9aa4a3c3bd818475d6326cbd9f",
-            "amount": 6105
-          }
-        ],
-        "creationHeight": 1915414,
+        "boxId": "0327a4cbc1de575ee109489d505af9bd7459f498eeecee2e65e4deac1f2f6ca0",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
         "additionalRegisters": {},
-        "transactionId": "23bd66dcf48b89722b5a7660ec3a7020397bae19380e5e36bb1148a32438a12b",
+        "transactionId": "31496333ba9fec6afe22c7f343b0cbfce3567ad013885fa08bb0c4e41fdc7616",
         "index": 2
       }
     ],
-    "size": 531,
-    "cost": 18114
+    "size": 676,
+    "cost": 17390
+  },
+  {
+    "id": "348dc7fdac7f5999749c4a8edab0ef09ae04f3de6aaf5e63901e66bfa72f5068",
+    "inputs": [
+      {
+        "boxId": "bc0ad487df2eb8aa01611d0d0df4ce5cbb06c651075b0fd8d91cd0fd9ea5360b",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 122
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "0702a5c514bd912d91afeef58496b799d490e3281ace838fb9ce9dad71f29c478552"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 12,
+        "spendingProof": {
+          "proofBytes": "0672e4aa7c0a83bb84fa52c22a9d66be605b4b2ba17bb4d3f3295137d5eb34a6885cd5eb6c8f37feeba2369f8f01b2afed4fa6fb5e404972",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "2d0536c9a71f59a49cfb9d01524c246e55f9b4561c4c9cdab170a1406042f5b3",
+        "value": 15738500000,
+        "ergoTree": "0008cd02a5c514bd912d91afeef58496b799d490e3281ace838fb9ce9dad71f29c478552",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "d932aadca00fbba2052297e5e76b43d8656866afe415560e77aceef61492ab9b",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "a8ff032e5e5e44c3e62bc4fbf3bf3b6f64b8dc73b5e2cb5202ac350bb0fde331a090701135a54dcfd0b088cbf32ab088a3a31eac279147ca",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "71f377d2c021fe9cedb5e9f3318f3c0547dc1027b3a1c12f7d2902ec3b6c8cb2",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 122
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0702a5c514bd912d91afeef58496b799d490e3281ace838fb9ce9dad71f29c478552",
+          "R5": "04fea504",
+          "R6": "05b09b82e928"
+        },
+        "transactionId": "348dc7fdac7f5999749c4a8edab0ef09ae04f3de6aaf5e63901e66bfa72f5068",
+        "index": 0
+      },
+      {
+        "boxId": "7035f710f03456a7e3f390a67f9ec91a0824abfccd4b0361abd004f3ce433129",
+        "value": 15737000000,
+        "ergoTree": "0008cd02a5c514bd912d91afeef58496b799d490e3281ace838fb9ce9dad71f29c478552",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "348dc7fdac7f5999749c4a8edab0ef09ae04f3de6aaf5e63901e66bfa72f5068",
+        "index": 1
+      },
+      {
+        "boxId": "6eda0ce1f08467692c660aeecb0a90c6ed08d4803b211d4a8989fb08da70a65d",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "348dc7fdac7f5999749c4a8edab0ef09ae04f3de6aaf5e63901e66bfa72f5068",
+        "index": 2
+      }
+    ],
+    "size": 676,
+    "cost": 17390
+  },
+  {
+    "id": "953864915aab387d0528ed3f1ddec68fa240c7af52f9fb1d7ef089ca75a6ae0d",
+    "inputs": [
+      {
+        "boxId": "fb70edb4ddab30941a84a88c3ec7b782250e9b456d0055e2298368bffd19268c",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 119
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "0703aad1d62f62bc96e72f85d4bd2dd28d185c5af8ac145d59007dd70751f1382344"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 3,
+        "spendingProof": {
+          "proofBytes": "b386a65be551bcea65e5637e71d9ea1a477ad40adf8bf834c52c220156172dffe8670e929d94c126168a8a57cce300035726297d28a26fbe",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "0bb6f05114c7259bae39f09e87f3cdff0752655b952fac0c2d67e1ead2416dd3",
+        "value": 541300000,
+        "ergoTree": "0008cd03aad1d62f62bc96e72f85d4bd2dd28d185c5af8ac145d59007dd70751f1382344",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "898102fdf97e62c397a736b5fcd9b6bbef1779a3dc6a9ba5792c328c3c563b70",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "a411314547e38785f104aa8723cbfb4a441fcbbbdf3739b2d7c6fd410d152004edbc05b30fe3d77baf49cfcc4b0c8369f7da3e2ce7525dbf",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "0935f4c19e2ed67cddd97f7eae4ef42a63329da253e0f69048f9dc0e5f70106a",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 119
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0703aad1d62f62bc96e72f85d4bd2dd28d185c5af8ac145d59007dd70751f1382344",
+          "R5": "04fea504",
+          "R6": "05888f80e528"
+        },
+        "transactionId": "953864915aab387d0528ed3f1ddec68fa240c7af52f9fb1d7ef089ca75a6ae0d",
+        "index": 0
+      },
+      {
+        "boxId": "6e9fb4cb9d4d22595b6098a242c333251389b858701ebd3865e586eeec2483cf",
+        "value": 539800000,
+        "ergoTree": "0008cd03aad1d62f62bc96e72f85d4bd2dd28d185c5af8ac145d59007dd70751f1382344",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "953864915aab387d0528ed3f1ddec68fa240c7af52f9fb1d7ef089ca75a6ae0d",
+        "index": 1
+      },
+      {
+        "boxId": "5a2ecbb7c42b04a54c8d2dd2824f3dd4d6c70d2e1224114b80eaf83c87d67b6e",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "953864915aab387d0528ed3f1ddec68fa240c7af52f9fb1d7ef089ca75a6ae0d",
+        "index": 2
+      }
+    ],
+    "size": 676,
+    "cost": 17390
+  },
+  {
+    "id": "45046d5185df7df4fad2211e2ceb8d61d984830f820270b47ed0b26181fe1b5a",
+    "inputs": [
+      {
+        "boxId": "1027240ea5badd6f1d1bec80b61aa6e819e20b6dbc8b58b60929291e4fcd2c14",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 2991
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "070232830080b3b42f527663236726ec0d9cb7d8433f4fbef5b37929a2a36fa82689"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 7,
+        "spendingProof": {
+          "proofBytes": "d1958ffc94348904992fed4b75b773b7161425d6c08a720474b0dd0344ed80983a25acc6f38d9d832094420cfcb4899bc135f23bef87ad9e",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "13155aec48a9475fa107feba4cb15a48fd7f5b3e89d6070685bc45b7c59fb34b",
+        "value": 846500000,
+        "ergoTree": "0008cd0232830080b3b42f527663236726ec0d9cb7d8433f4fbef5b37929a2a36fa82689",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "3c89091b79236c89b137b854b25d6c1612d0f7a43c5e848a612fa5c19b1497db",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "8056869afd5cd57c86fb06e662b108b18d0f40e642cabcb9321df537f355fefbcf5f8324127e11039de8303a639ba160818d0d347874f5af",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "781de3a8b639d3edf6fb76bbb3da5128620d69025f194643536d08c21d390e10",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 2991
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "070232830080b3b42f527663236726ec0d9cb7d8433f4fbef5b37929a2a36fa82689",
+          "R5": "04fea504",
+          "R6": "05b0abf3e628"
+        },
+        "transactionId": "45046d5185df7df4fad2211e2ceb8d61d984830f820270b47ed0b26181fe1b5a",
+        "index": 0
+      },
+      {
+        "boxId": "32f93eb0cef72c1304fded04bd923acbd6f8ebe66e8ef976e7f95c6748804696",
+        "value": 845000000,
+        "ergoTree": "0008cd0232830080b3b42f527663236726ec0d9cb7d8433f4fbef5b37929a2a36fa82689",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "45046d5185df7df4fad2211e2ceb8d61d984830f820270b47ed0b26181fe1b5a",
+        "index": 1
+      },
+      {
+        "boxId": "1f16dd7370b43fe5edf54c6e2cc3ff8279c144419da76178b5a57a709cae4a15",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "45046d5185df7df4fad2211e2ceb8d61d984830f820270b47ed0b26181fe1b5a",
+        "index": 2
+      }
+    ],
+    "size": 677,
+    "cost": 17390
+  },
+  {
+    "id": "66bbf684f89c66ab91357417b0b4e0a501e3a2f8b73112256a6510f4d416b54b",
+    "inputs": [
+      {
+        "boxId": "dbf1ba96e463d79c8a1400eb5dd9c014778e6d5c542cb10b05f233c983dbeaa2",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 7279
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "07039f765f0644d3b8a758c5e5689fef44db84b21ea49d716d7b12685577c6e086c3"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 5,
+        "spendingProof": {
+          "proofBytes": "97c37abbee456c07095fc077c1b82625d6a0e1d6318b6f936a77af6c08ea95111427e38077ce275529e1763b170810f45c96101a6a54e347",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "2f302a8ea984b47261436c2d035961fb1901d79dca05387fe4a58933ceb0f1c8",
+        "value": 8074000000,
+        "ergoTree": "0008cd039f765f0644d3b8a758c5e5689fef44db84b21ea49d716d7b12685577c6e086c3",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "16f160a7988f2dfdf2954a81d0670151cfc0889aed5ec3be7c57bf1d153ac1b6",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "599daa097b095565c47b18d197ab478e88b2484d784107d9db96f5c0a2c1fe26cae0c86219b084426521533730a4b7696207cf099aaaca40",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "86a214e20ee7fc72d929f5a2e4b75f870505b85f7d69b1a798d87500e8b447bb",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 7279
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "07039f765f0644d3b8a758c5e5689fef44db84b21ea49d716d7b12685577c6e086c3",
+          "R5": "04fea504",
+          "R6": "05b0959ee228"
+        },
+        "transactionId": "66bbf684f89c66ab91357417b0b4e0a501e3a2f8b73112256a6510f4d416b54b",
+        "index": 0
+      },
+      {
+        "boxId": "484f5e23e613dadccb7621ec2de95a084d311f7486921fecf5c15e5c0209cd0e",
+        "value": 8072500000,
+        "ergoTree": "0008cd039f765f0644d3b8a758c5e5689fef44db84b21ea49d716d7b12685577c6e086c3",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "66bbf684f89c66ab91357417b0b4e0a501e3a2f8b73112256a6510f4d416b54b",
+        "index": 1
+      },
+      {
+        "boxId": "6566159f743eeae98b0ba672c0c0562bf180684745db9dc19fdec654ee3dd944",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "66bbf684f89c66ab91357417b0b4e0a501e3a2f8b73112256a6510f4d416b54b",
+        "index": 2
+      }
+    ],
+    "size": 677,
+    "cost": 17390
+  },
+  {
+    "id": "8c83acbf9168c4319f4526ae5cbe47c3166236a193f538d77b0e70e6b15928d3",
+    "inputs": [
+      {
+        "boxId": "59904879320bf40079bbfdb77a53f4d6d009b533e70948c945ec58b6673bbc77",
+        "value": 11500000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 1747
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "0703b8ba5502a30094cd35922cafe7287c7eb5d0cbdbcbc5ce6c053c7c0403a80168"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 9,
+        "spendingProof": {
+          "proofBytes": "ee0c0641d5f917d011356b9ca696fd08ba6f59ec83a907755ed691ef85f100626258c3e957a49a75880650c36915c469f938adbf73d1d4e6",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "4cd3cdc7b3d781bbd53cf41f6c6a730311f15ae13e2eee74ffd468664f5352b9",
+        "value": 1938500000,
+        "ergoTree": "0008cd03b8ba5502a30094cd35922cafe7287c7eb5d0cbdbcbc5ce6c053c7c0403a80168",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "2cd41d768723f1d71d1c118e51d81631de32e36ff6aa26ca3fa4faf026653e31",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "559ce64e520a9f5c5b0c01a6d936432034cfe74d75d2f5a2a8a9133c6f5d820afeebfaf0e2354131fc67830eaf5a9e0c95eafc34c4c6ae2f",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "6472e6c684d91e55eb7b6a6480d403f01a86e40723d4502ff8c66fbda155fda2",
+        "value": 11500000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 1747
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0703b8ba5502a30094cd35922cafe7287c7eb5d0cbdbcbc5ce6c053c7c0403a80168",
+          "R5": "04fea504",
+          "R6": "05b09b82e928"
+        },
+        "transactionId": "8c83acbf9168c4319f4526ae5cbe47c3166236a193f538d77b0e70e6b15928d3",
+        "index": 0
+      },
+      {
+        "boxId": "e0fb6f3ca18b4d239e1d74f7b4423c1155d2c686a6644f1e645a6d274b16dc58",
+        "value": 1937000000,
+        "ergoTree": "0008cd03b8ba5502a30094cd35922cafe7287c7eb5d0cbdbcbc5ce6c053c7c0403a80168",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "8c83acbf9168c4319f4526ae5cbe47c3166236a193f538d77b0e70e6b15928d3",
+        "index": 1
+      },
+      {
+        "boxId": "c013f9a1c95a7992b44222e9cb4a19675b46ac6f5a865ca865774dbdb007aa2e",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "8c83acbf9168c4319f4526ae5cbe47c3166236a193f538d77b0e70e6b15928d3",
+        "index": 2
+      }
+    ],
+    "size": 677,
+    "cost": 17390
+  },
+  {
+    "id": "190b5336839d2f0012dc8aa7af2e2085e8caab9f6cbbe4c8ce9b6db4ba882517",
+    "inputs": [
+      {
+        "boxId": "693b4fefa22183de3b2ca3477b0f9e61f879fef8355cc6ce42322928226c06fc",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 9033
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "07033a8238d69857709e47016aa51b06d0c95d67b8855c23e24c0d8fb26667424e76"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 4,
+        "spendingProof": {
+          "proofBytes": "652eaba6b25688e74384a7f2a1829c067f297506a9f5c30ef3936eb079d606abb128622bbc5ff2aa50c21b069ee7bec0ce245c2d5132c0a0",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "0c5cf9913fd11d741f9ebeaeb8c2ed82c6e5692b1c26898b948641ab1efd0857",
+        "value": 6189000000,
+        "ergoTree": "0008cd033a8238d69857709e47016aa51b06d0c95d67b8855c23e24c0d8fb26667424e76",
+        "assets": [
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 279
+          }
+        ],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "2aab9cbe6364ac33bb40ed9e8292839618feba587ad93a30b3bc1ba5288296c9",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "58222f45bf42ec7c805735ff433b63437a78a2be41966fedee9d5eba481359b9b0dd59b3d240e41c015a261f046a0218961f8e9b4b23b2e6",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "8f2e5a9730aca2268bfe7ed03f1c568c91afb47fd64a16a58592bad9297dc6cc",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 9033
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "07033a8238d69857709e47016aa51b06d0c95d67b8855c23e24c0d8fb26667424e76",
+          "R5": "04fea504",
+          "R6": "0596b8e7e628"
+        },
+        "transactionId": "190b5336839d2f0012dc8aa7af2e2085e8caab9f6cbbe4c8ce9b6db4ba882517",
+        "index": 0
+      },
+      {
+        "boxId": "727b28115e4bb758f6444b7cecc463624efd3adb8c44766ec6ba5561c095e037",
+        "value": 6187500000,
+        "ergoTree": "0008cd033a8238d69857709e47016aa51b06d0c95d67b8855c23e24c0d8fb26667424e76",
+        "assets": [
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 279
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "190b5336839d2f0012dc8aa7af2e2085e8caab9f6cbbe4c8ce9b6db4ba882517",
+        "index": 1
+      },
+      {
+        "boxId": "6bcf5ccb997df5c1dae3f5724dd3cff82dcc6240ec1774ad4541962f02841de4",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "190b5336839d2f0012dc8aa7af2e2085e8caab9f6cbbe4c8ce9b6db4ba882517",
+        "index": 2
+      }
+    ],
+    "size": 680,
+    "cost": 17590
+  },
+  {
+    "id": "af31183b5d95bd4433a8535fbffaeccc79742925cf059f377eab4c2f0163ada6",
+    "inputs": [
+      {
+        "boxId": "ef82094c5da8e7e775cfae18fb8ed35a4500d2b3a5b3422a29fcff716f88adb4",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 5516
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "0702256665e58fa0e86e3f9b45a02569961a905663d402f7eb69bfe9e6c580a2db7b"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 11,
+        "spendingProof": {
+          "proofBytes": "e1404d644843a11e788031b8c7004e02b55013c4898b8561a7e64331ba3c837d55773d397a2550be59244cd15d19bfe5c6565843eb6a45de",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "b0433089136a4f44bacfe966925737623c9193f6933bb4bb20180cefdc16e6d9",
+        "value": 4190000000,
+        "ergoTree": "0008cd02256665e58fa0e86e3f9b45a02569961a905663d402f7eb69bfe9e6c580a2db7b",
+        "assets": [
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 2862
+          },
+          {
+            "tokenId": "e1d7fcb9c033970d8485c200efc9febbb17244639c17c57a4c14b76bbd559183",
+            "amount": 1
+          }
+        ],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "5d50feedc00227bef6599a413f011a02fa26b5be9a4c940ce927cbd9e1039344",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "d244eb167e74f58899ed893bdfd86a1db10cca77a3bd000017ef0a76c39ed59f68753fe1af317d17f0588db0e563e497a59028dbbd857b87",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "4e76de73f5b127813f399b074f0c924feb443b7134b47e518ba9cfee0e931240",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 5516
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0702256665e58fa0e86e3f9b45a02569961a905663d402f7eb69bfe9e6c580a2db7b",
+          "R5": "04fea504",
+          "R6": "05c0f1c4e628"
+        },
+        "transactionId": "af31183b5d95bd4433a8535fbffaeccc79742925cf059f377eab4c2f0163ada6",
+        "index": 0
+      },
+      {
+        "boxId": "136ad19bb27af7b7a9e5a51b4180af951363af3e09e0e9e7a1ed7db7d03b4808",
+        "value": 4188500000,
+        "ergoTree": "0008cd02256665e58fa0e86e3f9b45a02569961a905663d402f7eb69bfe9e6c580a2db7b",
+        "assets": [
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 2862
+          },
+          {
+            "tokenId": "e1d7fcb9c033970d8485c200efc9febbb17244639c17c57a4c14b76bbd559183",
+            "amount": 1
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "af31183b5d95bd4433a8535fbffaeccc79742925cf059f377eab4c2f0163ada6",
+        "index": 1
+      },
+      {
+        "boxId": "566eba69dc43f72bdddc4c42638cf6acb91855332286cb258abd11b378622f4d",
+        "value": 1500000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "af31183b5d95bd4433a8535fbffaeccc79742925cf059f377eab4c2f0163ada6",
+        "index": 2
+      }
+    ],
+    "size": 714,
+    "cost": 17990
+  },
+  {
+    "id": "b7b927b4c1d8cdba60193d5d4fa4f00016434d434d554969556bad967566bb4e",
+    "inputs": [
+      {
+        "boxId": "ec6e8111658d412077a22e94e7100694f646b19b13f685cf69deb73744e159e8",
+        "value": 1000000,
+        "ergoTree": "100504000400050004000e20011d3364de07e5a26f0c4eef0852cddb387039a921b7154ef3cab22c6eda887fd803d601b2a5730000d602e4c6a70407d603b2db6501fe730100ea02d1ededededed93e4c672010407720293e4c67201050ec5720391e4c672010605730293c27201c2a793db63087201db6308a7938cb2db63087203730300017304cd7202",
+        "assets": [
+          {
+            "tokenId": "8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
+            "amount": 1
+          }
+        ],
+        "creationHeight": 1915468,
+        "additionalRegisters": {
+          "R4": "070296ddc0070e16db25480e4a22eae221f698e35b8ca6d21360dd910854e926a41c",
+          "R5": "0e20c6bc6814d136a3f77e654befcb649df99a5c4082e6c7a0485cf43a142b7bb29f",
+          "R6": "05bad9dfff28"
+        },
+        "transactionId": "edcfbc30891769f238d5f2b2c6855c83bfba0b6633171d0f04ee0a50e48b708f",
+        "index": 0,
+        "spendingProof": {
+          "proofBytes": "17518287091425b4f9b5b66b636aecc3416f6d142e4be26b94aa8dc9f4718fa9d7f39ccd41d8bb9d74f8d47ed312f865e67e0dff5b91fdf7",
+          "extension": {}
+        }
+      },
+      {
+        "boxId": "60a2ba8635b849c33f791b0a8c88f19e1b0c5c5bc9d70d8bc9661cf86da025c7",
+        "value": 3021200000,
+        "ergoTree": "0008cd0296ddc0070e16db25480e4a22eae221f698e35b8ca6d21360dd910854e926a41c",
+        "assets": [],
+        "creationHeight": 1915473,
+        "additionalRegisters": {},
+        "transactionId": "832cc6a0141ddc03a5ab6121464efc701529d8f21660ab1f3c7f16299aa0ad58",
+        "index": 2,
+        "spendingProof": {
+          "proofBytes": "f646def5b610d09ee33db33a6678e05790aee28ce8e2922575534dec39dd50d554bd6bd89f6e885b75a0cbb64508d1c976c65d55c470736d",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [
+      {
+        "boxId": "98ac19ce2e6b5fd573cbf01b523222c75771cbe3b8d884fdc2839e146e0819ba"
+      }
+    ],
+    "outputs": [
+      {
+        "boxId": "bc3ff5dbb286f10efa3e59042e5a7d7b8fe300d621ba2a61f262eb8c78045de8",
+        "value": 1000000,
+        "ergoTree": "100504000400050004000e20011d3364de07e5a26f0c4eef0852cddb387039a921b7154ef3cab22c6eda887fd803d601b2a5730000d602e4c6a70407d603b2db6501fe730100ea02d1ededededed93e4c672010407720293e4c67201050ec5720391e4c672010605730293c27201c2a793db63087201db6308a7938cb2db63087203730300017304cd7202",
+        "assets": [
+          {
+            "tokenId": "8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
+            "amount": 1
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "070296ddc0070e16db25480e4a22eae221f698e35b8ca6d21360dd910854e926a41c",
+          "R5": "0e2098ac19ce2e6b5fd573cbf01b523222c75771cbe3b8d884fdc2839e146e0819ba",
+          "R6": "05b0abf3e628"
+        },
+        "transactionId": "b7b927b4c1d8cdba60193d5d4fa4f00016434d434d554969556bad967566bb4e",
+        "index": 0
+      },
+      {
+        "boxId": "50956b86a76e28b33479e906698d77f9c0cc57d25af22bb4351793fe8ca50357",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "b7b927b4c1d8cdba60193d5d4fa4f00016434d434d554969556bad967566bb4e",
+        "index": 1
+      },
+      {
+        "boxId": "f38af270ef63df93873762305de73c7a98f215ad9492ec013d3a379e381ce8e0",
+        "value": 3020100000,
+        "ergoTree": "0008cd0296ddc0070e16db25480e4a22eae221f698e35b8ca6d21360dd910854e926a41c",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "b7b927b4c1d8cdba60193d5d4fa4f00016434d434d554969556bad967566bb4e",
+        "index": 2
+      }
+    ],
+    "size": 630,
+    "cost": 17109
+  },
+  {
+    "id": "e05f45d094c869f8a1f99da44d75f0abfdae47b2a208ddac88dd984a00689da0",
+    "inputs": [
+      {
+        "boxId": "390f8756f29295176f8072cdac50b8cd133df3799c6aea4845e47a0c40820423",
+        "value": 1000000,
+        "ergoTree": "100504000400050004000e20011d3364de07e5a26f0c4eef0852cddb387039a921b7154ef3cab22c6eda887fd803d601b2a5730000d602e4c6a70407d603b2db6501fe730100ea02d1ededededed93e4c672010407720293e4c67201050ec5720391e4c672010605730293c27201c2a793db63087201db6308a7938cb2db63087203730300017304cd7202",
+        "assets": [
+          {
+            "tokenId": "8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
+            "amount": 1
+          }
+        ],
+        "creationHeight": 1915468,
+        "additionalRegisters": {
+          "R4": "0702caad8ef6771ad15ebb0a2aa9b7e84b9c48962976061d1af3e73767203d2f2bb1",
+          "R5": "0e20c6bc6814d136a3f77e654befcb649df99a5c4082e6c7a0485cf43a142b7bb29f",
+          "R6": "05bad9dfff28"
+        },
+        "transactionId": "d1148c280b7062e69a0d8faa6cf84643378fb1a3914ab6c0357e88086dcc4e33",
+        "index": 0,
+        "spendingProof": {
+          "proofBytes": "8bf06e3b9b327a707fb5f9b754f80fb7758c346df774d60a61d3ad1752cf24aa9d958df6b568d991e0b18891f714bc71afb8e32e854e0013",
+          "extension": {}
+        }
+      },
+      {
+        "boxId": "db2130c3629bb9e70aa85234b966385cc3cc18122c0b3be62f6e510c2f2a8425",
+        "value": 10920950000,
+        "ergoTree": "0008cd02caad8ef6771ad15ebb0a2aa9b7e84b9c48962976061d1af3e73767203d2f2bb1",
+        "assets": [],
+        "creationHeight": 1915470,
+        "additionalRegisters": {},
+        "transactionId": "0b382e4773b129568ec41e9803b5118f8800ea7ca2542d66729378e9ff470bd4",
+        "index": 6,
+        "spendingProof": {
+          "proofBytes": "a64147475b17956f548e05fdbadb0ec5e1df84621a7a8a9e0b95aca3b5ee584613ad44a7bebfe36443719d3c9a1d964dc0b99461dabdab8e",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [
+      {
+        "boxId": "98ac19ce2e6b5fd573cbf01b523222c75771cbe3b8d884fdc2839e146e0819ba"
+      }
+    ],
+    "outputs": [
+      {
+        "boxId": "04b03aa1204f295edc4d7080cdaf3fbb4c871a9922d408debe554e21838b6327",
+        "value": 1000000,
+        "ergoTree": "100504000400050004000e20011d3364de07e5a26f0c4eef0852cddb387039a921b7154ef3cab22c6eda887fd803d601b2a5730000d602e4c6a70407d603b2db6501fe730100ea02d1ededededed93e4c672010407720293e4c67201050ec5720391e4c672010605730293c27201c2a793db63087201db6308a7938cb2db63087203730300017304cd7202",
+        "assets": [
+          {
+            "tokenId": "8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
+            "amount": 1
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0702caad8ef6771ad15ebb0a2aa9b7e84b9c48962976061d1af3e73767203d2f2bb1",
+          "R5": "0e2098ac19ce2e6b5fd573cbf01b523222c75771cbe3b8d884fdc2839e146e0819ba",
+          "R6": "05e0dfa4e728"
+        },
+        "transactionId": "e05f45d094c869f8a1f99da44d75f0abfdae47b2a208ddac88dd984a00689da0",
+        "index": 0
+      },
+      {
+        "boxId": "b8bfcc979f2bf527efb12e4e3c744647f7153cb51f8987c50e9f87ce4fcca1e3",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "e05f45d094c869f8a1f99da44d75f0abfdae47b2a208ddac88dd984a00689da0",
+        "index": 1
+      },
+      {
+        "boxId": "85a53eb2cf70b2f0812b69da5bbf6948ff6fc8ad50e49f17cb3f43ffbf94c20a",
+        "value": 10919850000,
+        "ergoTree": "0008cd02caad8ef6771ad15ebb0a2aa9b7e84b9c48962976061d1af3e73767203d2f2bb1",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "e05f45d094c869f8a1f99da44d75f0abfdae47b2a208ddac88dd984a00689da0",
+        "index": 2
+      }
+    ],
+    "size": 630,
+    "cost": 17109
+  },
+  {
+    "id": "161c251d12f3595e944b9670b9cfc6d073ed057becb97334641598e916c0c949",
+    "inputs": [
+      {
+        "boxId": "c3d5d54619400eacae24ffc0934df249c472c6b34436185706f6164bedf480cc",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 5015
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "07025343cc6a88e882c27dad0b770f3873676691e69119ae5df08e0e29cb6b55b580"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 10,
+        "spendingProof": {
+          "proofBytes": "d10719122ce36bcd34e0cb280ee1ab718739b44b118f66e4c28ae34c1a08bbb7d6f5a45eafac30c0193b0203c17387e78ef1956bb3562304",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "9cc79ef6f3c9a88ac0efc1c9cc39870b25c95a1339709a9536e52327561a878b",
+        "value": 8552400000,
+        "ergoTree": "0008cd025343cc6a88e882c27dad0b770f3873676691e69119ae5df08e0e29cb6b55b580",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "b1ec463ccf7cd1378fb2be8d9dbf36765417cabca6fc7833ae6ab9e9fe58e50d",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "b6ffb85946729b6030e127bab538fe8d331c17935e522c64e96d4ded48960e6f49fc494c12b6132ecf1466bb931b245913ad06a55f943cc5",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "db61d069035aa555c7785386027c6b82fcbe96191db3f5a85e9767bcfb1eadad",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 5015
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "07025343cc6a88e882c27dad0b770f3873676691e69119ae5df08e0e29cb6b55b580",
+          "R5": "04fea504",
+          "R6": "05e28fbfe728"
+        },
+        "transactionId": "161c251d12f3595e944b9670b9cfc6d073ed057becb97334641598e916c0c949",
+        "index": 0
+      },
+      {
+        "boxId": "9860779cd9548a5653fe5ee8661d7d308ef24a5e4f9cea09b0bde178635d4772",
+        "value": 8551300000,
+        "ergoTree": "0008cd025343cc6a88e882c27dad0b770f3873676691e69119ae5df08e0e29cb6b55b580",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "161c251d12f3595e944b9670b9cfc6d073ed057becb97334641598e916c0c949",
+        "index": 1
+      },
+      {
+        "boxId": "bc22fe43885dd0e9b12b0a1fcf1124293d5eb34f206c9f1248c33e211dc976c6",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "161c251d12f3595e944b9670b9cfc6d073ed057becb97334641598e916c0c949",
+        "index": 2
+      }
+    ],
+    "size": 677,
+    "cost": 17390
+  },
+  {
+    "id": "d585525625fdb6c67c8ff0b2fb2fa1c6d19e91482a52a6fa983cfbf367c8e4c6",
+    "inputs": [
+      {
+        "boxId": "5948e6b9a391b5ba67af6ecdf82a237b97fee306a48f0508a2f65b0b147ff324",
+        "value": 11500000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 2429
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "070327d0de042360309ab3cb6be07b30364d128a6ef93a71627c9d88e37e16e4231c"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 8,
+        "spendingProof": {
+          "proofBytes": "2379ad19f595f8f1b8502badf84a5b0f77903ff29b821e6f43435ddcaa33f59d7a9210acb92ff26849b64621d4d2fc4fa911da155ea84fcf",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "2762166287e25ac02d02b76f9e38d0233d4909251f43a167df9c1e5f394b41b3",
+        "value": 2855750000,
+        "ergoTree": "0008cd0327d0de042360309ab3cb6be07b30364d128a6ef93a71627c9d88e37e16e4231c",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "e45603734fc5fe4825b9c88c71ef95b2b30dff0c309e6e889ddb3a401165a046",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "1087186a83a374c80c25e064ef6143ca5bad39c92498e0e74679abce03ff0c1fa86af8bcd164e69d27894d8b07f4abea98995eaeff28b355",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "4cb9e700868d12a42958065e85bc605998cd1794e087dd2f55189302adf97fd4",
+        "value": 11500000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 2429
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "070327d0de042360309ab3cb6be07b30364d128a6ef93a71627c9d88e37e16e4231c",
+          "R5": "04fea504",
+          "R6": "059a968ce028"
+        },
+        "transactionId": "d585525625fdb6c67c8ff0b2fb2fa1c6d19e91482a52a6fa983cfbf367c8e4c6",
+        "index": 0
+      },
+      {
+        "boxId": "da591e3e93217209a0f9795360d40b83cce76f05ac21b727da07b626e6695850",
+        "value": 2854650000,
+        "ergoTree": "0008cd0327d0de042360309ab3cb6be07b30364d128a6ef93a71627c9d88e37e16e4231c",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "d585525625fdb6c67c8ff0b2fb2fa1c6d19e91482a52a6fa983cfbf367c8e4c6",
+        "index": 1
+      },
+      {
+        "boxId": "03ae167ab0dd8157a6554106822123ea8686b715fe9cd089f6ad954b085e538c",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "d585525625fdb6c67c8ff0b2fb2fa1c6d19e91482a52a6fa983cfbf367c8e4c6",
+        "index": 2
+      }
+    ],
+    "size": 677,
+    "cost": 17390
+  },
+  {
+    "id": "875f12b50715a97593a7213c3b81de20ecdcd557e0f457b2e3e2cd76e5c28f01",
+    "inputs": [
+      {
+        "boxId": "a46d37832c27c06c23820c3dcf857d8e050714b13a97f4457aef27caa39bd0ad",
+        "value": 13000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 26156
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "0702afe418c057a023b10079d17237eabb8abf0b6c139f287eee1aee4e30fac51a6a"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 6,
+        "spendingProof": {
+          "proofBytes": "a63f5b5f8e8d754aea6a25b06e44c33d5e2d39d4ec9247be24604195f19b46f5782b9f47c788ea04596453e701ce001f4cc21418c22ed940",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "7513f9bcca202cc589e10924386f89e42abd4f5e79918a814fb7b90ae8ab2a5f",
+        "value": 2702300000,
+        "ergoTree": "0008cd02afe418c057a023b10079d17237eabb8abf0b6c139f287eee1aee4e30fac51a6a",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "79267cc28697c09a396e2d4e686f29018be547a84e58caac25af23a5ff6d0733",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "f93ffc707610b73f9fe0472a4194742471581f61cd156b3f8177dac1711533eb7acc291d74afa170d860cf39e154acd0b64f949f0e87c982",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "544ce37e6d6a29d6c8a429beb88cb23398045933fb4353ccb27a92acbe997893",
+        "value": 13000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 26156
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0702afe418c057a023b10079d17237eabb8abf0b6c139f287eee1aee4e30fac51a6a",
+          "R5": "04fea504",
+          "R6": "05e288e2e728"
+        },
+        "transactionId": "875f12b50715a97593a7213c3b81de20ecdcd557e0f457b2e3e2cd76e5c28f01",
+        "index": 0
+      },
+      {
+        "boxId": "854ccef7a323ba2f15e8a2c3221b1120f43c8af4597e698a0c4d8eaaefae1e61",
+        "value": 2701200000,
+        "ergoTree": "0008cd02afe418c057a023b10079d17237eabb8abf0b6c139f287eee1aee4e30fac51a6a",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "875f12b50715a97593a7213c3b81de20ecdcd557e0f457b2e3e2cd76e5c28f01",
+        "index": 1
+      },
+      {
+        "boxId": "dfb80749ffc75f19f14a0d2f6b8a558b91e7496b474d296c7799fb9b66e226f0",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "875f12b50715a97593a7213c3b81de20ecdcd557e0f457b2e3e2cd76e5c28f01",
+        "index": 2
+      }
+    ],
+    "size": 678,
+    "cost": 17390
+  },
+  {
+    "id": "f926a69561b75fc791dc82c5e008bbeceb117fcdbfe38e0b128a3753f5d38a9d",
+    "inputs": [
+      {
+        "boxId": "48c62f5292d4ae61deaf2d583ac58f52e59749eba3dfe392b11d7b2d37d9efa9",
+        "value": 10000000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 101512
+          }
+        ],
+        "creationHeight": 1915470,
+        "additionalRegisters": {
+          "R4": "0703a662d29632f73d245c1064e56624bb77f90d4f7af1289cb0773afecdc4f2d072"
+        },
+        "transactionId": "9075456e6380c7df6a9b0156f64f4c71b715a3d0971c2658fa17b8507a25780e",
+        "index": 2,
+        "spendingProof": {
+          "proofBytes": "0fa436b0b45a3926d61c8915ddec249d5053eb02a1fb7a9b7795801dd62c149f6858e50a054bf58b84b633ae249b117b39ef38b14b82fa09",
+          "extension": {
+            "0": "0400"
+          }
+        }
+      },
+      {
+        "boxId": "0cf061bdb0bc802d5257a4a5c45d78e548b5a5f36b05e470a26299c1722c287e",
+        "value": 12857800000,
+        "ergoTree": "0008cd03a662d29632f73d245c1064e56624bb77f90d4f7af1289cb0773afecdc4f2d072",
+        "assets": [],
+        "creationHeight": 1915468,
+        "additionalRegisters": {},
+        "transactionId": "27164453f9ef1b950373d5bf1eb7c06d2de476ab6596d8015d3d7e863abbd9fe",
+        "index": 1,
+        "spendingProof": {
+          "proofBytes": "8f0b8951cda9d1e3eb74589105c7df3711bac5c099aac06069d9e56526c8d1e4b94c49531f80339636e9cb4a9a490ca5925dfb57e0a3ef44",
+          "extension": {}
+        }
+      }
+    ],
+    "dataInputs": [],
+    "outputs": [
+      {
+        "boxId": "c7afdf545dcd3240cb2237a62adaaa3f6ccb4a603594e6892cf8f76fc143a33c",
+        "value": 11500000,
+        "ergoTree": "100a040004000580dac409040004000e206a2b821b5727e85beb5e78b4efb9f0250d59cd48481d2ded2c23e91ba1d07c660402040204020402d804d601b2a5e4e3000400d602db63087201d603db6308a7d604e4c6a70407ea02d1ededed93b27202730000b2720373010093c27201c2a7e6c67201040792c172017302eb02cd7204d1ededededed938cb2db6308b2a4730300730400017305938cb27202730600018cb2720373070001918cb27202730800028cb272037309000293e4c672010407720492c17201c1a7efe6c672010561",
+        "assets": [
+          {
+            "tokenId": "74fa4aee3607ceb7bdefd51a856861b5dbfa434a8f6c93bfe967de8ed1a30a78",
+            "amount": 1
+          },
+          {
+            "tokenId": "ae399fcb751e8e247d0da8179a2bcca2aa5119fff9c85721ffab9cdc9a3cb2dd",
+            "amount": 101512
+          }
+        ],
+        "creationHeight": 1915474,
+        "additionalRegisters": {
+          "R4": "0703a662d29632f73d245c1064e56624bb77f90d4f7af1289cb0773afecdc4f2d072",
+          "R5": "04fea504",
+          "R6": "05e288e2e728"
+        },
+        "transactionId": "f926a69561b75fc791dc82c5e008bbeceb117fcdbfe38e0b128a3753f5d38a9d",
+        "index": 0
+      },
+      {
+        "boxId": "0649e410882144f18b8b633efc2ca86f968781d4628b115233fa349bdaa7b8c7",
+        "value": 12855200000,
+        "ergoTree": "0008cd03a662d29632f73d245c1064e56624bb77f90d4f7af1289cb0773afecdc4f2d072",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "f926a69561b75fc791dc82c5e008bbeceb117fcdbfe38e0b128a3753f5d38a9d",
+        "index": 1
+      },
+      {
+        "boxId": "79e0de262131fb549a94f8aee7c23c454c6a27a80bb2b0cdb28dc89d025d0a1f",
+        "value": 1100000,
+        "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+        "assets": [],
+        "creationHeight": 1915474,
+        "additionalRegisters": {},
+        "transactionId": "f926a69561b75fc791dc82c5e008bbeceb117fcdbfe38e0b128a3753f5d38a9d",
+        "index": 2
+      }
+    ],
+    "size": 678,
+    "cost": 17390
   }
 ]

@@ -4,7 +4,7 @@ use arc_swap::ArcSwap;
 pub use mempool::MempoolSnapshot;
 use tokio::task::JoinHandle;
 
-use crate::{clients::node::NodeClient, error::AppError};
+use crate::{clients::NodeClient, error::AppError};
 
 mod mempool;
 

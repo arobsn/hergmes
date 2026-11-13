@@ -4,7 +4,11 @@ use arc_swap::ArcSwap;
 use tokio::time::sleep;
 use tracing::{error, info};
 
-use crate::{clients::node::NodeClient, error::AppError, types::ergo::UnconfirmedTransaction};
+use crate::{
+    clients::{NodeClient, NodeSource},
+    error::AppError,
+    types::ergo::UnconfirmedTransaction,
+};
 
 #[derive(Default)]
 pub struct MempoolSnapshot {
@@ -12,7 +16,7 @@ pub struct MempoolSnapshot {
     pub transactions: Vec<UnconfirmedTransaction>,
 }
 
-const POOLING_INTERVAL: Duration = Duration::from_secs(1);
+const POLLING_INTERVAL: Duration = Duration::from_secs(1);
 
 #[tracing::instrument(skip(node, swap))]
 pub async fn start(node: &NodeClient, swap: Arc<ArcSwap<MempoolSnapshot>>) -> Result<(), AppError> {
@@ -20,8 +24,8 @@ pub async fn start(node: &NodeClient, swap: Arc<ArcSwap<MempoolSnapshot>>) -> Re
 
     let mut last_update = 0u64;
     loop {
-        match node.get_last_mempool_update_timestamp().await {
-            Ok(updated) if updated > last_update => match node.get_mempool_snapshot().await {
+        match node.info().await.map(|info| info.last_mempool_update) {
+            Ok(updated) if updated > last_update => match node.mempool().await {
                 Ok(transactions) => {
                     last_update = updated;
                     info!(count = ?transactions.len(), ?last_update, "Mempool updated, storing new snapshot");
@@ -33,6 +37,6 @@ pub async fn start(node: &NodeClient, swap: Arc<ArcSwap<MempoolSnapshot>>) -> Re
             _ => {}
         }
 
-        sleep(POOLING_INTERVAL).await;
+        sleep(POLLING_INTERVAL).await;
     }
 }

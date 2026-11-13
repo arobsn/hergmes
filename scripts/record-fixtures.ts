@@ -228,19 +228,33 @@ async function main() {
   headers.sort((a, b) => b.height - a.height);
   headers.shift();
 
-  let sampleBlock: Json;
+  const fetched = new Map<string, Json>();
+  const fetchBlock = async (id: string) => {
+    if (!fetched.has(id)) fetched.set(id, await node.ok("GET", `/blockchain/block/byHeaderId/${id}`));
+    return fetched.get(id);
+  };
   async function* blocks() {
-    for (const header of headers) {
-      const block = await node.ok("GET", `/blockchain/block/byHeaderId/${header.id}`);
-      sampleBlock ??= block;
-      yield block;
-    }
+    for (const header of headers) yield await fetchBlock(header.id);
   }
 
   const { address, nft, small, large } = await discover(node, blocks(), {
     address: args.address,
     smallToken: args["small-token"],
   });
+
+  // Prefer a block where a tx spends a box created earlier in the same block.
+  const spendsOwnOutput = (block: Json) =>
+    block.transactions.some((tx: Json) =>
+      tx.inputs.some((i: Json) => i.inclusionHeight === block.header.height),
+    );
+  let sampleBlock: Json = await fetchBlock(headers[0].id);
+  for (const header of headers) {
+    const block = await fetchBlock(header.id);
+    if (spendsOwnOutput(block)) {
+      sampleBlock = block;
+      break;
+    }
+  }
   console.log(
     `  address: ${address}\n  nft: ${nft}\n  small-supply token: ${small}\n  large token: ${large}`,
   );
@@ -262,13 +276,6 @@ async function main() {
       "(top-level header/transactions/height/size).",
   );
   await rec.record("indexed_block_unknown", "GET", `/blockchain/block/byHeaderId/${UNKNOWN_ID}`);
-  await rec.record(
-    "block",
-    "GET",
-    `/blocks/${headerId}`,
-    undefined,
-    "Plain block: inputs carry only boxId and spendingProof.",
-  );
 
   // Mempool
   const mempool = await rec.record("mempool", "GET", `/transactions/unconfirmed?limit=${MEMPOOL_LIMIT}`);
@@ -295,14 +302,22 @@ async function main() {
     console.log("  (live mempool already contains an unresolved input)");
   }
 
-  // Address
-  const unspentPath = "/blockchain/box/unspent/byAddress?limit=5&sortDirection=asc";
-  await rec.record("unspent_by_address", "POST", unspentPath, address);
+  // Address, queried by its ErgoTree
+  const tree = (addr: string) => node.ok("GET", `/script/addressToTree/${addr}`).then((r) => r.tree);
+  const ergoTree: string = await tree(address);
+  const unspentPath = "/blockchain/box/unspent/byErgoTree?limit=5&sortDirection=asc";
   await rec.record(
-    "unspent_by_address_empty",
+    "unspent_by_ergo_tree",
     "POST",
     unspentPath,
-    EMPTY_ADDRESS,
+    ergoTree,
+    "A plain array (the spec says {items, total}).",
+  );
+  await rec.record(
+    "unspent_by_ergo_tree_empty",
+    "POST",
+    unspentPath,
+    await tree(EMPTY_ADDRESS),
     "Empty set is 200 [] (the spec says 404).",
   );
   await rec.record("balance", "POST", "/blockchain/balance", address);
@@ -335,7 +350,7 @@ async function main() {
     "Spent box: spentTransactionId is set, spendingHeight is absent.",
   );
   await rec.record("box_by_id_unknown", "GET", `/blockchain/box/byId/${UNKNOWN_ID}`);
-  const [unspent] = await node.ok("POST", "/blockchain/box/unspent/byAddress?limit=1", address);
+  const [unspent] = await node.ok("POST", "/blockchain/box/unspent/byErgoTree?limit=1", ergoTree);
   await rec.record(
     "with_pool_partial",
     "POST",
@@ -356,7 +371,7 @@ async function main() {
     nodeVersion: info.appVersion,
     network: info.network,
     fullHeight: info.fullHeight,
-    samples: { address, nft, smallSupplyToken: small, largeSupplyToken: large, headerId },
+    samples: { address, ergoTree, nft, smallSupplyToken: small, largeSupplyToken: large, headerId },
     fixtures: rec.manifest,
   };
   writeFileSync(join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");

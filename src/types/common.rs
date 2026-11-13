@@ -1,4 +1,5 @@
 use std::fmt::{self, Debug, Display, Formatter};
+use std::str::FromStr;
 
 use hex::{FromHex, ToHex};
 use serde::de::Error;
@@ -29,19 +30,35 @@ impl<const N: usize> Debug for Digest<N> {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, thiserror::Error)]
+pub enum DigestError {
+    #[error(transparent)]
+    Hex(#[from] hex::FromHexError),
+    #[error("expected {expected} bytes, got {got}")]
+    Length { expected: usize, got: usize },
+}
+
+impl<const N: usize> FromStr for Digest<N> {
+    type Err = DigestError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let bytes = Vec::from_hex(s)?;
+        let got = bytes.len();
+        let bytes: [u8; N] = bytes
+            .try_into()
+            .map_err(|_| DigestError::Length { expected: N, got })?;
+        Ok(Digest(bytes))
+    }
+}
+
 impl<'de, const N: usize> Deserialize<'de> for Digest<N> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
-        let hex_str = String::deserialize(deserializer)?;
-        let bytes_vec = Vec::from_hex(&hex_str).map_err(D::Error::custom)?;
-        let len = bytes_vec.len();
-        let bytes: [u8; N] = bytes_vec
-            .try_into()
-            .map_err(|_| D::Error::custom(format!("expected {} bytes, got {}", N, len)))?;
-
-        Ok(Digest(bytes))
+        String::deserialize(deserializer)?
+            .parse()
+            .map_err(D::Error::custom)
     }
 }
 

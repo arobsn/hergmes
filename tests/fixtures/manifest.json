@@ -1,14 +1,15 @@
 {
-  "recordedAt": "2026-11-12T21:30:08Z",
+  "recordedAt": "2026-11-12T23:22:10Z",
   "nodeVersion": "6.0.8-0-c1a69f65-20261013-0626-SNAPSHOT",
   "network": "mainnet",
-  "fullHeight": 1915414,
+  "fullHeight": 1915474,
   "samples": {
     "address": "9gsbKAia1ARpA2zyotMzrWnJvmfuqcPemue5pfbm87Mnt5h1Tmm",
+    "ergoTree": "0008cd033602a81fce83c18c4c591f4aea8f2732f479d6b08a21ec57c0de683e8e3815ad",
     "nft": "20fa2bf23962cdf51b07722d6237c0c7b8a44f78856c0f7ec308dc1ef1a92a51",
     "smallSupplyToken": "8c27dd9d8a35aac1e3167d58858c0a8b4059b277da790552e37eba22df9b9035",
     "largeSupplyToken": "d9a2cc8a09abfaed87afacfbb7daee79a6b26f10c6613fc13d3f3953e5521d1a",
-    "headerId": "7507c76facf0e222f90ef426e08dbad8e4a263736b21b65286545b72eb4edeed"
+    "headerId": "41f89ff983dc639d0950522e819012854bbcbecdc41c0739c685b7e53fb27a02"
   },
   "fixtures": {
     "info": {
@@ -28,7 +29,7 @@
     },
     "indexed_block": {
       "method": "GET",
-      "path": "/blockchain/block/byHeaderId/7507c76facf0e222f90ef426e08dbad8e4a263736b21b65286545b72eb4edeed",
+      "path": "/blockchain/block/byHeaderId/41f89ff983dc639d0950522e819012854bbcbecdc41c0739c685b7e53fb27a02",
       "status": 200,
       "notes": "Inputs are full indexed boxes. The live shape differs from the spec (top-level header/transactions/height/size)."
     },
@@ -36,12 +37,6 @@
       "method": "GET",
       "path": "/blockchain/block/byHeaderId/abababababababababababababababababababababababababababababababab",
       "status": 404
-    },
-    "block": {
-      "method": "GET",
-      "path": "/blocks/7507c76facf0e222f90ef426e08dbad8e4a263736b21b65286545b72eb4edeed",
-      "status": 200,
-      "notes": "Plain block: inputs carry only boxId and spendingProof."
     },
     "mempool": {
       "method": "GET",
@@ -55,17 +50,18 @@
       "synthetic": true,
       "notes": "Copy of mempool.json with the first tx's first input reduced to boxId + spendingProof, as the node returns for ergo#2248. No such input was live when recording."
     },
-    "unspent_by_address": {
+    "unspent_by_ergo_tree": {
       "method": "POST",
-      "path": "/blockchain/box/unspent/byAddress?limit=5&sortDirection=asc",
+      "path": "/blockchain/box/unspent/byErgoTree?limit=5&sortDirection=asc",
       "status": 200,
-      "body": "9gsbKAia1ARpA2zyotMzrWnJvmfuqcPemue5pfbm87Mnt5h1Tmm"
+      "body": "0008cd033602a81fce83c18c4c591f4aea8f2732f479d6b08a21ec57c0de683e8e3815ad",
+      "notes": "A plain array (the spec says {items, total})."
     },
-    "unspent_by_address_empty": {
+    "unspent_by_ergo_tree_empty": {
       "method": "POST",
-      "path": "/blockchain/box/unspent/byAddress?limit=5&sortDirection=asc",
+      "path": "/blockchain/box/unspent/byErgoTree?limit=5&sortDirection=asc",
       "status": 200,
-      "body": "9gNvAv97W71Wm33GoXgSQBFJxinFubKvE6wh2dEhFTSgYEe783j",
+      "body": "0008cd02f4e68cc26759e7b6dc63505c3427b2d565ab839e7f80306b2ce9d1c7def94cfa",
       "notes": "Empty set is 200 [] (the spec says 404)."
     },
     "balance": {
@@ -118,7 +114,7 @@
     },
     "box_by_id_spent": {
       "method": "GET",
-      "path": "/blockchain/box/byId/c97696655c0cfaf1c58c1611ee3c9460ee3b38ec4a33591574269bfa16c323ff",
+      "path": "/blockchain/box/byId/5c65777f34573642468e6ca4b34d9d044bd82b5d8c698afca7ddfbaeefb28675",
       "status": 200,
       "notes": "Spent box: spentTransactionId is set, spendingHeight is absent."
     },
@@ -133,7 +129,7 @@
       "status": 200,
       "body": [
         "abababababababababababababababababababababababababababababababab",
-        "9634333a7285cb3b6f8daf90f2eadaa35a035c86368469ac49f5278e164b120a"
+        "976cd63b672c2ac052cba110cc36ca0a6a16546f33e9db6bc18f42ce1a143f12"
       ],
       "notes": "Missing ids are silently omitted."
     },

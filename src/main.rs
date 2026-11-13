@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use dotenvy::dotenv;
 use hergmes::{
-    clients::node::NodeClient,
+    clients::NodeClient,
     env::ERGO_NODE_URL,
     error::AppError,
     trace::{self, default_subscriber},
@@ -22,8 +22,7 @@ async fn main() -> Result<(), AppError> {
         .build()
         .expect("Failed to build HTTP client");
 
-    let node_client = NodeClient::new(http_client, &ERGO_NODE_URL);
-    node_client.check_index_status().await?;
+    let node_client = NodeClient::connect(http_client, &ERGO_NODE_URL).await?;
 
     let watcher = watcher::spawn(node_client.clone());
     let _mempool_snapshot = watcher.mempool_snapshot;
