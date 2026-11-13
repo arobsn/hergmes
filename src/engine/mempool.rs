@@ -6,7 +6,7 @@ use std::{collections::BTreeMap, sync::Arc};
 use crate::{
     engine::{
         BlockRef, Output, PendingTx, TrackingKey,
-        overlay::{self, OverlayHash, PendingTotals},
+        overlay::{self, OverlayHash, PendingDelta},
     },
     types::ergo::{TxId, UTxO, UnconfirmedTransaction},
 };
@@ -66,11 +66,11 @@ impl Mempool {
         }
     }
 
-    /// `key`'s pending totals over its overlay, tracked or not.
-    pub fn pending_totals(&self, key: &TrackingKey) -> PendingTotals {
+    /// `key`'s pending delta over its overlay, tracked or not.
+    pub fn pending_delta(&self, key: &TrackingKey) -> PendingDelta {
         match &self.snapshot {
-            Some(s) => overlay::pending_totals(&s.txs, &s.order, key),
-            None => PendingTotals::default(),
+            Some(s) => overlay::pending_delta(&s.txs, &s.order, key),
+            None => PendingDelta::default(),
         }
     }
 

@@ -5,7 +5,8 @@ A realtime, mempool-aware relay for the [Ergo](https://ergoplatform.org) blockch
 hergmes sits in front of an indexed Ergo node and lets clients track the boxes of **addresses**
 and **small-supply tokens** (NFTs and tokens with an emission of at most 100). A client gets a
 key's current boxes and balance, then receives live updates: new boxes, spent boxes, pending
-mempool activity and reorgs.
+mempool activity, balance changes and reorgs. Pending activity shows in the balance as a signed
+change on top of the confirmed amount ("10 ERG incoming", "10 ERG leaving").
 
 > **Status:** early development. The node client, wire types, address codec, engine types and a
 > mempool watcher are in place; the engine, adapters, REST and WebSocket layers are still being

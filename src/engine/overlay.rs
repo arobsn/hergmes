@@ -12,10 +12,10 @@ use std::{
 use blake2::{Blake2b256, Digest as _};
 
 use crate::{
-    engine::{PendingTx, Totals, TrackingKey},
+    engine::{PendingTx, TrackingKey},
     types::{
         Digest, HashDigest,
-        ergo::{BoxId, TxId, UTxO, UnconfirmedTransaction},
+        ergo::{BoxId, TokenId, TxId, UTxO, UnconfirmedTransaction},
     },
 };
 
@@ -129,32 +129,59 @@ pub fn overlay(
     order.iter().filter_map(|&i| touch(&txs[i], key)).collect()
 }
 
-/// A key's pending ERG and tokens.
+/// A key's pending change, per asset: what its balance becomes, minus what it is, once every
+/// tx of the overlay confirms. Positive is incoming, negative is leaving. An asset whose net
+/// change is zero is left out, so two deltas with the same changes are equal as values.
+///
+/// Signed and wider than the unsigned [`Totals`](crate::engine::Totals): while the pool holds
+/// both sides of a conflict, both sides' outputs count, so the incoming side can exceed any
+/// supply.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
-pub struct PendingTotals {
-    /// Over the boxes matching the key that pending txs create.
-    pub incoming: Totals,
-    /// Over the boxes matching the key that pending txs spend.
-    pub outgoing: Totals,
+pub struct PendingDelta {
+    pub nano_ergs: i128,
+    pub tokens: BTreeMap<TokenId, i128>,
 }
 
-/// `key`'s pending totals over the txs of `order`. A box created and spent within the overlay
-/// counts on both sides, so `incoming - outgoing` is the net change.
-pub fn pending_totals(
+impl PendingDelta {
+    /// Adds `sign` times a box's ERG and tokens.
+    fn add(&mut self, utxo: &UTxO, sign: i128) {
+        self.nano_ergs += sign * i128::from(utxo.value);
+        for token in &utxo.tokens {
+            *self.tokens.entry(token.id).or_default() += sign * i128::from(token.amount);
+        }
+    }
+}
+
+/// `key`'s pending delta over the txs of `order`: the matching boxes they create and do not
+/// spend, minus the matching boxes they spend and do not create (confirmed ones), each box
+/// counted once. A box created and spent within the overlay cancels out, and a box spent by
+/// both sides of a conflict is subtracted once, so the confirmed balance plus the delta is
+/// never negative.
+pub fn pending_delta(
     txs: &[UnconfirmedTransaction],
     order: &[usize],
     key: &TrackingKey,
-) -> PendingTotals {
-    let mut totals = PendingTotals::default();
+) -> PendingDelta {
+    // Per matching box: whether the overlay creates it, and whether it spends it.
+    let mut sides: HashMap<BoxId, (&UTxO, bool, bool)> = HashMap::new();
     for tx in order.iter().map(|&i| &txs[i]) {
         for b in tx.outputs.iter().filter(|b| key.matches(b)) {
-            totals.incoming.add(b);
+            sides.entry(b.id).or_insert((b, false, false)).1 = true;
         }
         for b in tx.inputs.iter().filter(|b| key.matches(b)) {
-            totals.outgoing.add(b);
+            sides.entry(b.id).or_insert((b, false, false)).2 = true;
         }
     }
-    totals
+    let mut delta = PendingDelta::default();
+    for (b, created, spent) in sides.into_values() {
+        match (created, spent) {
+            (true, false) => delta.add(b, 1),
+            (false, true) => delta.add(b, -1),
+            _ => {}
+        }
+    }
+    delta.tokens.retain(|_, amount| *amount != 0);
+    delta
 }
 
 /// The keys a box matches: its tree, and each token it holds, once each.

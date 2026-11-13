@@ -1,0 +1,8 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc bb431865f957681d2c819a4e5e3a29e5b921c0064e3acbb19e353e1cc5679c95 # shrinks to ops = [MempoolAdd { seed: 0 }, MempoolAdd { seed: 1163070664606924505 }], mask = 0, seed = 0
+cc bbd573df0cd2d8daa6e8919384c193dee50297a4b011c3fe64370603a5b56f5a # shrinks to ops = [Mine { from_pool: 0, fresh: 0, seed: 0 }, Mine { from_pool: 0, fresh: 0, seed: 0 }, Mine { from_pool: 0, fresh: 0, seed: 0 }, MempoolAdd { seed: 0 }, MempoolAdd { seed: 0 }, MempoolAdd { seed: 1974508445303 }, Mine { from_pool: 1, fresh: 0, seed: 1830082318671481489 }, MempoolConflict { pick: 0, seed: 0 }, MempoolRecheckRace { pick: 0 }], mask = 0, seed = 0

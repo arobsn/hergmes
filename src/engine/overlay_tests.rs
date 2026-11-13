@@ -161,20 +161,47 @@ fn hashes_tell_overlays_apart() {
 }
 
 #[test]
-fn pending_totals_count_each_side_over_the_whole_overlay() {
-    // 0x30 moves box 1 to 0x31, which 0x10 spends into 0x11: 0x31 is on both sides.
+fn pending_delta_nets_each_box_once_over_the_whole_overlay() {
+    // 0x30 moves box 1 to 0x31, which 0x10 spends into 0x11 (with 4 token units); 0x20 moves
+    // box 2 to 0x21. 0x31 is created and spent, so it cancels out: two boxes of 1 nanoErg
+    // leave and two arrive.
     let mut mempool = family();
     mempool[1].outputs[0].tokens = vec![Token { id: digest(TOKEN), amount: 4 }];
     let order = pending_order(&mempool, |_| true);
-    let totals = pending_totals(&mempool, &order, &owner());
-    assert_eq!(totals.incoming.nano_ergs, 3, "0x31, 0x11 and 0x21");
-    assert_eq!(totals.outgoing.nano_ergs, 3, "1, 0x31 and 2");
-    assert_eq!(totals.incoming.tokens, BTreeMap::from([(digest(TOKEN), 4)]));
-    assert!(totals.outgoing.tokens.is_empty());
+    let delta = pending_delta(&mempool, &order, &owner());
+    assert_eq!(delta.nano_ergs, 0);
+    assert_eq!(delta.tokens, BTreeMap::from([(digest(TOKEN), 4)]));
 
-    // Txs left out of the overlay count for nothing.
+    // Txs left out of the overlay count for nothing: only 0x20 is left, moving 1 nanoErg out
+    // and 1 back.
     let order = pending_order(&mempool, |b| b.id != digest(1));
-    let totals = pending_totals(&mempool, &order, &owner());
-    assert_eq!((totals.incoming.nano_ergs, totals.outgoing.nano_ergs), (1, 1));
-    assert!(totals.incoming.tokens.is_empty());
+    assert_eq!(pending_delta(&mempool, &order, &owner()), PendingDelta::default());
+}
+
+#[test]
+fn pending_delta_is_signed_per_asset() {
+    // A swap: the owner's box 1 (5 nanoErgs) goes to the other key, and the other key's box 2
+    // sends 3 token units to the owner.
+    let mut paid = utxo(1, 0, OWNER, &[]);
+    paid.value = 5;
+    let mempool = vec![tx(
+        0x10,
+        vec![paid, utxo(2, 0, OTHER, &[(TOKEN, 3)])],
+        vec![utxo(0x11, 0x10, OTHER, &[]), utxo(0x12, 0x10, OWNER, &[(TOKEN, 3)])],
+    )];
+    let order = pending_order(&mempool, |_| true);
+    let delta = pending_delta(&mempool, &order, &owner());
+    assert_eq!(delta.nano_ergs, -4, "5 leave, 1 comes back");
+    assert_eq!(delta.tokens, BTreeMap::from([(digest(TOKEN), 3)]));
+}
+
+#[test]
+fn a_box_spent_by_both_sides_of_a_conflict_is_subtracted_once() {
+    let mempool = vec![
+        tx(0x41, vec![utxo(1, 0, OWNER, &[])], vec![]),
+        tx(0x40, vec![utxo(1, 0, OWNER, &[])], vec![]),
+    ];
+    let order = pending_order(&mempool, |_| true);
+    assert_eq!(order.len(), 2);
+    assert_eq!(pending_delta(&mempool, &order, &owner()).nano_ergs, -1);
 }

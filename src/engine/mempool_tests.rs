@@ -45,20 +45,37 @@ fn ids(txs: &[UnconfirmedTransaction], order: &[usize]) -> Vec<TxId> {
     order.iter().map(|&i| txs[i].id).collect()
 }
 
-/// The reference pending totals: the oracle's overlay, summed side by side.
-fn reference_totals(mempool: &[UnconfirmedTransaction], overlay: &[PendingTx]) -> PendingTotals {
-    let inputs: HashMap<BoxId, &UTxO> = mempool
+/// The reference pending delta, computed another way than the engine's: the key's balance
+/// once the overlay confirms (its confirmed boxes and the overlay's outputs, minus everything
+/// the overlay spends), minus its confirmed balance. Also checks that the first is never
+/// negative, which the unsigned totals would catch by overflowing.
+fn reference_delta(confirmed: &[&UTxO], overlay: &[PendingTx]) -> PendingDelta {
+    let spent: HashSet<BoxId> = overlay
         .iter()
-        .flat_map(|tx| tx.inputs.iter().map(|i| (i.id, i)))
+        .flat_map(|p| p.spent.iter().copied())
         .collect();
-    PendingTotals {
-        incoming: sim::totals(overlay.iter().flat_map(|p| p.created.iter().map(|b| &**b))),
-        outgoing: sim::totals(
-            overlay
-                .iter()
-                .flat_map(|p| p.spent.iter().map(|id| inputs[id])),
-        ),
+    let created = overlay.iter().flat_map(|p| p.created.iter().map(|b| &**b));
+    let after = sim::totals(
+        confirmed
+            .iter()
+            .copied()
+            .chain(created)
+            .filter(|b| !spent.contains(&b.id)),
+    );
+    let before = sim::totals(confirmed.iter().copied());
+
+    let mut delta = PendingDelta {
+        nano_ergs: i128::from(after.nano_ergs) - i128::from(before.nano_ergs),
+        tokens: BTreeMap::new(),
+    };
+    for (id, &amount) in &after.tokens {
+        *delta.tokens.entry(*id).or_default() += i128::from(amount);
     }
+    for (id, &amount) in &before.tokens {
+        *delta.tokens.entry(*id).or_default() -= i128::from(amount);
+    }
+    delta.tokens.retain(|_, amount| *amount != 0);
+    delta
 }
 
 /// Every pending spend refers to a confirmed box or to one created by an earlier tx of the
@@ -163,11 +180,17 @@ fn check_state(
     );
 
     // Every key, tracked or not, answers like the oracle.
+    let utxo = chain.utxo();
     for (key, reference) in &overlays {
         let overlay = mempool.overlay(key);
         assert_eq!(&overlay, reference);
         assert_spends_known_boxes(&overlay, &confirmed);
-        assert_eq!(mempool.pending_totals(key), reference_totals(&snapshot, reference));
+        let held: Vec<&UTxO> = utxo
+            .values()
+            .map(|b| &**b)
+            .filter(|b| key.matches(b))
+            .collect();
+        assert_eq!(mempool.pending_delta(key), reference_delta(&held, reference));
     }
 }
 
