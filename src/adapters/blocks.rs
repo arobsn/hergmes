@@ -7,7 +7,7 @@
 use tracing::{debug, info, warn};
 
 use crate::{
-    adapters::{EngineHandle, engine_chain, engine_tip},
+    adapters::{AdapterError, EngineGone, EngineHandle, engine_chain, engine_tip},
     clients::{NodeError, NodeSource},
     engine::{BlockRef, ChainLink, EngineError, Event},
     types::ergo::IndexedBlock,
@@ -65,16 +65,20 @@ impl<S: NodeSource> BlockConsumer<S> {
     /// A block the indexer does not serve, at or below `indexedHeight`, means the tip moved
     /// again (the block was orphaned), not an error. A `503` while the indexer recovers comes
     /// back as `NodeError::Unavailable`, with nothing sent.
-    pub async fn sync(&self, engine: &impl EngineHandle, tip: BlockRef) -> Result<Sync, NodeError> {
-        if engine_tip(engine).await == Some(tip) {
+    pub async fn sync(
+        &self,
+        engine: &impl EngineHandle,
+        tip: BlockRef,
+    ) -> Result<Sync, AdapterError> {
+        if engine_tip(engine).await? == Some(tip) {
             return Ok(Sync::Idle);
         }
-        let chain = engine_chain(engine).await;
+        let chain = engine_chain(engine).await?;
 
         // The node went back to a block the engine has: revert only.
         if let Some(at) = chain.iter().position(|l| l.block == tip) {
             let reverts = chain[at + 1..].iter().rev().map(|l| l.block).collect();
-            return Ok(send(engine, reverts, Vec::new(), false).await);
+            return Ok(send(engine, reverts, Vec::new(), false).await?);
         }
 
         let indexed = self.source.indexed_height().await?;
@@ -109,7 +113,7 @@ impl<S: NodeSource> BlockConsumer<S> {
             }
         };
         walked.reverse();
-        Ok(send(engine, reverts, walked, reset).await)
+        Ok(send(engine, reverts, walked, reset).await?)
     }
 
     /// The indexed blocks from `tip` down to the engine's chain, newest first, and where the
@@ -156,18 +160,18 @@ async fn send(
     reverts: Vec<BlockRef>,
     blocks: Vec<IndexedBlock>,
     reset: bool,
-) -> Sync {
+) -> Result<Sync, EngineGone> {
     let (reverted, applied) = (reverts.len(), blocks.len());
     let from = reverts.first().copied();
     let to = blocks.last().map(|b| BlockRef::from(&b.header));
     for block in reverts {
-        if let Err(error) = engine.apply(Event::BlockReverted(block)).await {
-            return Sync::Refused(error);
+        if let Err(error) = engine.apply(Event::BlockReverted(block)).await? {
+            return Ok(Sync::Refused(error));
         }
     }
     for block in blocks {
-        if let Err(error) = engine.apply(Event::BlockApplied(block)).await {
-            return Sync::Refused(error);
+        if let Err(error) = engine.apply(Event::BlockApplied(block)).await? {
+            return Ok(Sync::Refused(error));
         }
     }
     if reverted > 0 {
@@ -175,7 +179,7 @@ async fn send(
     } else {
         debug!(applied, ?to, "Blocks applied");
     }
-    Sync::Synced { reverted, applied, reset }
+    Ok(Sync::Synced { reverted, applied, reset })
 }
 
 #[cfg(test)]

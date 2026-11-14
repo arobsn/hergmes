@@ -8,9 +8,9 @@ key's current boxes and balance, then receives live updates: new boxes, spent bo
 mempool activity, balance changes and reorgs. Pending activity shows in the balance as a signed
 change on top of the confirmed amount ("10 ERG incoming", "10 ERG leaving").
 
-> **Status:** early development. The node client, wire types, address codec, engine types and a
-> mempool watcher are in place; the engine, adapters, REST and WebSocket layers are still being
-> built.
+> **Status:** early development. The engine, the adapters that feed it from the node and the
+> runtime that wires them together are in place: the relay follows the node and tracks the keys
+> named in its configuration. The REST and WebSocket layers are still being built.
 
 ## How it works
 
@@ -38,9 +38,16 @@ cp .env.example .env
 cargo run
 ```
 
-| Variable        | Description                            |
-| --------------- | -------------------------------------- |
-| `ERGO_NODE_URL` | URL of an indexed Ergo node (required) |
+| Variable                     | Default | Description                                                      |
+| ---------------------------- | ------- | ---------------------------------------------------------------- |
+| `ERGO_NODE_URL`              |         | URL of an indexed Ergo node (required)                           |
+| `HERGMES_WINDOW_BLOCKS`      | 720     | Blocks of deltas kept for replays, rollbacks and pinned pages    |
+| `HERGMES_GRACE_BLOCKS`       | 5       | Blocks a key with no subscribers stays tracked                   |
+| `HERGMES_POLL_INTERVAL_MS`   | 1000    | How often `/info` is read                                        |
+| `HERGMES_MEMPOOL_REFRESH_MS` | 10000   | How often the mempool is fetched even if `/info` shows no change |
+| `HERGMES_TOKEN_SUPPLY_LIMIT` | 100     | Largest token emission that can be tracked                       |
+| `HERGMES_TRACK_ADDRESSES`    |         | Addresses tracked for the life of the process, comma-separated   |
+| `HERGMES_TRACK_TOKENS`       |         | Token ids tracked for the life of the process, comma-separated   |
 
 Logging uses `tracing`; set `RUST_LOG` (e.g. `RUST_LOG=hergmes=debug`) to adjust verbosity.
 
@@ -68,9 +75,10 @@ cargo test
 | ----------------- | ------------------------------------------------------------ |
 | `src/clients/`    | Ergo node HTTP client and the `NodeSource` trait             |
 | `src/types/`      | Wire types and the address codec                             |
-| `src/engine/`     | Tracking keys, block/delta types, engine events and messages |
-| `src/watcher/`    | Background mempool watcher                                   |
-| `src/adapters/`   | Node I/O feeding the engine (in progress)                    |
+| `src/engine/`     | The engine: a pure state machine with no I/O and no clock    |
+| `src/adapters/`   | Node I/O feeding the engine                                  |
+| `src/runtime/`    | The engine task, output routing, configured keys             |
+| `src/config.rs`   | Configuration from environment variables                     |
 | `src/api/`        | REST and WebSocket transport (in progress)                   |
 | `src/sim/`        | Simulated chain for tests (`sim` feature)                    |
 | `tests/fixtures/` | Recorded node responses                                      |

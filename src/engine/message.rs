@@ -63,7 +63,7 @@ pub enum Query {
 /// The answer to a [`Query`], in the matching variant. Where a reply is an `Option`, `None`
 /// means the key is untracked or there is no tip; overlays and pending deltas are answered
 /// for any key.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Reply {
     Page(Result<Vec<BoxKey>, PageError>),
     Overlay(Vec<PendingTx>),
@@ -133,6 +133,20 @@ pub enum Output {
     ResyncRequired { key: TrackingKey, reason: ResyncReason },
     /// A first load pinned to a block other than the tip; the loader retries.
     LoadRejected { key: TrackingKey, as_of: BlockRef },
+}
+
+impl Output {
+    /// The key the message is about.
+    pub fn key(&self) -> &TrackingKey {
+        match self {
+            Output::Block { key, .. }
+            | Output::Rollback { key, .. }
+            | Output::Mempool { key, .. }
+            | Output::Balance { key, .. }
+            | Output::ResyncRequired { key, .. }
+            | Output::LoadRejected { key, .. } => key,
+        }
+    }
 }
 
 /// A pending transaction as it affects one key.

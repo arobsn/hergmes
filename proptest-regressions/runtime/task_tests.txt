@@ -1,0 +1,11 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 317eb11700db967cb38cc221b3c22696d3a779d1e4ebb83fb9d7b9e806204f5f # shrinks to ops = [Tick, Load(Index(6707906935894382406)), Subscribe { key: Index(6707906935894382406), from: None, capacity: 1 }, Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 })]
+cc c0dd607e46177697eed2d00a2fa9dc592b3043a0dbc07d25211c84482bedf00e # shrinks to ops = [Tick, Chain(Mine { from_pool: 0, fresh: 2, seed: 3973518331153632650 }), Tick, Load(Index(13415813871788764812)), Subscribe { key: Index(13415813871788764812), from: Some(Index(0)), capacity: 1 }, Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 2, seed: 331630573611506598 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 })]
+cc eea5664f943933535d2b8f060e2e80af11fd60a99b1e3803f14f75c7f0abc9de # shrinks to ops = [Tick, Load(Index(11738837137815169211)), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Subscribe { key: Index(11738837137815169211), from: Some(Index(0)), capacity: 1 }, Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 })]
+cc 2ca94b6e8b8ea791572f262ec58c0ecf06f6d1c3f162b081af949519ab209468 # shrinks to ops = [Tick, Load(Index(11738837137815169211)), Chain(MempoolAdd { seed: 2720073987738847779 }), Chain(Mine { from_pool: 1, fresh: 2, seed: 2220597653578653137 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Subscribe { key: Index(11738837137815169211), from: Some(Index(0)), capacity: 1 }, Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Chain(Mine { from_pool: 0, fresh: 0, seed: 0 })]
+cc d50efeb983e201544a862565cd858c63b5efaa1ae218e8ba8e5b6f509bd2f235 # shrinks to ops = [Chain(Mine { from_pool: 0, fresh: 0, seed: 0 }), Tick, Load(Index(13415813871788764812)), Subscribe { key: Index(13415813871788764812), from: None, capacity: 1 }, Chain(Reorg { depth: 1, extra: 0, seed: 0 })]

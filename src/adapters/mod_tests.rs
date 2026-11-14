@@ -14,7 +14,7 @@ use crate::{
         loader::{self, Attempt, LoadError, Loader},
         mempool::Poll,
     },
-    engine::{Config, TrackingKey},
+    engine::{Config, Engine, TrackingKey},
     sim::{Chain, SimChain, SimConfig, SimOp, strategy},
 };
 

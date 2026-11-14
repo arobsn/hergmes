@@ -17,7 +17,7 @@ use tracing::{info, warn};
 
 use crate::{
     adapters::{
-        EngineHandle, backoff, best_full_block,
+        AdapterError, EngineGone, EngineHandle, backoff, best_full_block,
         blocks::{BlockConsumer, Sync},
         mempool::{self, MempoolPoller, Poll},
     },
@@ -65,15 +65,19 @@ impl<S: NodeSource + Clone> Follower<S> {
     }
 
     /// One tick at `now`: read `/info`, bring the engine to its tip, then, if it got there,
-    /// poll the mempool and send the snapshot taken. `Err` only if `/info` itself failed.
+    /// poll the mempool and send the snapshot taken. `Err` only if `/info` itself failed or
+    /// the engine is gone.
     pub async fn tick(
         &mut self,
         engine: &impl EngineHandle,
         now: Instant,
-    ) -> Result<Tick, NodeError> {
+    ) -> Result<Tick, AdapterError> {
         let info = self.source.info().await?;
         let blocks = match best_full_block(&info) {
-            Some(tip) => self.blocks.sync(engine, tip).await,
+            Some(tip) => match self.blocks.sync(engine, tip).await {
+                Ok(sync) => Ok(sync),
+                Err(error) => Err(error.into_node()?),
+            },
             None => Ok(Sync::Idle),
         };
         if !matches!(blocks, Ok(Sync::Idle | Sync::Synced { .. })) {
@@ -83,29 +87,28 @@ impl<S: NodeSource + Clone> Follower<S> {
         if let Ok(Poll::Snapshot { txs, observed_tip }) = &mempool {
             let event = Event::MempoolSnapshot { txs: txs.clone(), observed_tip: *observed_tip };
             // The engine never refuses a snapshot: one off its tip is held or ignored.
-            let _ = engine.apply(event).await;
+            let _ = engine.apply(event).await?;
         }
         Ok(Tick { blocks, mempool: Some(mempool) })
     }
 
-    /// Ticks every interval, forever. A failed call is logged, and a `503` waits for its
-    /// `Retry-After` before the next tick.
-    pub async fn run(mut self, engine: &impl EngineHandle) {
+    /// Ticks every interval until the engine is gone. A failed call is logged, and a `503`
+    /// waits for its `Retry-After` before the next tick. A refused event is logged by the
+    /// engine task; the next tick syncs again from the engine's chain.
+    pub async fn run(mut self, engine: &impl EngineHandle) -> EngineGone {
         let mut ticker = tokio::time::interval(self.config.interval);
         ticker.set_missed_tick_behavior(MissedTickBehavior::Delay);
         loop {
             ticker.tick().await;
             let wait = match self.tick(engine, Instant::now()).await {
                 Ok(tick) => {
-                    if let Ok(Sync::Refused(error)) = &tick.blocks {
-                        warn!(%error, "Engine refused a block event; syncing again from its chain");
-                    }
                     if let Some(Err(error)) = &tick.mempool {
                         warn!(%error, "Mempool poll failed");
                     }
                     tick.blocks.err()
                 }
-                Err(error) => Some(error),
+                Err(AdapterError::Node(error)) => Some(error),
+                Err(AdapterError::EngineGone(gone)) => return gone,
             };
             if let Some(error) = wait {
                 let wait = backoff(&error, self.config.interval);

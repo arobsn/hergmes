@@ -11,8 +11,8 @@ use lru::LruCache;
 use tracing::debug;
 
 use crate::{
-    adapters::EngineHandle,
-    clients::{NodeError, NodeSource},
+    adapters::{AdapterError, EngineHandle},
+    clients::NodeSource,
     engine::{Query, Reply},
     types::ergo::{BoxId, UTxO},
 };
@@ -51,7 +51,7 @@ impl<S: NodeSource> BoxFetcher<S> {
         &self,
         engine: &impl EngineHandle,
         ids: &[BoxId],
-    ) -> Result<Vec<Option<Arc<UTxO>>>, NodeError> {
+    ) -> Result<Vec<Option<Arc<UTxO>>>, AdapterError> {
         let mut found: HashMap<BoxId, Arc<UTxO>> = HashMap::new();
         {
             let mut cache = self.cache.lock().unwrap_or_else(PoisonError::into_inner);
@@ -65,7 +65,7 @@ impl<S: NodeSource> BoxFetcher<S> {
         let mut missing = missing(ids, &found);
 
         if !missing.is_empty() {
-            match engine.query(Query::Boxes(missing.clone())).await {
+            match engine.query(Query::Boxes(missing.clone())).await? {
                 Reply::Boxes(boxes) => found.extend(boxes.into_iter().map(|b| (b.id, b))),
                 other => unreachable!("`Query::Boxes` answered {other:?}"),
             }

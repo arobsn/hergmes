@@ -33,6 +33,7 @@ impl Fixture {
     fn sync(&self) -> Result<Sync, NodeError> {
         let tip = self.sim.lock().tip();
         ready(self.consumer.sync(&self.engine, tip))
+            .map_err(|error| error.into_node().expect("the engine is in this test"))
     }
 
     fn engine_tip(&self) -> Option<BlockRef> {

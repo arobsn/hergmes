@@ -11,7 +11,7 @@ use tokio::time::sleep;
 use tracing::{debug, info};
 
 use crate::{
-    adapters::{EngineHandle, backoff, best_full_block, engine_tip},
+    adapters::{EngineGone, EngineHandle, backoff, best_full_block, engine_tip},
     clients::{NodeError, NodeSource, Page, source::MAX_PAGE_LIMIT},
     engine::{BlockRef, Event, Output, TrackingKey},
     types::ergo::{BoxId, IndexedBox},
@@ -60,8 +60,13 @@ pub enum LoadError {
     /// The indexer returned a box the key does not match. A node bug; the key is not tracked.
     #[error("the indexer returned box {box_id} that does not match the key")]
     Mismatch { box_id: BoxId },
+    /// No attempt settled. `last` is the last attempt's outcome, `None` when the indexer
+    /// answered `503`. `wait` is what the loader would have waited before the next attempt
+    /// (a `503`'s `Retry-After`, or the retry): a caller that tries again waits it first.
     #[error("no load settled after {attempts} attempts, the last one {last:?}")]
-    GaveUp { attempts: u32, last: Attempt },
+    GaveUp { attempts: u32, last: Option<Attempt>, wait: Duration },
+    #[error(transparent)]
+    EngineGone(#[from] EngineGone),
 }
 
 pub struct Loader<S> {
@@ -77,15 +82,17 @@ impl<S: NodeSource> Loader<S> {
 
     /// Loads `key` and sends it to the engine, retrying until an attempt is accepted or
     /// `attempts` have been made. A `503` waits for its `Retry-After`; other node errors end
-    /// the load.
+    /// the load. No wait follows the last attempt: a caller giving up should not sit through
+    /// it, so `GaveUp` carries it instead.
     pub async fn load(
         &self,
         engine: &impl EngineHandle,
         key: &TrackingKey,
     ) -> Result<(BlockRef, usize), LoadError> {
-        let mut last = Attempt::NoTip;
+        let mut last = None;
+        let mut wait = self.config.retry;
         for attempt in 1..=self.config.attempts {
-            let wait = match self.try_load(engine, key).await {
+            (last, wait) = match self.try_load(engine, key).await {
                 Ok(Attempt::Tracked { as_of, boxes }) => return Ok((as_of, boxes)),
                 Ok(outcome) => {
                     if outcome == Attempt::Rejected {
@@ -93,13 +100,12 @@ impl<S: NodeSource> Loader<S> {
                     } else {
                         debug!(?key, attempt, ?outcome, "Load not settled, retrying");
                     }
-                    last = outcome;
-                    self.config.retry
+                    (Some(outcome), self.config.retry)
                 }
                 Err(LoadError::Node(error @ NodeError::Unavailable { .. })) => {
                     let wait = backoff(&error, self.config.retry);
                     info!(?key, ?wait, "Indexer unavailable (503) during a load, backing off");
-                    wait
+                    (None, wait)
                 }
                 Err(error) => return Err(error),
             };
@@ -107,7 +113,7 @@ impl<S: NodeSource> Loader<S> {
                 sleep(wait).await;
             }
         }
-        Err(LoadError::GaveUp { attempts: self.config.attempts, last })
+        Err(LoadError::GaveUp { attempts: self.config.attempts, last, wait })
     }
 
     /// One attempt: read the tip, check the engine and the indexer are at it, read every
@@ -121,7 +127,7 @@ impl<S: NodeSource> Loader<S> {
         let Some(tip) = best_full_block(&self.source.info().await?) else {
             return Ok(Attempt::NoTip);
         };
-        let engine_at = engine_tip(engine).await;
+        let engine_at = engine_tip(engine).await?;
         if engine_at != Some(tip) {
             return Ok(Attempt::EngineBehind { engine: engine_at, node: tip });
         }
@@ -145,7 +151,7 @@ impl<S: NodeSource> Loader<S> {
         let count = boxes.len();
         let event = Event::KeyLoaded { key: key.clone(), as_of: tip, boxes };
         // `KeyLoaded` is never an `EngineError`: an off-tip load answers `LoadRejected`.
-        let outputs = engine.apply(event).await.unwrap_or_default();
+        let outputs = engine.apply(event).await?.unwrap_or_default();
         let rejected = outputs
             .iter()
             .any(|o| matches!(o, Output::LoadRejected { key: k, .. } if k == key));

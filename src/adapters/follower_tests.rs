@@ -196,6 +196,6 @@ mod node {
         let client = NodeClient::new(reqwest::Client::new(), &server.uri(), Network::Mainnet);
         let mut follower = Follower::new(client, Config::default());
         let error = follower.tick(&engine(), Instant::now()).await.unwrap_err();
-        assert!(matches!(error, NodeError::Api { .. }), "{error:?}");
+        assert!(matches!(error, AdapterError::Node(NodeError::Api { .. })), "{error:?}");
     }
 }

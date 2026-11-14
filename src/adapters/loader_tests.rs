@@ -9,7 +9,7 @@ use std::sync::{
 
 use super::*;
 use crate::{
-    adapters::{Follower, follower},
+    adapters::{EngineGone, Follower, follower},
     engine::{Config as EngineConfig, Engine, EngineError, Query, Reply},
     sim::{
         Chain, Endpoint, SimChain, SimConfig,
@@ -175,17 +175,17 @@ struct Racing {
 }
 
 impl EngineHandle for Racing {
-    async fn apply(&self, event: Event) -> Result<Vec<Output>, EngineError> {
+    async fn apply(&self, event: Event) -> Result<Result<Vec<Output>, EngineError>, EngineGone> {
         let mut engine = self.inner.lock().unwrap();
         if matches!(event, Event::KeyLoaded { .. }) && self.armed.swap(false, Ordering::SeqCst) {
             let tip = engine.tip().expect("a tip");
-            engine.apply(Event::BlockReverted(tip))?;
+            engine.apply(Event::BlockReverted(tip)).unwrap();
         }
-        engine.apply(event)
+        Ok(engine.apply(event))
     }
 
-    async fn query(&self, query: Query) -> Reply {
-        self.inner.lock().unwrap().query(query)
+    async fn query(&self, query: Query) -> Result<Reply, EngineGone> {
+        Ok(self.inner.lock().unwrap().query(query))
     }
 }
 
@@ -242,8 +242,11 @@ async fn load_gives_up_after_its_attempts() {
     assert!(
         matches!(
             error,
-            LoadError::GaveUp { attempts: 3, last: Attempt::EngineBehind { engine, node: n } }
-                if engine == before && n == node
+            LoadError::GaveUp {
+                attempts: 3,
+                last: Some(Attempt::EngineBehind { engine, node: n }),
+                wait,
+            } if engine == before && n == node && wait == Config::default().retry
         ),
         "{error:?}"
     );
@@ -309,5 +312,30 @@ mod node {
         let error = loader.try_load(&engine, &key).await.unwrap_err();
         assert!(matches!(error, LoadError::Mismatch { .. }), "{error:?}");
         assert!(!engine.lock().unwrap().is_tracked(&key));
+    }
+
+    /// No wait follows the last attempt, so a `503` there hands its `Retry-After` to the
+    /// caller instead of losing it.
+    #[tokio::test]
+    async fn a_503_on_the_last_attempt_hands_its_wait_to_the_caller() {
+        let engine = Mutex::new(Engine::new(EngineConfig::default()));
+        let server = MockServer::start().await;
+        Mock::given(method("GET"))
+            .and(path("/info"))
+            .respond_with(ResponseTemplate::new(503).insert_header("Retry-After", "30"))
+            .mount(&server)
+            .await;
+        let client = NodeClient::new(reqwest::Client::new(), &server.uri(), Network::Mainnet);
+        let loader = Loader::new(client, Config { attempts: 1, ..Config::default() });
+        let key = TrackingKey::Tree(HexBytes(hex::decode(sample("ergoTree")).unwrap()));
+        let error = loader.load(&engine, &key).await.unwrap_err();
+        assert!(
+            matches!(
+                error,
+                LoadError::GaveUp { attempts: 1, last: None, wait }
+                    if wait == Duration::from_secs(30)
+            ),
+            "{error:?}"
+        );
     }
 }
